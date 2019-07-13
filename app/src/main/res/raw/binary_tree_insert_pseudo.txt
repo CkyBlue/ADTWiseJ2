@@ -1,0 +1,31 @@
+PROCEDURE Insert(Data_Item)
+        IF Free_Pointer = -1 THEN
+                OUTPUT "Error: Insertion could not be performed as the Tree has no free nodes."
+        ELSE
+                New_Data_Node_Pointer <- Free_Pointer
+                NodeArray[New_Data_Node_Pointer].Item <- Data_Item
+                Free_Pointer <- NodeArray[New_Data_Node_Pointer].Left_Pointer
+                NodeArray[New_Data_Node_Pointer].Left_Pointer <- -1
+                NodeArray[New_Data_Node_Pointer].Right_Pointer <- -1
+                IF Root_Pointer = -1 THEN
+                        Root_Pointer <- New_Data_Node_Pointer
+                ELSE
+                        Current_Pointer <- Root_Pointer
+                        WHILE Current_Pointer <> -1
+                                Prev_Pointer <- Current_Pointer
+                                IF NodeArray[Prev_Pointer].Item < Data_Item THEN
+                                        TurnedRight <- True
+                                        Current_Pointer <- NodeArray[Prev_Pointer].Right_Pointer
+                                ELSE
+                                        TurnedRight <- False
+                                        Current_Pointer <- NodeArray[Prev_Pointer].Left_Pointer
+                                ENDIF
+                         ENDWHILE
+                        IF TurnedRight THEN
+                                NodeArray[Prev_Pointer].Right_Pointer <- Current_Pointer
+                        ELSE
+                                NodeArray[Prev_Pointer].Left_Pointer <- Current_Pointer
+                        ENDIF
+                ENDIF
+        ENDIF
+ENDPROCEDURE

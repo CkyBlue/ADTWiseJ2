@@ -1,0 +1,14 @@
+PROCEDURE Binary_Search(INTEGER : Start, INTEGER : End, STRING : Item_To_Be_Searched):
+		IF (End < Start) THEN
+				OUTPUT "Item not found."
+		ELSE  
+				MidPoint <- (Start + End)/2
+				IF MyList[MidPoint] == Item_To_Be_Searched THEN 
+					OUTPUT "Item found at index " + MidPoint
+				ELSEIF MyList[MidPoint] > Item_To_Be_Searched THEN
+					Binary_Search(Start, MidPoint, Item_To_Be_Searched)
+				ELSE 
+					Binary_Search(MidPoint, End, Item_To_Be_Searched)	
+		ENDIF
+ENDPROCEDURE
+Binary_Search(0, 9, "F")
