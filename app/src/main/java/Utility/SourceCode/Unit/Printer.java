@@ -3,7 +3,7 @@ package Utility.SourceCode.Unit;
 import java.util.ArrayList;
 
 import Utility.SourceCode.FormattingKey;
-import Utility.SuperPrinter;
+import Utility.Bases.SuperPrinter;
 
 public abstract class Printer extends SuperPrinter <Content, Feed> {
     private final ArrayList<FormattingKey> formattingKeys = new ArrayList<>();

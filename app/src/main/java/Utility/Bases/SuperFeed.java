@@ -1,4 +1,4 @@
-package Utility;
+package Utility.Bases;
 
 import java.util.ArrayList;
 
@@ -38,6 +38,12 @@ public abstract class SuperFeed<Content extends SuperContent, Printer extends Su
 
     public ArrayList<Printer> getPrinters() {
         return printers;
+    }
+
+    public void refreshIntent() {
+        for (Printer printer : getPrinters()){
+            printer.notifyOfRefreshIntent();
+        }
     }
 
     public void feedRebuilt() {

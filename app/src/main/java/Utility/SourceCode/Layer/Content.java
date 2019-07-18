@@ -3,9 +3,7 @@ package Utility.SourceCode.Layer;
 import java.util.HashMap;
 import java.util.Set;
 
-import Utility.SuperContent;
-import Utility.SuperFeed;
-import Utility.SuperPrinter;
+import Utility.Bases.SuperContent;
 
 public class Content extends SuperContent<Feed> {
     private final HashMap<String, Utility.SourceCode.Unit.Feed> sourceCodeUnits = new HashMap<>();

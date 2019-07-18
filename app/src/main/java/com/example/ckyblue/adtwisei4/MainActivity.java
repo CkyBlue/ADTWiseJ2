@@ -24,7 +24,6 @@ import Utility.Utilities;
 public class MainActivity extends AppCompatActivity {
     /*TODO Test working with Layer*/
 
-//    private LayoutInflater inflater ;
     Content srcCodeLayer_Content;
     Feed srcCodeLayer_Feed;
 
@@ -39,12 +38,11 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-//        inflater = (LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         srcCodeLayer_Fragment = (SourceCodesFragment) getSupportFragmentManager().findFragmentById(R.id.sourceCodeFragment);
     }
 
     public void update(View view) {
-        switch (step) {
+        /*switch (step) {
             case 0: {
                 srcCodeLayer_Feed = new Feed();
                 this.srcCodeLayer_Fragment.setFeed(srcCodeLayer_Feed);
@@ -66,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case 3: {
-                Utility.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Pseudocode");
+                Utilities.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Pseudocode");
                 feed.getContent().setText(Utilities.readRawTextFile(this, R.raw.binary_tree_insert_pseudo));
                 break;
             }
@@ -76,9 +74,9 @@ public class MainActivity extends AppCompatActivity {
 
                 srcCodeLayer_Content = new Content();
                 srcCodeLayer_Content.buildUnits(unitKeys);
-                Utility.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Pseudocode");
+                Utilities.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Pseudocode");
 
-                Utility.SourceCode.Unit.Content unitContent = new Utility.SourceCode.Unit.Content();
+                Utilities.SourceCode.Unit.Content unitContent = new Utilities.SourceCode.Unit.Content();
                 unitContent.setText(Utilities.readRawTextFile(this, R.raw.binary_search));
                 unitContent.highlight(new int[]{1, 3});
 
@@ -95,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
                 srcCodeLayer_Content = new Content();
                 srcCodeLayer_Content.buildUnits(unitKeys);
-                Utility.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Python");
+                Utilities.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Python");
                 feed.getContent().setText(Utilities.readRawTextFile(this, R.raw.queue_insert_pseudo));
                 feed.getContent().highlight(new int[]{1, 3});
 
@@ -103,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
                 this.srcCodeLayer_Fragment.setFeed(srcCodeLayer_Feed);
                 break;
             }
-        }
+        }*/
 
         Log.i("Step", String.valueOf(step));
         step++;

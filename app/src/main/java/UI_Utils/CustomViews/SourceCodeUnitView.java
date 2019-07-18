@@ -1,12 +1,13 @@
-package com.example.ckyblue.adtwisei4.CustomViews;
+package UI_Utils.CustomViews;
 
 import android.content.Context;
 import android.graphics.Typeface;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.util.AttributeSet;
 
 import com.example.ckyblue.adtwisei4.Logger;
-import com.example.ckyblue.adtwisei4.SpanFactory;
+import UI_Utils.SpanFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -18,7 +19,7 @@ import Utility.SourceCode.Unit.Content;
 import Utility.SourceCode.Unit.Feed;
 import Utility.SourceCode.Unit.Printer;
 
-public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextView{
+public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextView {
     private SpannableString spannableString;
 
     private HashMap<FormattingKey, SpanFactory> spanFactories = new HashMap<>();
@@ -103,20 +104,15 @@ public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextV
         return printer;
     }
 
-    public SourceCodeUnitView(Context context) {
-        super(context);
-        this.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
-    }
-
-    public Content getContent(){
+    public Content getContent() {
         return getPrinter().getContent();
     }
 
-    public void setFeed(Feed feed){
+    public void setFeed(Feed feed) {
         getPrinter().setFeed(feed);
     }
 
-    public Feed getFeed(){
+    public Feed getFeed() {
         return getPrinter().getFeed();
     }
 
@@ -211,4 +207,23 @@ public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextV
             buildAllFormatting();
         }
     };
+
+    public void init() {
+        this.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
+    }
+
+    public SourceCodeUnitView(Context context) {
+        super(context);
+        init();
+    }
+
+    public SourceCodeUnitView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+        init();
+    }
+
+    public SourceCodeUnitView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+        init();
+    }
 }

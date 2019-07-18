@@ -1,7 +1,7 @@
 package Utility.SourceCode.Unit;
 
 import Utility.SourceCode.FormattingKey;
-import Utility.SuperFeed;
+import Utility.Bases.SuperFeed;
 
 public class Feed extends SuperFeed <Content, Printer>{
     void maskChanged() {

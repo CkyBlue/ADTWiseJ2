@@ -14,8 +14,9 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.example.ckyblue.adtwisei4.CustomViews.SourceCodeUnitView;
+import UI_Utils.CustomViews.SourceCodeUnitView;
 
+import UI_Utils.SpanFactory;
 import Utility.Colors.Values;
 import Utility.SourceCode.FormattingKey;
 import Utility.SourceCode.Layer.Content;

@@ -1,4 +1,4 @@
-package com.example.ckyblue.adtwisei4;
+package UI_Utils;
 
 public interface SpanFactory{
     Object[] createSpans(int scopeCount);

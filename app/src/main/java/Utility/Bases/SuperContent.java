@@ -1,4 +1,4 @@
-package Utility;
+package Utility.Bases;
 
 public class SuperContent <Feed extends SuperFeed> {
     private Feed feed;

@@ -1,9 +1,11 @@
-package Utility;
+package Utility.Bases;
 
 public abstract class SuperPrinter<Content extends SuperContent, Feed extends SuperFeed> {
     private Feed feed;
 
     public abstract void notifyOfFeedRebuild();
+
+    public abstract void notifyOfRefreshIntent();
 
     public Feed getFeed() {
         return feed;

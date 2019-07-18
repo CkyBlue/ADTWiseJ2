@@ -1,11 +1,11 @@
-package Utility.Colors.Chrome.Cascade;
+package Utility.Colors.Cascade;
 
-import Utility.Colors.Chrome.Chrome;
+import Utility.Colors.Chrome.Content;
 import Utility.Colors.Chrome.Components;
 import Utility.Colors.Color;
 import Utility.Colors.Values;
 
-public abstract class Cascade extends Chrome {
+abstract class Cascade extends Content {
     private Values[] values;
     private float[] tints;
     private Values defaultBgColor, defaultLightText, defaultDarkText;

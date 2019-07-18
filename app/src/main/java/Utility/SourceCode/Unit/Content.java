@@ -7,7 +7,7 @@ import java.util.Set;
 import Utility.SourceCode.FormattingKey;
 import Utility.SourceCode.Parser;
 import Utility.SourceCode.Tracker;
-import Utility.SuperContent;
+import Utility.Bases.SuperContent;
 import Utility.Utilities;
 
 public class Content extends SuperContent<Feed> {
