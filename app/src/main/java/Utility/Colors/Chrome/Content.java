@@ -1,6 +1,7 @@
 package Utility.Colors.Chrome;
 
 import Utility.Bases.SuperContent;
+import Utility.Colors.Components;
 import Utility.SourceCode.Unit.Feed;
 
 public abstract class Content extends SuperContent<Feed> {

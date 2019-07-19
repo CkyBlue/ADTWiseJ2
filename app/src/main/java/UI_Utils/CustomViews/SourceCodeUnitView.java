@@ -118,6 +118,11 @@ public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextV
 
     private final Printer printer = new Printer() {
         @Override
+        public void notifyOfRefreshIntent() {
+
+        }
+
+        @Override
         public void buildFormatting(FormattingKey key) {
             Logger.log(getClass().getName(), "buildFormatting(" + key + ")");
 

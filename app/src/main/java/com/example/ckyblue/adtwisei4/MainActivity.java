@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             }
             case 1: {
                 srcCodeLayer_Content = new Content();
-                srcCodeLayer_Feed.setContent(srcCodeLayer_Content);
+                srcCodeLayer_Feed.setLogText(srcCodeLayer_Content);
 
                 break;
             }
@@ -80,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
                 unitContent.setText(Utilities.readRawTextFile(this, R.raw.binary_search));
                 unitContent.highlight(new int[]{1, 3});
 
-                feed.setContent(unitContent);
+                feed.setLogText(unitContent);
 
-                srcCodeLayer_Feed.setContent(srcCodeLayer_Content);
+                srcCodeLayer_Feed.setLogText(srcCodeLayer_Content);
                 break;
             }
             case 5: {
@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
                 feed.getContent().setText(Utilities.readRawTextFile(this, R.raw.queue_insert_pseudo));
                 feed.getContent().highlight(new int[]{1, 3});
 
-                srcCodeLayer_Feed.setContent(srcCodeLayer_Content);
+                srcCodeLayer_Feed.setLogText(srcCodeLayer_Content);
                 this.srcCodeLayer_Fragment.setFeed(srcCodeLayer_Feed);
                 break;
             }

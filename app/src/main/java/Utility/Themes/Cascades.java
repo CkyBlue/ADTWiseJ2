@@ -5,53 +5,64 @@ import Utility.Colors.Cascade.StreamIndex;
 import Utility.Colors.Chrome.Content;
 import Utility.Colors.Color;
 
-public enum Cascades {
-    Crimson_CA(new Color[]{Color.crimson, Color.indian_red, Color.pink_raspberry, Color.ruber},
-            new float[]{0.1f, -0.15f, 0.3f}, true),
+interface Streamers {
+    public Content getChrome();
+}
 
-    AquaGreens_CA(new Color[]{Color.dark_sea_green, Color.sea_green, Color.wintergreen_dream},
-            new float[]{0.2f, -0.15f, 0f}, true),
+public class Cascades {
+    public enum ContentStreamers implements Streamers {
+        Crimson(new Color[]{Color.crimson, Color.indian_red, Color.pink_raspberry, Color.ruber},
+                new float[]{0.1f, -0.15f, 0.3f}),
 
-    DarkPurple_CA(new Color[]{Color.raisin_black},
-            new float[]{0.6f, 0.2f, 0f, 0.15f, 0.4f}, true),
+        AquaGreens(new Color[]{Color.dark_sea_green, Color.sea_green, Color.wintergreen_dream},
+                new float[]{0.2f, -0.15f, 0f}),
 
-    AllInPlains_CA(Color.values(),
-            new float[]{0}, true),
+        DarkPurple(new Color[]{Color.raisin_black},
+                new float[]{0.6f, 0.2f, 0f, 0.15f, 0.4f}),
 
-    Stripes(new Color[]{Color.isabelline, Color.light_gray},
-            new float[]{0}, false);
+        AllInPlains(Color.values(),
+                new float[]{0}),
+        ;
 
-    private final Content chrome;
+        private Content chrome;
 
-    Cascades(Content chrome){
-        this.chrome = chrome;
-    }
-
-    Cascades(Color[] colors,
-             float[] tints,
-             boolean streamContent) {
-
-        if (streamContent){
-            this.chrome = new StreamContent(colors,
+        ContentStreamers(Color[] colors,
+                         float[] tints) {
+            chrome = new StreamContent(colors,
                     tints,
                     Defaults.defaultLightText(),
                     Defaults.defaultDarkText(),
                     Defaults.defaultBgColorDark(),
                     0,
                     -1);
+        }
 
-        } else {
-            this.chrome = new StreamIndex(colors,
-                    tints,
-                    Defaults.defaultLightText(),
-                    Defaults.defaultDarkText(),
-                    Defaults.defaultBgColorLight(),
-                    0,
-                    -1);
+        @Override
+        public Content getChrome() {
+            return chrome;
         }
     }
 
-    public Content getChrome() {
-        return chrome;
+    public enum IndexStreamers implements Streamers {
+        Stripes(new Color[]{Color.isabelline, Color.light_gray},
+                new float[]{0});
+
+        private Content chrome;
+
+        IndexStreamers(Color[] colors,
+                       float[] tints) {
+            chrome = new StreamIndex(colors,
+                    tints,
+                    Defaults.defaultLightText(),
+                    Defaults.defaultDarkText(),
+                    Defaults.defaultBgColorDark(),
+                    0,
+                    -1);
+        }
+
+        @Override
+        public Content getChrome() {
+            return chrome;
+        }
     }
 }

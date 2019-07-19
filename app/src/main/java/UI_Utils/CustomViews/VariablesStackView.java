@@ -11,22 +11,20 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import UI_Utils.DataAdapter;
-import UI_Utils.DataViewCustomizations.Feed;
-import UI_Utils.DataViewCustomizations.Printer;
 import com.example.ckyblue.adtwisei4.Logger;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import UI_Utils.DataAdapter;
+import UI_Utils.DataViewCustomizations.Feed;
+import UI_Utils.DataViewCustomizations.Printer;
 import Utility.Data.Alteration;
 
 /*TODO Dispatcher with post execute notifyOfRefreshIntent*/
 
-/*TODO Hack vs Class for conveying data from Printer to ArrayAdapter for nodes*/
-
-public class VariableStackView extends FrameLayout {
+public class VariablesStackView extends FrameLayout {
     String TAG = "Info " + getClass().getName();
 
     public boolean notified = false;
@@ -39,11 +37,18 @@ public class VariableStackView extends FrameLayout {
         String TAG = "Info " + "VariableStackView.customizationsPrinter";
 
         @Override
+        public void notifyOfRefreshIntent() {
+            Logger.log(TAG, "notifyOfRefreshIntent()");
+
+            VariablesStackView.this.notifyOfRefreshIntent();
+        }
+
+        @Override
         public void notifyOfFeedRebuild() {
             Logger.log(TAG, "notifyOfFeedRebuild()");
 
-            VariableStackView.this.variablesAdapter.setCustomizations(getContent());
-            VariableStackView.this.notifyOfFeedRebuild();
+            VariablesStackView.this.variablesAdapter.setCustomizations(getContent());
+            VariablesStackView.this.notifyOfFeedRebuild();
         }
     };
 
@@ -54,22 +59,22 @@ public class VariableStackView extends FrameLayout {
         public void notifyOfContentAlteration(Alteration alteration, String variableName) {
             Logger.log(TAG, "notifyOfContentAlteration(" + alteration + ", " + variableName + ")");
 
-            VariableStackView.this.notifyOfContentAlteration(alteration, variableName);
+            VariablesStackView.this.notifyOfContentAlteration(alteration, variableName);
         }
 
         @Override
         public void notifyOfRefreshIntent() {
             Logger.log(TAG, "notifyOfRefreshIntent()");
 
-            VariableStackView.this.notifyOfRefreshIntent();
+            VariablesStackView.this.notifyOfRefreshIntent();
         }
 
         @Override
         public void notifyOfFeedRebuild() {
             Logger.log(TAG, "notifyOfFeedRebuild()");
 
-            VariableStackView.this.variablesAdapter.setVariablesStackContent(getContent());
-            VariableStackView.this.notifyOfFeedRebuild();
+            VariablesStackView.this.variablesAdapter.setVariablesStackContent(getContent());
+            VariablesStackView.this.notifyOfFeedRebuild();
         }
     };
 
@@ -77,15 +82,15 @@ public class VariableStackView extends FrameLayout {
         this.customizationsPrinter.setFeed(customizationsFeed);
     }
 
-    public void setVariablesStackFeed(Utility.Data.Variables.Stack.Feed variablesStackFeed){
+    public void setVariablesStackFeed(Utility.Data.Variables.Stack.Feed variablesStackFeed) {
         this.variableStackPrinter.setFeed(variablesStackFeed);
     }
 
-    public Feed getCustomizationsFeed(){
+    public Feed getCustomizationsFeed() {
         return this.customizationsPrinter.getFeed();
     }
 
-    public Utility.Data.Variables.Stack.Feed getVariablesFeed(){
+    public Utility.Data.Variables.Stack.Feed getVariablesFeed() {
         return this.variableStackPrinter.getFeed();
     }
 
@@ -134,7 +139,7 @@ public class VariableStackView extends FrameLayout {
         rebuildView();
     }
 
-    private void init(){
+    private void init() {
         variablesAdapter = new VariablesAdapter(getContext(), 0, listAdapterKeys, variableStackPrinter.getContent());
 
         listView = new ListView(getContext());
@@ -147,22 +152,22 @@ public class VariableStackView extends FrameLayout {
         rebuildView();
     }
 
-    public VariableStackView(Context context) {
+    public VariablesStackView(Context context) {
         super(context);
         init();
     }
 
-    public VariableStackView(Context context, AttributeSet attrs) {
+    public VariablesStackView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public VariableStackView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public VariablesStackView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public VariableStackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public VariablesStackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
@@ -193,7 +198,7 @@ class VariablesAdapter extends DataAdapter<String> {
 
             rowLinearLayout = new LinearLayout(getContext());
             rowLinearLayout.setId(View.generateViewId());
-            rowLinearLayout.setLayoutParams(getParamsContent().getRowParams());
+            rowLinearLayout.setLayoutParams(getParamsAdapter().getRowParams());
 
             data = variablesStackContent.getUnit().getStrEqv(varKey);
             rowLinearLayout.addView(createView(Utility.Data.Variables.Unit.Content.Column.identifier.toString(),
@@ -203,7 +208,7 @@ class VariablesAdapter extends DataAdapter<String> {
 
         } else {
             rowLinearLayout = (LinearLayout) convertView;
-            rowLinearLayout.setLayoutParams(getParamsContent().getRowParams());
+            rowLinearLayout.setLayoutParams(getParamsAdapter().getRowParams());
 
             TextView childTextView;
 

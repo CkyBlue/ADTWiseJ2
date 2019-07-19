@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.example.ckyblue.adtwisei4.Logger;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import UI_Utils.DataAdapter;
@@ -22,52 +21,57 @@ import UI_Utils.DataViewCustomizations.Feed;
 import UI_Utils.DataViewCustomizations.Printer;
 import Utility.Data.Alteration;
 
-/*TODO Hack vs Class for conveying data from Printer to ArrayAdapter for nodes*/
-
-public class VariableStackView extends FrameLayout {
+public class NodesStackView extends FrameLayout {
     String TAG = "Info " + getClass().getName();
 
     public boolean notified = false;
 
-    VariablesAdapter variablesAdapter;
+    NodesAdapter nodesAdapter;
     private ListView listView;
-    private List<String> listAdapterKeys = new ArrayList<String>();
+    private List<Integer> listAdapterIndices = new ArrayList<>();
 
     private Printer customizationsPrinter = new Printer() {
-        String TAG = "Info " + "VariableStackView.customizationsPrinter";
+        String TAG = "Info " + "NodesStackView.customizationsPrinter";
+
+        @Override
+        public void notifyOfRefreshIntent() {
+            Logger.log(TAG, "notifyOfRefreshIntent()");
+
+            NodesStackView.this.notifyOfRefreshIntent();
+        }
 
         @Override
         public void notifyOfFeedRebuild() {
             Logger.log(TAG, "notifyOfFeedRebuild()");
 
-            VariableStackView.this.variablesAdapter.setCustomizations(getContent());
-            VariableStackView.this.notifyOfFeedRebuild();
+            NodesStackView.this.nodesAdapter.setCustomizations(getContent());
+            NodesStackView.this.notifyOfFeedRebuild();
         }
     };
 
-    private Utility.Data.Variables.Stack.Printer variableStackPrinter = new Utility.Data.Variables.Stack.Printer() {
-        private String TAG = "Info " + "VariableStackView.variableStackPrinter";
+    private Utility.Data.Nodes.Stack.Printer nodesStackPrinter = new Utility.Data.Nodes.Stack.Printer() {
+        private String TAG = "Info " + "NodesStackView.nodesStackPrinter";
 
         @Override
-        public void notifyOfContentAlteration(Alteration alteration, String variableName) {
-            Logger.log(TAG, "notifyOfContentAlteration(" + alteration + ", " + variableName + ")");
+        public void notifyOfContentAlteration(Alteration alteration, String elementKey, int index) {
+            Logger.log(TAG, "notifyOfContentAlteration(" + alteration + ", " + elementKey + ", " + index + ")");
 
-            VariableStackView.this.notifyOfContentAlteration(alteration, variableName);
+            NodesStackView.this.notifyOfContentAlteration(alteration, elementKey, index);
         }
 
         @Override
         public void notifyOfRefreshIntent() {
             Logger.log(TAG, "notifyOfRefreshIntent()");
 
-            VariableStackView.this.notifyOfRefreshIntent();
+            NodesStackView.this.notifyOfRefreshIntent();
         }
 
         @Override
         public void notifyOfFeedRebuild() {
             Logger.log(TAG, "notifyOfFeedRebuild()");
 
-            VariableStackView.this.variablesAdapter.setVariablesStackContent(getContent());
-            VariableStackView.this.notifyOfFeedRebuild();
+            NodesStackView.this.nodesAdapter.setNodesStackContent(getContent());
+            NodesStackView.this.notifyOfFeedRebuild();
         }
     };
 
@@ -75,25 +79,20 @@ public class VariableStackView extends FrameLayout {
         this.customizationsPrinter.setFeed(customizationsFeed);
     }
 
-    public void setVariablesStackFeed(Utility.Data.Variables.Stack.Feed variablesStackFeed){
-        this.variableStackPrinter.setFeed(variablesStackFeed);
+    public void setNodesStackFeed(Utility.Data.Nodes.Stack.Feed nodesStackFeed) {
+        this.nodesStackPrinter.setFeed(nodesStackFeed);
     }
 
-    public Feed getCustomizationsFeed(){
+    public Feed getCustomizationsFeed() {
         return this.customizationsPrinter.getFeed();
     }
 
-    public Utility.Data.Variables.Stack.Feed getVariablesFeed(){
-        return this.variableStackPrinter.getFeed();
+    public Utility.Data.Nodes.Stack.Feed getNodesFeed() {
+        return this.nodesStackPrinter.getFeed();
     }
 
     public void rebuildView() {
         Logger.log(TAG, "rebuildView()");
-
-        listAdapterKeys.clear();
-        if (variableStackPrinter.getUnit() != null) {
-            listAdapterKeys.addAll(Arrays.asList(variableStackPrinter.getUnit().getVariableNames()));
-        }
 
         refreshView();
     }
@@ -101,7 +100,16 @@ public class VariableStackView extends FrameLayout {
     public void refreshView() {
         Logger.log(TAG, "refreshView()");
 
-        variablesAdapter.notifyDataSetChanged();
+        listAdapterIndices.clear();
+        if (nodesStackPrinter.getUnit() != null) {
+
+            for (int i = 0; i < nodesStackPrinter.getUnit().getSize(); i++) {
+                listAdapterIndices.add(i);
+
+            }
+        }
+
+        nodesAdapter.notifyDataSetChanged();
     }
 
     public void notifyOfRefreshIntent() {
@@ -113,16 +121,9 @@ public class VariableStackView extends FrameLayout {
         }
     }
 
-    public void notifyOfContentAlteration(Alteration alteration, String variableName) {
-        Logger.log(TAG, "notifyOfContentAlteration(" + alteration + ", " + variableName + ")");
+    public void notifyOfContentAlteration(Alteration alteration, String elementKey, int index) {
+        Logger.log(TAG, "notifyOfContentAlteration(" + alteration + ", " + elementKey + ", " + index + ")");
 
-        if (alteration == Alteration.component_added) {
-            listAdapterKeys.add(variableName);
-
-        } else if (alteration == Alteration.component_removed) {
-            listAdapterKeys.remove(variableName);
-
-        }
         notified = true;
     }
 
@@ -132,50 +133,50 @@ public class VariableStackView extends FrameLayout {
         rebuildView();
     }
 
-    private void init(){
-        variablesAdapter = new VariablesAdapter(getContext(), 0, listAdapterKeys, variableStackPrinter.getContent());
+    private void init() {
+        nodesAdapter = new NodesAdapter(getContext(), 0, listAdapterIndices, nodesStackPrinter.getContent());
 
         listView = new ListView(getContext());
         listView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
         this.addView(listView);
-        listView.setAdapter(variablesAdapter);
+        listView.setAdapter(nodesAdapter);
 
         rebuildView();
     }
 
-    public VariableStackView(Context context) {
+    public NodesStackView(Context context) {
         super(context);
         init();
     }
 
-    public VariableStackView(Context context, AttributeSet attrs) {
+    public NodesStackView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public VariableStackView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public NodesStackView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }
 
-    public VariableStackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public NodesStackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
     }
 }
 
-class VariablesAdapter extends DataAdapter<String> {
-    private Utility.Data.Variables.Stack.Content variablesStackContent;
+class NodesAdapter extends DataAdapter<Integer> {
+    private Utility.Data.Nodes.Stack.Content nodesStackContent;
 
-    public VariablesAdapter(Context context, int resource, List<String> objects, Utility.Data.Variables.Stack.Content variablesStack) {
+    public NodesAdapter(Context context, int resource, List<Integer> objects, Utility.Data.Nodes.Stack.Content nodesStack) {
         super(context, resource, objects);
-        variablesStackContent = variablesStack;
+        nodesStackContent = nodesStack;
     }
 
-    public void setVariablesStackContent(Utility.Data.Variables.Stack.Content variablesStackContent) {
-        this.variablesStackContent = variablesStackContent;
+    public void setNodesStackContent(Utility.Data.Nodes.Stack.Content nodesStackContent) {
+        this.nodesStackContent = nodesStackContent;
     }
 
     @NonNull
@@ -184,39 +185,44 @@ class VariablesAdapter extends DataAdapter<String> {
         LinearLayout rowLinearLayout;
 
         String data;
-        String varKey = getItem(position);
+
+        Integer index = getItem(position);
+        if (index == null) {
+            throw new IllegalStateException("The indices passed to NodesAdapter cannot contain a null value.");
+
+        }
 
         if (convertView == null) {
             /*If no view available for recycling, create one*/
 
             rowLinearLayout = new LinearLayout(getContext());
             rowLinearLayout.setId(View.generateViewId());
-            rowLinearLayout.setLayoutParams(getParamsContent().getRowParams());
+            rowLinearLayout.setLayoutParams(getParamsAdapter().getRowParams());
 
-            data = variablesStackContent.getUnit().getStrEqv(varKey);
-            rowLinearLayout.addView(createView(Utility.Data.Variables.Unit.Content.Column.identifier.toString(),
-                    varKey, position));
-            rowLinearLayout.addView(createView(Utility.Data.Variables.Unit.Content.Column.value.toString(),
-                    data, position));
+            for (String elementKey : nodesStackContent.getBluePrint().getKeys()) {
+                data = nodesStackContent.getUnit().getStrEqv(elementKey, index);
+
+                rowLinearLayout.addView(createView(elementKey,
+                        data, position));
+            }
 
         } else {
             rowLinearLayout = (LinearLayout) convertView;
-            rowLinearLayout.setLayoutParams(getParamsContent().getRowParams());
+            rowLinearLayout.setLayoutParams(getParamsAdapter().getRowParams());
 
             TextView childTextView;
 
-            data = variablesStackContent.getUnit().getStrEqv(varKey);
+            int count = 0;
+            for (String elementKey : nodesStackContent.getBluePrint().getKeys()) {
+                data = nodesStackContent.getUnit().getStrEqv(elementKey, index);
 
-            childTextView = (TextView) rowLinearLayout.getChildAt(0);
-            childTextView.setText(varKey);
-            applyCustomizationsToChildView(Utility.Data.Variables.Unit.Content.Column.identifier.toString(),
-                    varKey, position, childTextView);
+                childTextView = (TextView) rowLinearLayout.getChildAt(count);
+                childTextView.setText(data);
+                applyCustomizationsToChildView(elementKey,
+                        data, position, childTextView);
 
-
-            childTextView = (TextView) rowLinearLayout.getChildAt(1);
-            childTextView.setText(data);
-            applyCustomizationsToChildView(Utility.Data.Variables.Unit.Content.Column.value.toString(),
-                    data, position, childTextView);
+                count++;
+            }
         }
 
         return rowLinearLayout;

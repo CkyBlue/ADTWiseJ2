@@ -6,22 +6,25 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import UI_Utils.CustomViews.VariableStackView;
+import UI_Utils.CustomViews.NodesStackView;
 import UI_Utils.DataViewCustomizations.Content;
+import UI_Utils.ParamAdapters;
 import UI_Utils.ParamsAdapter.Themes;
 
+import Utility.Colors.Components;
 import Utility.Data.Nodes.BluePrint;
 import Utility.Data.Type;
 import Utility.Data.Variables.Stack.Feed;
 import Utility.Themes.Cascades;
+import Utility.Themes.Defaults;
 
 /*TODO Test Nodes.Unit.Content for sent notifications*/
 
 public class TestActivity extends AppCompatActivity {
     Utility.Data.Variables.Stack.Content variableStackContent = new Utility.Data.Variables.Stack.Content("myVarStack");
-    VariableStackView variableStackView;
     Feed feed = new Feed();
 
+    NodesStackView nodesStackView;
     BluePrint bluePrint = new BluePrint();
 
     {
@@ -42,10 +45,10 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        Log.i(TAG, "Variables: " + variableStackContent.toString());
+        Log.i(TAG, "Nodes: " + nodesStackContent.toString());
 
-        variableStackView = findViewById(R.id.variableStackView);
-        variableStackView.setVariablesStackFeed(feed);
+        nodesStackView = findViewById(R.id.nodesStackView);
+        nodesStackView.setNodesStackFeed(nodesStackFeed);
     }
 
     public void testingVariables() {
@@ -64,11 +67,11 @@ public class TestActivity extends AppCompatActivity {
         Log.i(TAG, "updateView()");
         Log.i(TAG, "Count: " + count);
 
-        switch (count) {
+       /* switch (count) {
             case 0: {
                 Log.i(TAG, "Setting content.");
 
-                feed.setContent(variableStackContent);
+                feed.setLogText(variableStackContent);
                 break;
             }
             case 1: {
@@ -101,9 +104,9 @@ public class TestActivity extends AppCompatActivity {
 
                 Content customizationsContent = new Content(Cascades.Crimson_CA.getChrome(), Themes.Variables);
                 UI_Utils.DataViewCustomizations.Feed customizationsFeed = new UI_Utils.DataViewCustomizations.Feed();
-                customizationsFeed.setContent(customizationsContent);
+                customizationsFeed.setLogText(customizationsContent);
 
-                variableStackView.setCustomizationsFeed(customizationsFeed);
+                nodesStackView.setCustomizationsFeed(customizationsFeed);
 
                 break;
             }
@@ -116,19 +119,19 @@ public class TestActivity extends AppCompatActivity {
             case 6: {
                 Log.i(TAG, "Trying to access old variables.");
 
-/*
+*//*
                 Log.i("Output", variableStackContent.getUnit().getStr(mString));
                 Log.i("Output", String.valueOf(variableStackContent.getUnit().getInt(mInt)));
                 Log.i("Output", String.valueOf(variableStackContent.getUnit().getBool(mBool)));
                 Log.i("Output", String.valueOf(variableStackContent.getUnit().getFloat(mFloat)));
-*/
+*//*
 
                 break;
             }
             case 7: {
                 Log.i(TAG, "Declaring new variables and changing chromeConteent.");
 
-                variableStackView.getCustomizationsFeed().getContent().setChromeContent(Cascades.AquaGreens_CA.getChrome());
+                nodesStackView.getCustomizationsFeed().getContent().setColorAdapter(Cascades.AquaGreens_CA.getChrome());
 
                 variableStackContent.getUnit().declareVariable(newVar1, Type.STRING);
                 variableStackContent.getUnit().declareVariable(newVar2, Type.INTEGER);
@@ -196,7 +199,7 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
 
-        }
+        }*/
 
         count++;
 
@@ -208,9 +211,9 @@ public class TestActivity extends AppCompatActivity {
         Log.i(TAG, "updateView()");
         Log.i(TAG, "Count: " + count);
 
-        String index = "Index";
-        String data = "Data";
-        String pointer = "Pointer";
+        final String index = "Index";
+        final String data = "Data";
+        final String pointer = "Pointer";
 
         switch (count) {
             case 0: {
@@ -229,6 +232,38 @@ public class TestActivity extends AppCompatActivity {
                     this.nodesStackContent.getUnit().set(pointer, i, i + 1);
                 }
 
+                break;
+            }
+            case 2: {
+                Utility.Colors.ColorAdapter.Content colorAdapter = new Utility.Colors.ColorAdapter.Content() {
+                    @Override
+                    public Components fetchComponents(String key, String content, int position) {
+                        Utility.Colors.Chrome.Content chrome = Defaults.chrome;
+
+                        switch (key) {
+                            case index: {
+                                chrome = Cascades.ContentStreamers.Crimson.getChrome();
+                                break;
+                            }
+                            case data: {
+                                chrome = Cascades.IndexStreamers.Stripes.getChrome();
+                                break;
+                            }
+                            case pointer: {
+                                chrome = Cascades.ContentStreamers.Crimson.getChrome();
+                                break;
+                            }
+                        }
+
+                        return chrome.fetchComponents(content, position);
+                    }
+                };
+
+                Content customizationsContent = new Content(colorAdapter, Themes.Variables);
+                UI_Utils.DataViewCustomizations.Feed customizationsFeed = new UI_Utils.DataViewCustomizations.Feed();
+                customizationsFeed.setContent(customizationsContent);
+
+                nodesStackView.setCustomizationsFeed(customizationsFeed);
                 break;
             }
             case 3: {
@@ -263,13 +298,16 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
             case 7: {
-                Log.i(TAG, "Setting up new nodes.");
+                Log.i(TAG, "Setting up new nodes and applying customization changes.");
 
                 for (int i = 0; i < this.nodesStackContent.getUnit().getSize(); i++) {
                     this.nodesStackContent.getUnit().set(index, i, i);
                     this.nodesStackContent.getUnit().set(data, i, String.valueOf((char) ('M' + i)));
                     this.nodesStackContent.getUnit().set(pointer, i, i + 8);
                 }
+
+                nodesStackView.getCustomizationsFeed().getContent().setParamsAdapter(ParamAdapters.SquareIndices.getParamsAdapter());
+
                 break;
             }
             case 8: {
@@ -305,6 +343,7 @@ public class TestActivity extends AppCompatActivity {
         }
 
         count++;
+        nodesStackContent.refreshIntent();
         Log.i(TAG, "Nodes: " + nodesStackContent.toString());
     }
 

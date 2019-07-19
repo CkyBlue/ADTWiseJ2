@@ -46,6 +46,10 @@ public class Content extends SuperContent<Feed> {
         throw new IllegalStateException("The stack is empty.");
     }
 
+    public BluePrint getBluePrint() {
+        return bluePrint;
+    }
+
     public String getName() {
         return name;
     }

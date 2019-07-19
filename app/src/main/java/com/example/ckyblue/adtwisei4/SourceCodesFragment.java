@@ -23,6 +23,8 @@ import Utility.SourceCode.Layer.Content;
 import Utility.SourceCode.Layer.Feed;
 import Utility.SourceCode.Layer.Printer;
 
+/*ToDO Export SpanFactory objs to library*/
+
 public class SourceCodesFragment extends Fragment {
     View rootView;
     LinearLayout srcCodeLayer_Container;
@@ -69,6 +71,11 @@ public class SourceCodesFragment extends Fragment {
     }
 
     Printer srcCodeLayer_Printer = new Printer() {
+        @Override
+        public void notifyOfRefreshIntent() {
+
+        }
+
         @Override
         public void notifyOfFeedRebuild() {
             rebuildSourceCodeViews();

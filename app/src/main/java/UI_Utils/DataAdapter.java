@@ -15,7 +15,7 @@ import UI_Utils.ParamsAdapter.Themes;
 
 import java.util.List;
 
-import Utility.Colors.Chrome.Components;
+import Utility.Colors.Components;
 import Utility.Themes.Defaults;
 
 public abstract class DataAdapter<T> extends ArrayAdapter<T> {
@@ -35,18 +35,18 @@ public abstract class DataAdapter<T> extends ArrayAdapter<T> {
     }
 
     @NonNull
-    public Utility.Colors.Chrome.Content getChromeContent() {
+    public Utility.Colors.ColorAdapter.Content getColorAdapter() {
         if (getCustomizations() != null) {
-            if (getCustomizations().getChromeContent() != null) {
-                return getCustomizations().getChromeContent();
+            if (getCustomizations().getColorAdapter() != null) {
+                return getCustomizations().getColorAdapter();
             }
         }
 
-        return Defaults.chrome;
+        return Defaults.colorAdapter;
     }
 
     @NonNull
-    public UI_Utils.ParamsAdapter.Content getParamsContent() {
+    public UI_Utils.ParamsAdapter.Content getParamsAdapter() {
         if (getCustomizations() != null) {
             if (getCustomizations().getParamsContent() != null) {
                 return getCustomizations().getParamsContent();
@@ -57,15 +57,18 @@ public abstract class DataAdapter<T> extends ArrayAdapter<T> {
     }
 
     protected void applyCustomizationsToChildView(String key, String content, int position, TextView view) {
-        Utility.Colors.Chrome.Content chromeContent = getChromeContent();
-        UI_Utils.ParamsAdapter.Content paramsContent = getParamsContent();
+        Utility.Colors.ColorAdapter.Content colorAdapter = getColorAdapter();
+        UI_Utils.ParamsAdapter.Content paramsAdapter = getParamsAdapter();
 
-        Components components = getChromeContent().fetchComponents(content, position);
-        view.setTextColor(Color.parseColor(components.getText_color()));
-        view.setBackgroundColor(Color.parseColor(components.getBg_color()));
+        Components components = getColorAdapter().fetchComponents(key, content, position);
 
-        view.setLayoutParams(getParamsContent().getChildParams(key));
-        getParamsContent().applyModifications(key, view);
+        if (components != null) {
+            view.setTextColor(Color.parseColor(components.getText_color()));
+            view.setBackgroundColor(Color.parseColor(components.getBg_color()));
+        }
+
+        view.setLayoutParams(getParamsAdapter().getChildParams(key));
+        getParamsAdapter().applyModifications(key, view);
     }
 
     protected TextView createView(String key, String content, int position) {

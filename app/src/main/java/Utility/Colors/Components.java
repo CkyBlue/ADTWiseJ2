@@ -1,4 +1,4 @@
-package Utility.Colors.Chrome;
+package Utility.Colors;
 
 public class Components {
         private String text_color = "";

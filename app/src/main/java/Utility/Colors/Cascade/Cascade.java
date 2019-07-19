@@ -1,7 +1,7 @@
 package Utility.Colors.Cascade;
 
 import Utility.Colors.Chrome.Content;
-import Utility.Colors.Chrome.Components;
+import Utility.Colors.Components;
 import Utility.Colors.Color;
 import Utility.Colors.Values;
 

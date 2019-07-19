@@ -7,4 +7,9 @@ public class Printer extends SuperPrinter<Content, Feed> {
     public void notifyOfFeedRebuild() {
 
     }
+
+    @Override
+    public void notifyOfRefreshIntent() {
+
+    }
 }

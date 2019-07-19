@@ -1,7 +1,7 @@
 package Utility.Themes;
 
 import Utility.Colors.Chrome.Content;
-import Utility.Colors.Chrome.Components;
+import Utility.Colors.Components;
 import Utility.Colors.Color;
 import Utility.Colors.Values;
 
@@ -39,6 +39,12 @@ public class Defaults {
         public Components fetchComponents(String content, int position) {
             return components;
 
+        }
+    };
+    public final static Utility.Colors.ColorAdapter.Content colorAdapter = new Utility.Colors.ColorAdapter.Content() {
+        @Override
+        public Components fetchComponents(String key, String content, int position) {
+            return chrome.fetchComponents(content, position);
         }
     };
     public final static Content headerChrome = new Content() {
