@@ -1,4 +1,4 @@
-package UI_Utils.CustomViews;
+package UI_Utils.CustomViews.DataView;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -17,14 +17,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import UI_Utils.DataAdapter;
-import UI_Utils.DataViewCustomizations.Feed;
-import UI_Utils.DataViewCustomizations.Printer;
+import UI_Utils.CustomViews.DataView.Customizations.Feed;
+import UI_Utils.CustomViews.DataView.Customizations.Printer;
 import Utility.Data.Alteration;
 
 /*TODO Dispatcher with post execute notifyOfRefreshIntent*/
 
-public class VariablesStackView extends FrameLayout {
+public class VariablesStackView extends LinearLayout {
     String TAG = "Info " + getClass().getName();
 
     public boolean notified = false;
@@ -52,7 +51,7 @@ public class VariablesStackView extends FrameLayout {
         }
     };
 
-    private Utility.Data.Variables.Stack.Printer variableStackPrinter = new Utility.Data.Variables.Stack.Printer() {
+    private Utilities.Data.Variables.Stack.Printer variableStackPrinter = new Utilities.Data.Variables.Stack.Printer() {
         private String TAG = "Info " + "VariableStackView.variableStackPrinter";
 
         @Override
@@ -82,7 +81,7 @@ public class VariablesStackView extends FrameLayout {
         this.customizationsPrinter.setFeed(customizationsFeed);
     }
 
-    public void setVariablesStackFeed(Utility.Data.Variables.Stack.Feed variablesStackFeed) {
+    public void setVariablesStackFeed(Utilities.Data.Variables.Stack.Feed variablesStackFeed) {
         this.variableStackPrinter.setFeed(variablesStackFeed);
     }
 
@@ -90,7 +89,7 @@ public class VariablesStackView extends FrameLayout {
         return this.customizationsPrinter.getFeed();
     }
 
-    public Utility.Data.Variables.Stack.Feed getVariablesFeed() {
+    public Utilities.Data.Variables.Stack.Feed getVariablesFeed() {
         return this.variableStackPrinter.getFeed();
     }
 
@@ -174,14 +173,14 @@ public class VariablesStackView extends FrameLayout {
 }
 
 class VariablesAdapter extends DataAdapter<String> {
-    private Utility.Data.Variables.Stack.Content variablesStackContent;
+    private Utilities.Data.Variables.Stack.Content variablesStackContent;
 
-    public VariablesAdapter(Context context, int resource, List<String> objects, Utility.Data.Variables.Stack.Content variablesStack) {
+    public VariablesAdapter(Context context, int resource, List<String> objects, Utilities.Data.Variables.Stack.Content variablesStack) {
         super(context, resource, objects);
         variablesStackContent = variablesStack;
     }
 
-    public void setVariablesStackContent(Utility.Data.Variables.Stack.Content variablesStackContent) {
+    public void setVariablesStackContent(Utilities.Data.Variables.Stack.Content variablesStackContent) {
         this.variablesStackContent = variablesStackContent;
     }
 
@@ -201,9 +200,9 @@ class VariablesAdapter extends DataAdapter<String> {
             rowLinearLayout.setLayoutParams(getParamsAdapter().getRowParams());
 
             data = variablesStackContent.getUnit().getStrEqv(varKey);
-            rowLinearLayout.addView(createView(Utility.Data.Variables.Unit.Content.Column.identifier.toString(),
+            rowLinearLayout.addView(createView(Utilities.Data.Variables.Unit.Content.Column.identifier.toString(),
                     varKey, position));
-            rowLinearLayout.addView(createView(Utility.Data.Variables.Unit.Content.Column.value.toString(),
+            rowLinearLayout.addView(createView(Utilities.Data.Variables.Unit.Content.Column.value.toString(),
                     data, position));
 
         } else {
@@ -216,13 +215,13 @@ class VariablesAdapter extends DataAdapter<String> {
 
             childTextView = (TextView) rowLinearLayout.getChildAt(0);
             childTextView.setText(varKey);
-            applyCustomizationsToChildView(Utility.Data.Variables.Unit.Content.Column.identifier.toString(),
+            applyCustomizationsToChildView(Utilities.Data.Variables.Unit.Content.Column.identifier.toString(),
                     varKey, position, childTextView);
 
 
             childTextView = (TextView) rowLinearLayout.getChildAt(1);
             childTextView.setText(data);
-            applyCustomizationsToChildView(Utility.Data.Variables.Unit.Content.Column.value.toString(),
+            applyCustomizationsToChildView(Utilities.Data.Variables.Unit.Content.Column.value.toString(),
                     data, position, childTextView);
         }
 

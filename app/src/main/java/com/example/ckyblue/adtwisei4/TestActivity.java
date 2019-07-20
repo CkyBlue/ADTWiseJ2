@@ -6,10 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 
-import UI_Utils.CustomViews.NodesStackView;
-import UI_Utils.DataViewCustomizations.Content;
-import UI_Utils.ParamAdapters;
-import UI_Utils.ParamsAdapter.Themes;
+import UI_Utils.CustomViews.DataView.NodesStackView;
+import UI_Utils.CustomViews.DataView.Customizations.Content;
+import UI_Utils.CustomViews.DataView.ParamsAdapter.Themes;
 
 import Utility.Colors.Components;
 import Utility.Data.Nodes.BluePrint;
@@ -103,7 +102,7 @@ public class TestActivity extends AppCompatActivity {
                 Log.i("Output", String.valueOf(variableStackContent.getUnit().getFloat(mFloat)));
 
                 Content customizationsContent = new Content(Cascades.Crimson_CA.getChrome(), Themes.Variables);
-                UI_Utils.DataViewCustomizations.Feed customizationsFeed = new UI_Utils.DataViewCustomizations.Feed();
+                UI_Utils.CustomViews.DataView.DataViewCustomizations.Feed customizationsFeed = new UI_Utils.CustomViews.DataView.DataViewCustomizations.Feed();
                 customizationsFeed.setLogText(customizationsContent);
 
                 nodesStackView.setCustomizationsFeed(customizationsFeed);
@@ -260,7 +259,7 @@ public class TestActivity extends AppCompatActivity {
                 };
 
                 Content customizationsContent = new Content(colorAdapter, Themes.Variables);
-                UI_Utils.DataViewCustomizations.Feed customizationsFeed = new UI_Utils.DataViewCustomizations.Feed();
+                UI_Utils.CustomViews.DataView.Customizations.Feed customizationsFeed = new UI_Utils.CustomViews.DataView.Customizations.Feed();
                 customizationsFeed.setContent(customizationsContent);
 
                 nodesStackView.setCustomizationsFeed(customizationsFeed);

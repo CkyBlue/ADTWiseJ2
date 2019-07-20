@@ -15,10 +15,10 @@
         android:onClick="update"
         android:text="Update" />
 
-    <UI_Utils.CustomViews.NodesStackView
+    <UI_Utils.CustomViews.DataView.NodesStackView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/nodesStackView">
-    </UI_Utils.CustomViews.NodesStackView>
+    </UI_Utils.CustomViews.DataView.NodesStackView>
 
 </LinearLayout>

@@ -7,6 +7,6 @@
 
     <include layout="@layout/title_view" />
 
-    <include layout="@layout/scroller_v_in_h_out" />
+    <include layout="@layout/2d_scroller" />
 
 </LinearLayout>

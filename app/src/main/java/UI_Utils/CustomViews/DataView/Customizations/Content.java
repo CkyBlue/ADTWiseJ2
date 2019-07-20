@@ -1,4 +1,4 @@
-package UI_Utils.DataViewCustomizations;
+package UI_Utils.CustomViews.DataView.Customizations;
 
 import Utility.Bases.SuperContent;
 
@@ -21,8 +21,8 @@ public class Content extends SuperContent<Feed> {
         }
     };
 
-    private UI_Utils.ParamsAdapter.Feed paramsFeed = new UI_Utils.ParamsAdapter.Feed();
-    private UI_Utils.ParamsAdapter.Printer paramsPrinter = new UI_Utils.ParamsAdapter.Printer() {
+    private UI_Utils.CustomViews.DataView.ParamsAdapter.Feed paramsFeed = new UI_Utils.CustomViews.DataView.ParamsAdapter.Feed();
+    private UI_Utils.CustomViews.DataView.ParamsAdapter.Printer paramsPrinter = new UI_Utils.CustomViews.DataView.ParamsAdapter.Printer() {
         @Override
         public void notifyOfRefreshIntent() {
             if (Content.this.getFeed() != null) {
@@ -38,7 +38,7 @@ public class Content extends SuperContent<Feed> {
         }
     };
 
-    public Content(Utility.Colors.ColorAdapter.Content colorAdapter, UI_Utils.ParamsAdapter.Content paramsAdapter) {
+    public Content(Utility.Colors.ColorAdapter.Content colorAdapter, UI_Utils.CustomViews.DataView.ParamsAdapter.Content paramsAdapter) {
         colorPrinter.setFeed(colorFeed);
         paramsPrinter.setFeed(paramsFeed);
 
@@ -50,7 +50,7 @@ public class Content extends SuperContent<Feed> {
         return colorPrinter.getContent();
     }
 
-    public UI_Utils.ParamsAdapter.Content getParamsContent() {
+    public UI_Utils.CustomViews.DataView.ParamsAdapter.Content getParamsContent() {
         return paramsPrinter.getContent();
     }
 
@@ -58,7 +58,7 @@ public class Content extends SuperContent<Feed> {
         this.colorFeed.setContent(colorAdapter);
     }
 
-    public void setParamsAdapter(UI_Utils.ParamsAdapter.Content paramsAdapter) {
+    public void setParamsAdapter(UI_Utils.CustomViews.DataView.ParamsAdapter.Content paramsAdapter) {
         this.paramsFeed.setContent(paramsAdapter);
     }
 }

@@ -1,12 +1,12 @@
-package UI_Utils.CustomViews;
+package UI_Utils.CustomViews.DataView;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,18 +16,25 @@ import com.example.ckyblue.adtwisei4.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import UI_Utils.DataAdapter;
-import UI_Utils.DataViewCustomizations.Feed;
-import UI_Utils.DataViewCustomizations.Printer;
+import UI_Utils.CustomViews.DataView.Customizations.Feed;
+import UI_Utils.CustomViews.DataView.Customizations.Printer;
+import UI_Utils.CustomViews.DataView.ParamsAdapter.Themes;
 import Utility.Data.Alteration;
 
-public class NodesStackView extends FrameLayout {
+import static UI_Utils.CustomViews.DataView.Utilities.applyCustomizations;
+
+/*TODO Header port*/
+/*TODO Build abstract superclass for StackViews for common default alts logic*/
+
+public class NodesStackView extends LinearLayout {
     String TAG = "Info " + getClass().getName();
 
     public boolean notified = false;
 
-    NodesAdapter nodesAdapter;
+    DataAdapter dataAdapter;
     private ListView listView;
+    private LinearLayout headerRow;
+
     private List<Integer> listAdapterIndices = new ArrayList<>();
 
     private Printer customizationsPrinter = new Printer() {
@@ -44,7 +51,7 @@ public class NodesStackView extends FrameLayout {
         public void notifyOfFeedRebuild() {
             Logger.log(TAG, "notifyOfFeedRebuild()");
 
-            NodesStackView.this.nodesAdapter.setCustomizations(getContent());
+            NodesStackView.this.dataAdapter.setCustomizations(getContent());
             NodesStackView.this.notifyOfFeedRebuild();
         }
     };
@@ -70,7 +77,9 @@ public class NodesStackView extends FrameLayout {
         public void notifyOfFeedRebuild() {
             Logger.log(TAG, "notifyOfFeedRebuild()");
 
-            NodesStackView.this.nodesAdapter.setNodesStackContent(getContent());
+            NodesAdapter nodesAdapter = (NodesAdapter) dataAdapter;
+
+            nodesAdapter.setNodesStackContent(getContent());
             NodesStackView.this.notifyOfFeedRebuild();
         }
     };
@@ -94,6 +103,21 @@ public class NodesStackView extends FrameLayout {
     public void rebuildView() {
         Logger.log(TAG, "rebuildView()");
 
+        this.headerRow.removeAllViews();
+
+        if (nodesStackPrinter.getUnit() != null) {
+            for (String key : nodesStackPrinter.getUnit().getBluePrint().getKeys()) {
+                TextView tv = new TextView(this.getContext());
+
+                applyCustomizations("Header", key, 0, tv, );
+
+                tv.setGravity(Gravity.CENTER);
+                tv.setText(content);
+            }
+        }
+
+        return tv;
+
         refreshView();
     }
 
@@ -109,7 +133,7 @@ public class NodesStackView extends FrameLayout {
             }
         }
 
-        nodesAdapter.notifyDataSetChanged();
+        dataAdapter.notifyDataSetChanged();
     }
 
     public void notifyOfRefreshIntent() {
@@ -134,14 +158,29 @@ public class NodesStackView extends FrameLayout {
     }
 
     private void init() {
-        nodesAdapter = new NodesAdapter(getContext(), 0, listAdapterIndices, nodesStackPrinter.getContent());
+        setOrientation(VERTICAL);
+
+        this.headerRow = new LinearLayout(getContext());
+
+        if (this.customizationsPrinter.getColorAdapter() != null) {
+            this.headerRow.setLayoutParams(this.customizationsPrinter.getParamsAdapter().getRowParams(Port.header));
+
+        } else {
+            this.headerRow.setLayoutParams(Themes.Default.getRowParams(Port.header));
+
+        }
+
+
+        this.addView(this.headerRow);
+
+        dataAdapter = new NodesAdapter(getContext(), 0, listAdapterIndices, nodesStackPrinter.getContent());
 
         listView = new ListView(getContext());
         listView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
 
         this.addView(listView);
-        listView.setAdapter(nodesAdapter);
+        listView.setAdapter(dataAdapter);
 
         rebuildView();
     }
@@ -164,6 +203,32 @@ public class NodesStackView extends FrameLayout {
     public NodesStackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
+    }
+}
+
+abstract class StackView extends LinearLayout {
+    public abstract void refreshView();
+
+    public abstract void notifyOfRefreshIntent();
+
+    public abstract void notifyOfContentAlteration(Alteration alteration, String elementKey, int index);
+
+    public abstract void notifyOfFeedRebuild();
+
+    public StackView(Context context) {
+        super(context);
+    }
+
+    public StackView(Context context, AttributeSet attrs) {
+        super(context, attrs);
+    }
+
+    public StackView(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    public StackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr, defStyleRes);
     }
 }
 
