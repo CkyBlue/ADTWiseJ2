@@ -1,5 +1,6 @@
 package Utility.Themes;
 
+import Utility.Port;
 import Utility.Colors.Chrome.Content;
 import Utility.Colors.Components;
 import Utility.Colors.Color;
@@ -43,8 +44,13 @@ public class Defaults {
     };
     public final static Utility.Colors.ColorAdapter.Content colorAdapter = new Utility.Colors.ColorAdapter.Content() {
         @Override
-        public Components fetchComponents(String key, String content, int position) {
+        public Components fetchComponents(Port port, String key, String content, int position) {
+            if (port == Port.header) {
+                return headerChrome.fetchComponents(content, position);
+            }
+
             return chrome.fetchComponents(content, position);
+
         }
     };
     public final static Content headerChrome = new Content() {

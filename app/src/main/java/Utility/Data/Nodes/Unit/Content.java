@@ -2,6 +2,8 @@ package Utility.Data.Nodes.Unit;
 
 import android.util.Log;
 
+import com.example.ckyblue.adtwisei4.Logger;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -20,7 +22,7 @@ public class Content extends SuperContent<Feed> {
     private final HashMap<String, ArrayList> node_values = new HashMap<>();
 
     public Content(BluePrint bluePrint, int length) {
-        rebuildNodes(bluePrint, length);
+        init(bluePrint, length);
     }
 
     public BluePrint getBluePrint() {
@@ -41,11 +43,11 @@ public class Content extends SuperContent<Feed> {
 
             } else {
                 if (index == getSize()) {
-                    Log.i("addNode", "index == getSize()");
+                    Logger.log("addNode", "index == getSize()");
                     arrayList.add(Utilities.getTypeDefault(getBluePrint().getType(element_key)));
 
                 } else if (index < getSize() && index >= 0) {
-                    Log.i("addNode", "index < getSize() && index >= 0");
+                    Logger.log("addNode", "index < getSize() && index >= 0");
                     arrayList.add(index, Utilities.getTypeDefault(getBluePrint().getType(element_key)));
 
                 } else {
@@ -105,7 +107,7 @@ public class Content extends SuperContent<Feed> {
     }
 
     @SuppressWarnings("unchecked")
-    public void rebuildNodes(BluePrint bluePrint, int length) {
+    private void init(BluePrint bluePrint, int length) {
         if (bluePrint == null){
             throw new IllegalArgumentException("BluePrint object cannot be null.");
         }
@@ -259,12 +261,6 @@ public class Content extends SuperContent<Feed> {
     private void validateIndexExists(int index) {
         if (index < 0 || index >= getSize()) {
             throw new IllegalArgumentException(index + " is not a valid index.");
-        }
-    }
-
-    public void refreshIntent() {
-        if (this.getFeed() != null) {
-            this.getFeed().refreshIntent();
         }
     }
 

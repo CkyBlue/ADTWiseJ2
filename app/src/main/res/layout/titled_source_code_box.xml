@@ -6,7 +6,6 @@
     android:orientation="vertical">
 
     <include layout="@layout/title_view" />
-
-    <include layout="@layout/2d_scroller" />
+    <include layout="@layout/scroller_2d" />
 
 </LinearLayout>

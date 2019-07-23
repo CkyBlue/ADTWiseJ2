@@ -14,6 +14,8 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import java.util.HashMap;
+
 import UI_Utils.CustomViews.SourceCodeUnitView;
 
 import UI_Utils.SpanFactory;
@@ -29,7 +31,8 @@ public class SourceCodesFragment extends Fragment {
     View rootView;
     LinearLayout srcCodeLayer_Container;
 
-//    private final HashMap<String, LinearLayout> titledSrcCodeBoxes = new HashMap<>();
+    //    private final HashMap<String, LinearLayout> titledSrcCodeBoxes = new HashMap<>();
+    private final HashMap<String, SourceCodeUnitView> sourceCodeUnitViews = new HashMap<>();
 
     SpanFactory baseFormatting, lineCountFormatting, highlightFormatting;
 
@@ -90,6 +93,14 @@ public class SourceCodesFragment extends Fragment {
         LinearLayout innerContainer;
         LinearLayout titleViewBox;
 
+        /*The unit Feeds constituting a Layer contain references to Printer objects used for rendering them. Those references are removed
+        ro prevent a memory leak.*/
+
+        for (SourceCodeUnitView sourceCodeUnitView : sourceCodeUnitViews.values()) {
+            sourceCodeUnitView.setFeed(null);
+        }
+
+        sourceCodeUnitViews.clear();
         srcCodeLayer_Container.removeAllViews();
 //        titledSrcCodeBoxes.clear();
 
@@ -97,7 +108,7 @@ public class SourceCodesFragment extends Fragment {
 
         if (layerContent != null) {
             for (String sourceCodeUnitKey : layerContent.getUnitKeys()) {
-                unitFeed = this.srcCodeLayer_Printer.getContent().getUnitFeed(sourceCodeUnitKey);
+                unitFeed = layerContent.getUnitFeed(sourceCodeUnitKey);
 
                 srcCodeUnitView = new SourceCodeUnitView(getContext());
                 srcCodeUnitView.setFeed(unitFeed);
@@ -108,7 +119,7 @@ public class SourceCodesFragment extends Fragment {
                 srcCodeUnitView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
                         LinearLayout.LayoutParams.WRAP_CONTENT));
 
-                titleViewBox = (LinearLayout) getLayoutInflater().inflate(R.layout.titled_src_code_box,
+                titleViewBox = (LinearLayout) getLayoutInflater().inflate(R.layout.titled_source_code_box,
                         srcCodeLayer_Container, false);
 
                 ((TextView) titleViewBox.findViewById(R.id.titleTextView)).setText(sourceCodeUnitKey);
@@ -116,6 +127,7 @@ public class SourceCodesFragment extends Fragment {
                 innerContainer.addView(srcCodeUnitView);
 
 //                titledSrcCodeBoxes.put(sourceCodeUnitKey, titleViewBox);
+                sourceCodeUnitViews.put(sourceCodeUnitKey, srcCodeUnitView);
                 srcCodeLayer_Container.addView(titleViewBox);
             }
         }

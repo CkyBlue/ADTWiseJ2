@@ -11,14 +11,17 @@ import static Utility.Data.Layer.Component.NodesStack;
 import static Utility.Data.Layer.Component.VariablesStack;
 
 public class Content extends SuperContent<Feed> {
-    private final HashMap<String, Utility.Data.Nodes.Stack.Content> nodesStackHashMap = new HashMap<>();
-    private final HashMap<String, Utility.Data.Variables.Stack.Content> variableStackHashMap = new HashMap<>();
+    private final HashMap<String, Utility.Data.Nodes.Stack.Feed> nodesStackFeedHashMap = new HashMap<>();
+    private final HashMap<String, Utility.Data.Variables.Stack.Feed> variableStackFeedHashMap = new HashMap<>();
 
     public void buildNodesStack(String key, BluePrint bluePrint, int length) {
-        validateNoStackExists(VariablesStack, key);
+        validateNoStackExists(NodesStack, key);
 
-        Utility.Data.Nodes.Stack.Content nodesStack = new Utility.Data.Nodes.Stack.Content(key, bluePrint, length);
-        this.nodesStackHashMap.put(key, nodesStack);
+        Utility.Data.Nodes.Stack.Content nodesStackContent = new Utility.Data.Nodes.Stack.Content(key, bluePrint, length);
+        Utility.Data.Nodes.Stack.Feed nodesStackFeed = new Utility.Data.Nodes.Stack.Feed();
+
+        nodesStackFeed.setContent(nodesStackContent);
+        this.nodesStackFeedHashMap.put(key, nodesStackFeed);
 
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_added, NodesStack, key);
@@ -27,10 +30,13 @@ public class Content extends SuperContent<Feed> {
     }
 
     public void buildVariablesStack(String key) {
-        validateNoStackExists(NodesStack, key);
+        validateNoStackExists(VariablesStack, key);
 
-        Utility.Data.Variables.Stack.Content variablesStack = new Utility.Data.Variables.Stack.Content(key);
-        this.variableStackHashMap.put(key, variablesStack);
+        Utility.Data.Variables.Stack.Content variablesStackContent = new Utility.Data.Variables.Stack.Content(key);
+        Utility.Data.Variables.Stack.Feed variablesStackFeed = new Utility.Data.Variables.Stack.Feed();
+
+        variablesStackFeed.setContent(variablesStackContent);
+        this.variableStackFeedHashMap.put(key, variablesStackFeed);
 
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_added, Component.VariablesStack, key);
@@ -42,10 +48,10 @@ public class Content extends SuperContent<Feed> {
         validateStackExists(component, componentKey);
 
         if (component == NodesStack) {
-            this.nodesStackHashMap.remove(componentKey);
+            this.nodesStackFeedHashMap.remove(componentKey);
 
         } else if (component == VariablesStack) {
-            this.variableStackHashMap.remove(componentKey);
+            this.variableStackFeedHashMap.remove(componentKey);
 
         }
 
@@ -55,40 +61,31 @@ public class Content extends SuperContent<Feed> {
         }
     }
 
-    public Utility.Data.Nodes.Stack.Content getNodesStack(String key) {
+    public Utility.Data.Nodes.Stack.Feed getNodesStackFeed(String key) {
         validateStackExists(NodesStack, key);
-        return  this.nodesStackHashMap.get(key);
+        return  this.nodesStackFeedHashMap.get(key);
 
     }
 
-    public Utility.Data.Variables.Stack.Content getVariablesStack(String key) {
+    public Utility.Data.Variables.Stack.Feed getVariablesStackFeed(String key) {
         validateStackExists(VariablesStack, key);
-        return  this.variableStackHashMap.get(key);
+        return  this.variableStackFeedHashMap.get(key);
 
     }
 
     public Set<String> getKeys(Component component) {
         switch (component) {
             case NodesStack: {
-                return this.nodesStackHashMap.keySet();
+                return this.nodesStackFeedHashMap.keySet();
 
             }
             case VariablesStack: {
-                return this.variableStackHashMap.keySet();
+                return this.variableStackFeedHashMap.keySet();
 
             }
         }
 
         throw new IllegalStateException("Component is not recognized.");
-    }
-
-    public void clear() {
-        this.variableStackHashMap.clear();
-        this.nodesStackHashMap.clear();
-
-        if (getFeed() != null) {
-            getFeed().feedRebuilt();
-        }
     }
 
     private void validateStackExists(Component component, String componentKey){
@@ -110,12 +107,12 @@ public class Content extends SuperContent<Feed> {
 
         switch (component) {
             case NodesStack: {
-                stack = this.nodesStackHashMap.get(componentKey);
+                stack = this.nodesStackFeedHashMap.get(componentKey);
                 break;
 
             }
             case VariablesStack: {
-                stack = this.variableStackHashMap.get(componentKey);
+                stack = this.variableStackFeedHashMap.get(componentKey);
                 break;
 
             }
@@ -128,5 +125,14 @@ public class Content extends SuperContent<Feed> {
         }
 
         return keyExists;
+    }
+
+    public void clear() {
+        this.variableStackFeedHashMap.clear();
+        this.nodesStackFeedHashMap.clear();
+
+        if (getFeed() != null) {
+            getFeed().feedRebuilt();
+        }
     }
 }

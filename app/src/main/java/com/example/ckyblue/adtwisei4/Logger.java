@@ -4,6 +4,6 @@ import android.util.Log;
 
 public class Logger {
     public static void log(String tag, String content){
-        Log.i(tag, content);
+        Log.i("<Log> " + tag, content);
     }
 }

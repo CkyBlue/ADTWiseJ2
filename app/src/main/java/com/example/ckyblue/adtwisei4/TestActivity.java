@@ -5,11 +5,15 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import UI_Utils.CustomViews.DataView.NodesStackView;
 import UI_Utils.CustomViews.DataView.Customizations.Content;
 import UI_Utils.CustomViews.DataView.ParamsAdapter.Themes;
 
+import UI_Utils.CustomViews.DataView.VariablesStackView;
+import Utility.Port;
 import Utility.Colors.Components;
 import Utility.Data.Nodes.BluePrint;
 import Utility.Data.Type;
@@ -21,9 +25,11 @@ import Utility.Themes.Defaults;
 
 public class TestActivity extends AppCompatActivity {
     Utility.Data.Variables.Stack.Content variableStackContent = new Utility.Data.Variables.Stack.Content("myVarStack");
-    Feed feed = new Feed();
+    Feed variableStackFeed = new Feed();
 
     NodesStackView nodesStackView;
+    VariablesStackView variablesStackView;
+
     BluePrint bluePrint = new BluePrint();
 
     {
@@ -35,7 +41,7 @@ public class TestActivity extends AppCompatActivity {
     Utility.Data.Nodes.Stack.Content nodesStackContent = new Utility.Data.Nodes.Stack.Content("myNodesStack", bluePrint, 12);
     Utility.Data.Nodes.Stack.Feed nodesStackFeed = new Utility.Data.Nodes.Stack.Feed();
 
-    String TAG = "Info " + getClass().getName();
+    String TAG = getClass().getName();
 
     int count = 0;
 
@@ -44,10 +50,13 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        Log.i(TAG, "Nodes: " + nodesStackContent.toString());
-
         nodesStackView = findViewById(R.id.nodesStackView);
         nodesStackView.setNodesStackFeed(nodesStackFeed);
+        nodesStackFeed.setContent(nodesStackContent);
+
+        variablesStackView = findViewById(R.id.variableStackView);
+        variablesStackView.setVariablesStackFeed(variableStackFeed);
+
     }
 
     public void testingVariables() {
@@ -63,18 +72,18 @@ public class TestActivity extends AppCompatActivity {
         String l3Var1 = "l3Var1";
         String l3Var2 = "l3Var2";
 
-        Log.i(TAG, "updateView()");
-        Log.i(TAG, "Count: " + count);
+        Logger.log(TAG, "updateView()");
+        Logger.log(TAG, "Count: " + count);
 
-       /* switch (count) {
+        switch (count) {
             case 0: {
-                Log.i(TAG, "Setting content.");
+                Logger.log(TAG, "Setting content.");
 
-                feed.setLogText(variableStackContent);
+                variableStackFeed.setContent(variableStackContent);
                 break;
             }
             case 1: {
-                Log.i(TAG, "Building variables.");
+                Logger.log(TAG, "Building variables.");
 
                 variableStackContent.getUnit().declareVariable(mString, Type.STRING);
                 variableStackContent.getUnit().declareVariable(mInt, Type.INTEGER);
@@ -84,7 +93,7 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
             case 2: {
-                Log.i(TAG, "Setting variables.");
+                Logger.log(TAG, "Setting variables.");
 
                 variableStackContent.getUnit().set(mString, "Sanskar");
                 variableStackContent.getUnit().set(mInt, 12);
@@ -94,43 +103,61 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
             case 4: {
-                Log.i(TAG, "Getting variables and setting new customizations.");
+                Logger.log(TAG, "Getting variables and setting new customizations.");
 
-                Log.i("Output", variableStackContent.getUnit().getStr(mString));
-                Log.i("Output", String.valueOf(variableStackContent.getUnit().getInt(mInt)));
-                Log.i("Output", String.valueOf(variableStackContent.getUnit().getBool(mBool)));
-                Log.i("Output", String.valueOf(variableStackContent.getUnit().getFloat(mFloat)));
+                Logger.log("Output", variableStackContent.getUnit().getStr(mString));
+                Logger.log("Output", String.valueOf(variableStackContent.getUnit().getInt(mInt)));
+                Logger.log("Output", String.valueOf(variableStackContent.getUnit().getBool(mBool)));
+                Logger.log("Output", String.valueOf(variableStackContent.getUnit().getFloat(mFloat)));
 
-                Content customizationsContent = new Content(Cascades.Crimson_CA.getChrome(), Themes.Variables);
-                UI_Utils.CustomViews.DataView.DataViewCustomizations.Feed customizationsFeed = new UI_Utils.CustomViews.DataView.DataViewCustomizations.Feed();
-                customizationsFeed.setLogText(customizationsContent);
+                Utility.Colors.ColorAdapter.Content colorAdapter = new Utility.Colors.ColorAdapter.Content() {
+                    @Override
+                    public Components fetchComponents(Port port, String key, String content, int position) {
 
-                nodesStackView.setCustomizationsFeed(customizationsFeed);
+                        Utility.Colors.Chrome.Content chrome;
 
+                        if (port == Port.header) {
+                            chrome = Defaults.headerChrome;
+
+                        } else {
+                            chrome = Defaults.chrome;
+
+                            if (key.equals(Utility.Data.Variables.Unit.Content.Column.Value.toString())) {
+                                chrome = Cascades.IndexStreamers.Stripes.getChrome();
+                            }
+                        }
+
+                        return chrome.fetchComponents(content, position);
+                    }
+                };
+
+                Content customizationsContent = new Content(colorAdapter, Themes.Variables);
+                UI_Utils.CustomViews.DataView.Customizations.Feed customizationsFeed = new UI_Utils.CustomViews.DataView.Customizations.Feed();
+                customizationsFeed.setContent(customizationsContent);
+
+                variablesStackView.setCustomizationsFeed(customizationsFeed);
                 break;
             }
             case 5: {
-                Log.i(TAG, "Adding layer.2");
+                Logger.log(TAG, "Adding layer.2");
 
                 variableStackContent.push();
                 break;
             }
             case 6: {
-                Log.i(TAG, "Trying to access old variables.");
+         /*       Logger.log(TAG, "Trying to access old variables.");
 
-*//*
-                Log.i("Output", variableStackContent.getUnit().getStr(mString));
-                Log.i("Output", String.valueOf(variableStackContent.getUnit().getInt(mInt)));
-                Log.i("Output", String.valueOf(variableStackContent.getUnit().getBool(mBool)));
-                Log.i("Output", String.valueOf(variableStackContent.getUnit().getFloat(mFloat)));
-*//*
 
+                Logger.log("Output", variableStackContent.getUnit().getStr(mString));
+                Logger.log("Output", String.valueOf(variableStackContent.getUnit().getInt(mInt)));
+                Logger.log("Output", String.valueOf(variableStackContent.getUnit().getBool(mBool)));
+                Logger.log("Output", String.valueOf(variableStackContent.getUnit().getFloat(mFloat)));
+
+*/
                 break;
             }
             case 7: {
-                Log.i(TAG, "Declaring new variables and changing chromeConteent.");
-
-                nodesStackView.getCustomizationsFeed().getContent().setColorAdapter(Cascades.AquaGreens_CA.getChrome());
+                Logger.log(TAG, "Declaring new variables and changing chromeConteent.");
 
                 variableStackContent.getUnit().declareVariable(newVar1, Type.STRING);
                 variableStackContent.getUnit().declareVariable(newVar2, Type.INTEGER);
@@ -138,7 +165,7 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
             case 8: {
-                Log.i(TAG, "Setting variables.");
+                Logger.log(TAG, "Setting variables.");
 
                 variableStackContent.getUnit().set(newVar1, "Rhythm");
                 variableStackContent.getUnit().set(newVar2, 52);
@@ -146,21 +173,21 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
             case 9: {
-                Log.i(TAG, "Getting variables.");
+                Logger.log(TAG, "Getting variables.");
 
-                Log.i("Output", variableStackContent.getUnit().getStr(newVar1));
-                Log.i("Output", String.valueOf(variableStackContent.getUnit().getInt(newVar2)));
+                Logger.log("Output", variableStackContent.getUnit().getStr(newVar1));
+                Logger.log("Output", String.valueOf(variableStackContent.getUnit().getInt(newVar2)));
 
                 break;
             }
             case 10: {
-                Log.i(TAG, "Adding layer 3.");
+                Logger.log(TAG, "Adding layer 3.");
 
                 variableStackContent.push();
                 break;
             }
             case 11: {
-                Log.i(TAG, "Declaring new variables.");
+                Logger.log(TAG, "Declaring new variables.");
 
                 variableStackContent.getUnit().declareVariable(l3Var1, Type.STRING);
                 variableStackContent.getUnit().declareVariable(l3Var2, Type.INTEGER);
@@ -168,47 +195,45 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
             case 12: {
-                Log.i(TAG, "First pop");
+                Logger.log(TAG, "First pop");
 
                 variableStackContent.pop();
                 break;
             }
             case 13: {
-                Log.i(TAG, "Re-pushing Layer 3");
+                Logger.log(TAG, "Re-pushing Layer 3");
 
                 variableStackContent.push();
                 break;
             }
             case 14: {
-                Log.i(TAG, "Another pop");
+                Logger.log(TAG, "Another pop");
 
                 variableStackContent.pop();
                 break;
             }
             case 15: {
-                Log.i(TAG, "Another pop");
+                Logger.log(TAG, "Another pop");
 
                 variableStackContent.pop();
                 break;
             }
             case 16: {
-                Log.i(TAG, "Attempting to pop base layer ");
+                Logger.log(TAG, "Attempting to pop base layer ");
 
                 variableStackContent.pop();
                 break;
             }
 
-        }*/
-
-        count++;
+        }
 
         variableStackContent.getUnit().refreshIntent();
-        Log.i(TAG, "Variables: " + variableStackContent.toString());
+        Logger.log(TAG, "Variables: " + variableStackContent.toString());
     }
 
     public void testingNodes() {
-        Log.i(TAG, "updateView()");
-        Log.i(TAG, "Count: " + count);
+        Logger.log(TAG, "updateView()");
+        Logger.log(TAG, "Count: " + count);
 
         final String index = "Index";
         final String data = "Data";
@@ -216,14 +241,14 @@ public class TestActivity extends AppCompatActivity {
 
         switch (count) {
             case 0: {
-                Log.i(TAG, "Setting content and adding a node.");
+                Logger.log(TAG, "Pushing a new layer and adding node.");
 
-                nodesStackFeed.setContent(nodesStackContent);
+                nodesStackFeed.getContent().push();
                 nodesStackContent.getUnit().addNode();
                 break;
             }
             case 1: {
-                Log.i(TAG, "Setting values to nodes.");
+                Logger.log(TAG, "Setting values to nodes.");
 
                 for (int i = 0; i < this.nodesStackContent.getUnit().getSize(); i++) {
                     this.nodesStackContent.getUnit().set(index, i, i);
@@ -236,21 +261,29 @@ public class TestActivity extends AppCompatActivity {
             case 2: {
                 Utility.Colors.ColorAdapter.Content colorAdapter = new Utility.Colors.ColorAdapter.Content() {
                     @Override
-                    public Components fetchComponents(String key, String content, int position) {
-                        Utility.Colors.Chrome.Content chrome = Defaults.chrome;
+                    public Components fetchComponents(Port port, String key, String content, int position) {
 
-                        switch (key) {
-                            case index: {
-                                chrome = Cascades.ContentStreamers.Crimson.getChrome();
-                                break;
-                            }
-                            case data: {
-                                chrome = Cascades.IndexStreamers.Stripes.getChrome();
-                                break;
-                            }
-                            case pointer: {
-                                chrome = Cascades.ContentStreamers.Crimson.getChrome();
-                                break;
+                        Utility.Colors.Chrome.Content chrome;
+
+                        if (port == Port.header) {
+                            chrome = Defaults.headerChrome;
+
+                        } else {
+                            chrome = Defaults.chrome;
+
+                            switch (key) {
+                                case index: {
+                                    chrome = Cascades.ContentStreamers.Crimson.getChrome();
+                                    break;
+                                }
+                                case data: {
+                                    chrome = Cascades.IndexStreamers.Stripes.getChrome();
+                                    break;
+                                }
+                                case pointer: {
+                                    chrome = Cascades.ContentStreamers.Crimson.getChrome();
+                                    break;
+                                }
                             }
                         }
 
@@ -266,13 +299,13 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
             case 3: {
-                Log.i(TAG, "Adding layer.2");
+                Logger.log(TAG, "Adding layer.2");
 
                 nodesStackContent.push();
                 break;
             }
             case 4: {
-                Log.i(TAG, "Setting up new nodes.");
+                Logger.log(TAG, "Setting up new nodes.");
 
                 for (int i = 0; i < this.nodesStackContent.getUnit().getSize(); i++) {
                     this.nodesStackContent.getUnit().set(index, i, i);
@@ -283,21 +316,21 @@ public class TestActivity extends AppCompatActivity {
                 break;
             }
             case 5: {
-                Log.i(TAG, "Retrieving values.");
+                Logger.log(TAG, "Retrieving values.");
 
-                Log.i("Output", nodesStackContent.getUnit().getStr(data, 0));
-                Log.i("Output", String.valueOf(nodesStackContent.getUnit().getInt(pointer, 0)));
+                Logger.log("Output", nodesStackContent.getUnit().getStr(data, 0));
+                Logger.log("Output", String.valueOf(nodesStackContent.getUnit().getInt(pointer, 0)));
 
                 break;
             }
             case 6: {
-                Log.i(TAG, "Adding layer 3.");
+                Logger.log(TAG, "Adding layer 3.");
 
                 nodesStackContent.push();
                 break;
             }
             case 7: {
-                Log.i(TAG, "Setting up new nodes and applying customization changes.");
+                Logger.log(TAG, "Setting up new nodes and applying customization changes.");
 
                 for (int i = 0; i < this.nodesStackContent.getUnit().getSize(); i++) {
                     this.nodesStackContent.getUnit().set(index, i, i);
@@ -305,48 +338,50 @@ public class TestActivity extends AppCompatActivity {
                     this.nodesStackContent.getUnit().set(pointer, i, i + 8);
                 }
 
-                nodesStackView.getCustomizationsFeed().getContent().setParamsAdapter(ParamAdapters.SquareIndices.getParamsAdapter());
+                nodesStackView.getCustomizationsFeed().getContent().setParamsAdapter(Themes.SquareIndices);
 
                 break;
             }
             case 8: {
-                Log.i(TAG, "First pop");
+                Logger.log(TAG, "First pop");
 
                 nodesStackContent.pop();
                 break;
             }
             case 9: {
-                Log.i(TAG, "Re-pushing Layer 3");
+                Logger.log(TAG, "Re-pushing Layer 3");
 
                 nodesStackContent.push();
                 break;
             }
             case 10: {
-                Log.i(TAG, "Another pop");
+                Logger.log(TAG, "Another pop");
 
                 nodesStackContent.pop();
                 break;
             }
             case 11: {
-                Log.i(TAG, "Another pop");
+                Logger.log(TAG, "Another pop");
 
                 nodesStackContent.pop();
                 break;
             }
             case 12: {
-                Log.i(TAG, "Attempting to pop base layer ");
+                Logger.log(TAG, "Attempting to pop base layer ");
 
                 nodesStackContent.pop();
                 break;
             }
         }
 
-        count++;
         nodesStackContent.refreshIntent();
-        Log.i(TAG, "Nodes: " + nodesStackContent.toString());
+        Logger.log(TAG, "Nodes: " + nodesStackContent.toString());
     }
 
     public void update(View view) {
+        testingVariables();
         testingNodes();
+
+        count++;
     }
 }

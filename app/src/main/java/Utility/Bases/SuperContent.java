@@ -7,6 +7,12 @@ public class SuperContent <Feed extends SuperFeed> {
         return feed;
     }
 
+    public void refreshIntent(){
+        if (this.getFeed() != null) {
+            this.getFeed().refreshIntent();
+        }
+    }
+
     public void setFeed(Feed feed) {
         this.feed = feed;
     }

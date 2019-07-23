@@ -4,11 +4,9 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.ckyblue.adtwisei4.Logger;
@@ -16,48 +14,16 @@ import com.example.ckyblue.adtwisei4.Logger;
 import java.util.ArrayList;
 import java.util.List;
 
-import UI_Utils.CustomViews.DataView.Customizations.Feed;
-import UI_Utils.CustomViews.DataView.Customizations.Printer;
-import UI_Utils.CustomViews.DataView.ParamsAdapter.Themes;
 import Utility.Data.Alteration;
+import Utility.Port;
 
-import static UI_Utils.CustomViews.DataView.Utilities.applyCustomizations;
-
-/*TODO Header port*/
-/*TODO Build abstract superclass for StackViews for common default alts logic*/
-
-public class NodesStackView extends LinearLayout {
-    String TAG = "Info " + getClass().getName();
-
-    public boolean notified = false;
-
-    DataAdapter dataAdapter;
-    private ListView listView;
-    private LinearLayout headerRow;
+public class NodesStackView extends DataStackView {
+    String TAG = getClass().getName();
 
     private List<Integer> listAdapterIndices = new ArrayList<>();
-
-    private Printer customizationsPrinter = new Printer() {
-        String TAG = "Info " + "NodesStackView.customizationsPrinter";
-
-        @Override
-        public void notifyOfRefreshIntent() {
-            Logger.log(TAG, "notifyOfRefreshIntent()");
-
-            NodesStackView.this.notifyOfRefreshIntent();
-        }
-
-        @Override
-        public void notifyOfFeedRebuild() {
-            Logger.log(TAG, "notifyOfFeedRebuild()");
-
-            NodesStackView.this.dataAdapter.setCustomizations(getContent());
-            NodesStackView.this.notifyOfFeedRebuild();
-        }
-    };
-
     private Utility.Data.Nodes.Stack.Printer nodesStackPrinter = new Utility.Data.Nodes.Stack.Printer() {
-        private String TAG = "Info " + "NodesStackView.nodesStackPrinter";
+        private String TAG_Header = "NodesStackView.nodesStackPrinter";
+        private String TAG = TAG_Header;
 
         @Override
         public void notifyOfContentAlteration(Alteration alteration, String elementKey, int index) {
@@ -75,52 +41,50 @@ public class NodesStackView extends LinearLayout {
 
         @Override
         public void notifyOfFeedRebuild() {
+            TAG = TAG_Header;
+
+            if (getContent() != null){
+                TAG += "<" + getContent().getName() + ">";
+            }
+
             Logger.log(TAG, "notifyOfFeedRebuild()");
 
-            NodesAdapter nodesAdapter = (NodesAdapter) dataAdapter;
+            NodesAdapter nodesAdapter = (NodesAdapter) getDataAdapter();
 
             nodesAdapter.setNodesStackContent(getContent());
             NodesStackView.this.notifyOfFeedRebuild();
         }
     };
 
-    public void setCustomizationsFeed(Feed customizationsFeed) {
-        this.customizationsPrinter.setFeed(customizationsFeed);
-    }
-
     public void setNodesStackFeed(Utility.Data.Nodes.Stack.Feed nodesStackFeed) {
         this.nodesStackPrinter.setFeed(nodesStackFeed);
-    }
-
-    public Feed getCustomizationsFeed() {
-        return this.customizationsPrinter.getFeed();
     }
 
     public Utility.Data.Nodes.Stack.Feed getNodesFeed() {
         return this.nodesStackPrinter.getFeed();
     }
 
+    @Override
     public void rebuildView() {
         Logger.log(TAG, "rebuildView()");
 
-        this.headerRow.removeAllViews();
+        getHeaderRow().removeAllViews();
+        getHeaderRow().setLayoutParams(getParamsAdapter().getHeaderRowParams());
+
+        TextView childView;
 
         if (nodesStackPrinter.getUnit() != null) {
             for (String key : nodesStackPrinter.getUnit().getBluePrint().getKeys()) {
-                TextView tv = new TextView(this.getContext());
+                childView = Utilities.createView(getContext(), Port.header, key, key, 0, getColorAdapter(), getParamsAdapter());
+                getHeaderRow().addView(childView);
 
-                applyCustomizations("Header", key, 0, tv, );
-
-                tv.setGravity(Gravity.CENTER);
-                tv.setText(content);
             }
         }
-
-        return tv;
 
         refreshView();
     }
 
+    @Override
     public void refreshView() {
         Logger.log(TAG, "refreshView()");
 
@@ -133,56 +97,38 @@ public class NodesStackView extends LinearLayout {
             }
         }
 
-        dataAdapter.notifyDataSetChanged();
-    }
-
-    public void notifyOfRefreshIntent() {
-        Logger.log(TAG, "notifyOfRefreshIntent()");
-
-        if (notified) {
-            refreshView();
-            notified = false;
+        if (getDataAdapter() != null) {
+            getDataAdapter().notifyDataSetChanged();
         }
     }
 
-    public void notifyOfContentAlteration(Alteration alteration, String elementKey, int index) {
-        Logger.log(TAG, "notifyOfContentAlteration(" + alteration + ", " + elementKey + ", " + index + ")");
+    @Override
+    public void notifyOfRefreshIntent() {
+        Logger.log(TAG, "notifyOfRefreshIntent()");
 
-        notified = true;
+        if (isNotified()) {
+            refreshView();
+            setNotified(false);
+        }
     }
 
+    @Override
     public void notifyOfFeedRebuild() {
         Logger.log(TAG, "notifyOfFeedRebuild()");
 
         rebuildView();
     }
 
+    public void notifyOfContentAlteration(Alteration alteration, String elementKey, int index) {
+        Logger.log(TAG, "notifyOfContentAlteration(" + alteration + ", " + elementKey + ", " + index + ")");
+
+        setNotified(true);
+    }
+
     private void init() {
-        setOrientation(VERTICAL);
+        setDataAdapter(new NodesAdapter(getContext(), -1, listAdapterIndices, this.nodesStackPrinter.getContent()));
+        getListView().setAdapter(getDataAdapter());
 
-        this.headerRow = new LinearLayout(getContext());
-
-        if (this.customizationsPrinter.getColorAdapter() != null) {
-            this.headerRow.setLayoutParams(this.customizationsPrinter.getParamsAdapter().getRowParams(Port.header));
-
-        } else {
-            this.headerRow.setLayoutParams(Themes.Default.getRowParams(Port.header));
-
-        }
-
-
-        this.addView(this.headerRow);
-
-        dataAdapter = new NodesAdapter(getContext(), 0, listAdapterIndices, nodesStackPrinter.getContent());
-
-        listView = new ListView(getContext());
-        listView.setLayoutParams(new LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-
-        this.addView(listView);
-        listView.setAdapter(dataAdapter);
-
-        rebuildView();
     }
 
     public NodesStackView(Context context) {
@@ -203,32 +149,6 @@ public class NodesStackView extends LinearLayout {
     public NodesStackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         init();
-    }
-}
-
-abstract class StackView extends LinearLayout {
-    public abstract void refreshView();
-
-    public abstract void notifyOfRefreshIntent();
-
-    public abstract void notifyOfContentAlteration(Alteration alteration, String elementKey, int index);
-
-    public abstract void notifyOfFeedRebuild();
-
-    public StackView(Context context) {
-        super(context);
-    }
-
-    public StackView(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
-
-    public StackView(Context context, AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    public StackView(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr, defStyleRes);
     }
 }
 
@@ -262,18 +182,18 @@ class NodesAdapter extends DataAdapter<Integer> {
 
             rowLinearLayout = new LinearLayout(getContext());
             rowLinearLayout.setId(View.generateViewId());
-            rowLinearLayout.setLayoutParams(getParamsAdapter().getRowParams());
+            rowLinearLayout.setLayoutParams(getParamsAdapter().getBodyRowParams());
 
-            for (String elementKey : nodesStackContent.getBluePrint().getKeys()) {
+            for (String elementKey : nodesStackContent.getUnit().getKeys()) {
                 data = nodesStackContent.getUnit().getStrEqv(elementKey, index);
 
-                rowLinearLayout.addView(createView(elementKey,
-                        data, position));
+                rowLinearLayout.addView(Utilities.createView(getContext(), Port.body, elementKey,
+                        data, position, getColorAdapter(), getParamsAdapter()));
             }
 
         } else {
             rowLinearLayout = (LinearLayout) convertView;
-            rowLinearLayout.setLayoutParams(getParamsAdapter().getRowParams());
+            rowLinearLayout.setLayoutParams(getParamsAdapter().getBodyRowParams());
 
             TextView childTextView;
 
@@ -283,8 +203,8 @@ class NodesAdapter extends DataAdapter<Integer> {
 
                 childTextView = (TextView) rowLinearLayout.getChildAt(count);
                 childTextView.setText(data);
-                applyCustomizationsToChildView(elementKey,
-                        data, position, childTextView);
+                Utilities.applyCustomizations(Port.body, elementKey,
+                        data, position, childTextView, getColorAdapter(), getParamsAdapter());
 
                 count++;
             }

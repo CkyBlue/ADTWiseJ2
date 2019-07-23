@@ -1,109 +1,120 @@
 package com.example.ckyblue.adtwisei4;
 
-import android.content.Context;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.style.BackgroundColorSpan;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.TypefaceSpan;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.LinearLayout;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
-import Utility.Colors.Values;
-import Utility.SourceCode.Layer.Content;
-import Utility.SourceCode.Layer.Feed;
-import Utility.SourceCode.Layer.Printer;
-import Utility.Utilities;
+import Utility.Data.Layer.Component;
+import Utility.Data.Layer.Content;
+import Utility.Data.Layer.Feed;
+import Utility.Data.Nodes.BluePrint;
+import Utility.Data.Type;
 
 public class MainActivity extends AppCompatActivity {
-    /*TODO Test working with Layer*/
-
-    Content srcCodeLayer_Content;
-    Feed srcCodeLayer_Feed;
-
-    private final HashMap<String, LinearLayout> titledSrcCodeBoxes = new HashMap<>();
-
-    SourceCodesFragment srcCodeLayer_Fragment;
-
+    private String TAG = getClass().getName();
     int step = 0;
+
+    DataLayerFragment dataLayerFragment;
+
+    Content dataLayer_Content = new Content();
+    Feed dataLayer_Feed = new Feed();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        srcCodeLayer_Fragment = (SourceCodesFragment) getSupportFragmentManager().findFragmentById(R.id.sourceCodeFragment);
+        dataLayerFragment = (DataLayerFragment) getSupportFragmentManager().findFragmentById(R.id.dataLayerFragment);
     }
 
-    public void update(View view) {
-        /*switch (step) {
+    private void dataLayerTest() {
+        switch (step) {
             case 0: {
-                srcCodeLayer_Feed = new Feed();
-                this.srcCodeLayer_Fragment.setFeed(srcCodeLayer_Feed);
+                Logger.log(TAG, "Building a data layer.");
 
+                dataLayer_Content.buildVariablesStack("myStack");
+
+                BluePrint bluePrint = new BluePrint();
+
+                bluePrint.addKey("Index", Type.INTEGER);
+                bluePrint.addKey("Data", Type.STRING);
+                bluePrint.addKey("Pointer", Type.INTEGER);
+
+                dataLayer_Content.buildNodesStack("myStack", bluePrint, 12);
                 break;
             }
             case 1: {
-                srcCodeLayer_Content = new Content();
-                srcCodeLayer_Feed.setLogText(srcCodeLayer_Content);
+                Logger.log(TAG, "Setting the data layer.");
 
+                dataLayer_Content.getVariablesStackFeed("myStack").getContent().getUnit().declareVariable("myVar", Type.STRING);
+                dataLayer_Content.getVariablesStackFeed("myStack").getContent().getUnit().declareVariable("myVar2", Type.INTEGER);
+
+                dataLayerFragment.setFeed(dataLayer_Feed);
+                dataLayer_Feed.setContent(dataLayer_Content);
+
+                BluePrint bluePrint = new BluePrint();
+
+                bluePrint.addKey("ID", Type.INTEGER);
+                bluePrint.addKey("Data", Type.STRING);
+
+                dataLayer_Content.buildNodesStack("hashTable", bluePrint, 5);
                 break;
             }
             case 2: {
-                HashSet<String> unitKeys = new HashSet<>();
-                unitKeys.add("Pseudocode");
-                unitKeys.add("Python");
+                Logger.log(TAG, "Setting null as data layer");
+                dataLayerFragment.setFeed(null);
 
-                srcCodeLayer_Content.buildUnits(unitKeys);
                 break;
             }
             case 3: {
-                Utilities.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Pseudocode");
-                feed.getContent().setText(Utilities.readRawTextFile(this, R.raw.binary_tree_insert_pseudo));
+                Logger.log(TAG, "Adding new components");
+                dataLayerFragment.setFeed(dataLayer_Feed);
+
+                dataLayer_Content.buildVariablesStack("locals");
+
                 break;
             }
             case 4: {
-                HashSet<String> unitKeys = new HashSet<>();
-                unitKeys.add("Pseudocode");
+                Logger.log(TAG, "Manipulating components");
 
-                srcCodeLayer_Content = new Content();
-                srcCodeLayer_Content.buildUnits(unitKeys);
-                Utilities.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Pseudocode");
+                String mString = "mString";
+                String mInt = "mInt";
+                String mBool = "mBool";
+                String mFloat = "mFloat";
 
-                Utilities.SourceCode.Unit.Content unitContent = new Utilities.SourceCode.Unit.Content();
-                unitContent.setText(Utilities.readRawTextFile(this, R.raw.binary_search));
-                unitContent.highlight(new int[]{1, 3});
+                final String index = "Index";
+                final String data = "Data";
+                final String pointer = "Pointer";
 
-                feed.setLogText(unitContent);
+                dataLayer_Content.getVariablesStackFeed("myStack").getContent().getUnit().declareVariable(mString, Type.STRING);
+                dataLayer_Content.getVariablesStackFeed("myStack").getContent().getUnit().declareVariable(mInt, Type.INTEGER);
+                dataLayer_Content.getVariablesStackFeed("myStack").getContent().getUnit().declareVariable(mBool, Type.BOOLEAN);
+                dataLayer_Content.getVariablesStackFeed("myStack").getContent().getUnit().declareVariable(mFloat, Type.FLOAT);
 
-                srcCodeLayer_Feed.setLogText(srcCodeLayer_Content);
+                for (int i = 0; i < dataLayer_Content.getNodesStackFeed("myStack").getContent().getUnit().getSize(); i++) {
+                    dataLayer_Content.getNodesStackFeed("myStack").getContent().getUnit().set(index, i, i);
+                    dataLayer_Content.getNodesStackFeed("myStack").getContent().getUnit().set(data, i, String.valueOf((char) ('A' + i)));
+                    dataLayer_Content.getNodesStackFeed("myStack").getContent().getUnit().set(pointer, i, i + 1);
+                }
                 break;
             }
             case 5: {
-                srcCodeLayer_Feed = new Feed();
-
-                HashSet<String> unitKeys = new HashSet<>();
-                unitKeys.add("Python");
-
-                srcCodeLayer_Content = new Content();
-                srcCodeLayer_Content.buildUnits(unitKeys);
-                Utilities.SourceCode.Unit.Feed feed = srcCodeLayer_Content.getUnitFeed("Python");
-                feed.getContent().setText(Utilities.readRawTextFile(this, R.raw.queue_insert_pseudo));
-                feed.getContent().highlight(new int[]{1, 3});
-
-                srcCodeLayer_Feed.setLogText(srcCodeLayer_Content);
-                this.srcCodeLayer_Fragment.setFeed(srcCodeLayer_Feed);
+                Logger.log(TAG, "Removing components");
+                dataLayer_Content.removeStack(Component.VariablesStack, "myStack");
                 break;
             }
-        }*/
+            case 6: {
+                break;
+            }
+        }
+        dataLayer_Content.refreshIntent();
+    }
 
-        Log.i("Step", String.valueOf(step));
+    public void update(View view) {
+        dataLayerTest();
+
+        Logger.log("Step", String.valueOf(step));
         step++;
     }
 }

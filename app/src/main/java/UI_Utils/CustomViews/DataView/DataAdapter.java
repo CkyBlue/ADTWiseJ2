@@ -26,52 +26,22 @@ public abstract class DataAdapter<T> extends ArrayAdapter<T> {
         super(context, resource, objects);
     }
 
+    @NonNull
+    public UI_Utils.CustomViews.DataView.ParamsAdapter.Content getParamsAdapter() {
+        return Utilities.getParamsAdapter(getCustomizations());
+    }
+
+    @NonNull
+    public Utility.Colors.ColorAdapter.Content getColorAdapter() {
+        return Utilities.getColorAdapter(getCustomizations());
+    }
+
     public Content getCustomizations() {
         return customizations;
     }
 
     public void setCustomizations(Content customizations) {
         this.customizations = customizations;
-    }
-
-    @NonNull
-    public Utility.Colors.ColorAdapter.Content getColorAdapter() {
-        if (getCustomizations() != null) {
-            if (getCustomizations().getColorAdapter() != null) {
-                return getCustomizations().getColorAdapter();
-            }
-        }
-
-        return Defaults.colorAdapter;
-    }
-
-    @NonNull
-    public UI_Utils.CustomViews.DataView.ParamsAdapter.Content getParamsAdapter() {
-        if (getCustomizations() != null) {
-            if (getCustomizations().getParamsContent() != null) {
-                return getCustomizations().getParamsContent();
-            }
-        }
-
-        return Themes.Default;
-    }
-
-    protected void applyCustomizationsToChildView(String key, String content, int position, TextView view) {
-        Utility.Colors.ColorAdapter.Content colorAdapter = getColorAdapter();
-        UI_Utils.CustomViews.DataView.ParamsAdapter.Content paramsAdapter = getParamsAdapter();
-
-        applyCustomizations(key, content, position, view, colorAdapter, paramsAdapter);
-    }
-
-    protected TextView createView(String key, String content, int position) {
-        TextView tv = new TextView(this.getContext());
-
-        applyCustomizationsToChildView(key, content, position, tv);
-
-        tv.setGravity(Gravity.CENTER);
-        tv.setText(content);
-
-        return tv;
     }
 
     public abstract View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent);

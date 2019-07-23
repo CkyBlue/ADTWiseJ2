@@ -84,12 +84,6 @@ public class Content extends SuperContent<Feed> {
         push();
     }
 
-    public void refreshIntent() {
-        if (this.getFeed() != null) {
-            this.getFeed().refreshIntent();
-        }
-    }
-
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder(getName());

@@ -15,8 +15,8 @@ import static Utility.Data.Utilities.validateAsNonNullData;
 
 public class Content extends SuperContent<Feed> {
     public enum Column implements Utility.Key {
-        identifier,
-        value;
+        Identifier,
+        Value;
     }
 
     private final List<String> variable_names = new ArrayList<String>();
@@ -152,12 +152,6 @@ public class Content extends SuperContent<Feed> {
 
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_value_updated, variableName);
-        }
-    }
-
-    public void refreshIntent(){
-        if (this.getFeed() != null) {
-            this.getFeed().refreshIntent();
         }
     }
 

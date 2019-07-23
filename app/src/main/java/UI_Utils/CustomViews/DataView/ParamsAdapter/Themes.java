@@ -7,10 +7,19 @@ import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import Utility.Port;
+
 public class Themes {
+    private static AbsListView.LayoutParams bodyRowParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 150);
+    private static LinearLayout.LayoutParams headerRowParams = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 150);
+    private static LinearLayout.LayoutParams headerChildParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+
+    static {
+        headerChildParams.setMargins(0, 5, 5, 0);
+    }
+
     public static final Content SquareIndices = new Content() {
         LinearLayout.LayoutParams indexChild = new LinearLayout.LayoutParams(140, LinearLayout.LayoutParams.MATCH_PARENT);
-
         LinearLayout.LayoutParams dataChild = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1.0f);
 
         {
@@ -18,12 +27,10 @@ public class Themes {
             indexChild.setMargins(5, 5, 5, 5);
         }
 
-        AbsListView.LayoutParams rowParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 150);
-
         Typeface typeface = Typeface.create("sans-serif-thin", Typeface.NORMAL);
 
         @Override
-        public void applyModifications(String key, View view) {
+        public void applyModifications(Port port, String key, View view) {
             TextView tv = (TextView) view;
 
             if (key.equals("Pointer") || key.equals("Index")) {
@@ -37,13 +44,23 @@ public class Themes {
 
         @NonNull
         @Override
-        public AbsListView.LayoutParams getRowParams() {
-            return rowParams;
+        public AbsListView.LayoutParams getBodyRowParams() {
+            return bodyRowParams;
         }
 
         @NonNull
         @Override
-        public LinearLayout.LayoutParams getChildParams(String key) {
+        public LinearLayout.LayoutParams getHeaderRowParams() {
+            return headerRowParams;
+        }
+
+        @NonNull
+        @Override
+        public LinearLayout.LayoutParams getChildParams(Port port, String key) {
+            if (port == Port.header) {
+                return headerChildParams;
+            }
+
             if (key.equals("Pointer") || key.equals("Index")) {
                 return indexChild;
             }
@@ -51,18 +68,18 @@ public class Themes {
         }
     };
     public static final Content Default = new Content() {
-        LinearLayout.LayoutParams childParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 0.60f);
+        LinearLayout.LayoutParams childParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
+        LinearLayout.LayoutParams headerChildParams = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.MATCH_PARENT, 1);
 
         {
+            headerChildParams.setMargins(0, 5, 5, 0);
             childParams.setMargins(5, 0, 5, 0);
         }
-
-        AbsListView.LayoutParams rowParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 150);
 
         Typeface typeface = Typeface.create("sans-serif-thin", Typeface.NORMAL);
 
         @Override
-        public void applyModifications(String key, View view) {
+        public void applyModifications(Port port, String key, View view) {
             TextView tv = (TextView) view;
             tv.setTextSize(15);
             tv.setTypeface(typeface);
@@ -70,13 +87,23 @@ public class Themes {
 
         @NonNull
         @Override
-        public AbsListView.LayoutParams getRowParams() {
-            return rowParams;
+        public AbsListView.LayoutParams getBodyRowParams() {
+            return bodyRowParams;
         }
 
         @NonNull
         @Override
-        public LinearLayout.LayoutParams getChildParams(String key) {
+        public LinearLayout.LayoutParams getHeaderRowParams() {
+            return headerRowParams;
+        }
+
+        @NonNull
+        @Override
+        public LinearLayout.LayoutParams getChildParams(Port port, String key) {
+            if (port == Port.header) {
+                return headerChildParams;
+            }
+
             return childParams;
         }
     };
@@ -90,12 +117,10 @@ public class Themes {
             valueChild.setMargins(5, 0, 5, 0);
         }
 
-        AbsListView.LayoutParams rowParams = new AbsListView.LayoutParams(AbsListView.LayoutParams.MATCH_PARENT, 150);
-
         Typeface typeface = Typeface.create("sans-serif-thin", Typeface.NORMAL);
 
         @Override
-        public void applyModifications(String key, View view) {
+        public void applyModifications(Port port, String key, View view) {
             TextView tv = (TextView) view;
             tv.setTextSize(15);
             tv.setTypeface(typeface);
@@ -103,13 +128,23 @@ public class Themes {
 
         @NonNull
         @Override
-        public AbsListView.LayoutParams getRowParams() {
-            return rowParams;
+        public AbsListView.LayoutParams getBodyRowParams() {
+            return bodyRowParams;
         }
 
         @NonNull
         @Override
-        public LinearLayout.LayoutParams getChildParams(String key) {
+        public LinearLayout.LayoutParams getHeaderRowParams() {
+            return headerRowParams;
+        }
+
+        @NonNull
+        @Override
+        public LinearLayout.LayoutParams getChildParams(Port port, String key) {
+            if (port == Port.header) {
+                return headerChildParams;
+            }
+
             if (key.equals("Identifier")) {
                 return identifierChild;
             }

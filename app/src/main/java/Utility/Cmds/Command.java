@@ -1,6 +1,6 @@
 package Utility.Cmds;
 
-/*TODO Custom class to encapsulate Log.i()*/
+/*TODO Custom class to encapsulate Logger.log()*/
 /*TODO Decouple algorithm and process*/
 
 import java.util.HashMap;
