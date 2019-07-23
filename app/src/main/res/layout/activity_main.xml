@@ -20,8 +20,8 @@
             android:text="Update" />
 
         <fragment
-            android:id="@+id/dataLayerFragment"
-            android:name="com.example.ckyblue.adtwisei4.DataLayerFragment"
+            android:id="@+id/sourceCodeFragment"
+            android:name="com.example.ckyblue.adtwisei4.SourceCodesFragment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
     </LinearLayout>

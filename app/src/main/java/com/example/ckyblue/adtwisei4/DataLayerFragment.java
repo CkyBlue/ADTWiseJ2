@@ -21,11 +21,6 @@ import Utility.Data.Layer.Content;
 import Utility.Data.Layer.Feed;
 import Utility.Data.Layer.Printer;
 
-/*TODO Add Logs*/
-
-/*TODO !!! Fix yhe problem causing duplicate notifications. Found it. Destroyed titledVariablesStacks does not mean destroyed printer b/c references are still
- * present with the Content Layer's Feeds*/
-
 public class DataLayerFragment extends Fragment {
     String TAG = getClass().getName();
     private String dataStackViewTag = "dataStackViewTag";

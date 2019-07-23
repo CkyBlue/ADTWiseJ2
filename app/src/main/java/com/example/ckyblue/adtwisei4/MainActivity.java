@@ -2,30 +2,37 @@ package com.example.ckyblue.adtwisei4;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
+
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 import Utility.Data.Layer.Component;
 import Utility.Data.Layer.Content;
 import Utility.Data.Layer.Feed;
 import Utility.Data.Nodes.BluePrint;
 import Utility.Data.Type;
+import Utility.Utilities;
 
 public class MainActivity extends AppCompatActivity {
     private String TAG = getClass().getName();
     int step = 0;
 
     DataLayerFragment dataLayerFragment;
+    SourceCodesFragment sourceCodesFragment;
 
     Content dataLayer_Content = new Content();
     Feed dataLayer_Feed = new Feed();
+
+    Utility.SourceCode.Layer.Feed srcCodeFeed = new Utility.SourceCode.Layer.Feed();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        dataLayerFragment = (DataLayerFragment) getSupportFragmentManager().findFragmentById(R.id.dataLayerFragment);
+        sourceCodesFragment = (SourceCodesFragment) getSupportFragmentManager().findFragmentById(R.id.sourceCodeFragment);
     }
 
     private void dataLayerTest() {
@@ -111,8 +118,38 @@ public class MainActivity extends AppCompatActivity {
         dataLayer_Content.refreshIntent();
     }
 
+    private void srcCodeLayerTest() {
+        switch (step) {
+            case 0: {
+                Utility.SourceCode.Layer.Content content = new Utility.SourceCode.Layer.Content();
+
+                Set<String> unitKeys = new HashSet<>();
+                unitKeys.add("Pseudo");
+
+                content.buildUnits(unitKeys);
+                content.getUnitFeed("Pseudo").getContent().setText(Utilities.readRawTextFile(this, R.raw.queue_insert_pseudo));
+
+                srcCodeFeed.setContent(content);
+                sourceCodesFragment.setFeed(srcCodeFeed);
+
+                Logger.log("MainActivity", Arrays.toString(content.getUnitFeed("Pseudo").getPrinters().toArray()));
+                break;
+            }
+            case 1: {
+                sourceCodesFragment.setFeed(null);
+                Logger.log("MainActivity", Arrays.toString(srcCodeFeed.getContent().getUnitFeed("Pseudo").getPrinters().toArray()));
+                break;
+            }
+            case 2: {
+                sourceCodesFragment.setFeed(srcCodeFeed);
+                break;
+            }
+        }
+
+    }
+
     public void update(View view) {
-        dataLayerTest();
+        srcCodeLayerTest();
 
         Logger.log("Step", String.valueOf(step));
         step++;
