@@ -13,7 +13,6 @@ import Utility.Data.Layer.Content;
 import Utility.Data.Layer.Feed;
 import Utility.Data.Nodes.BluePrint;
 import Utility.Data.Type;
-import Utility.Logs.BaseContent;
 import Utility.Utilities;
 
 public class MainActivity extends AppCompatActivity {
@@ -28,17 +27,17 @@ public class MainActivity extends AppCompatActivity {
 
     Utility.SourceCode.Layer.Feed srcCodeFeed = new Utility.SourceCode.Layer.Feed();
 
-    OutputFragment outputFragment = new OutputFragment();
+    OutputFragment outputFragment;
     Utility.Logs.Feed logFeed = new Utility.Logs.Feed();
 
-    Utility.Logs.Output.Content outputContent = new Utility.Logs.Output.Content();
+    Utility.Logs.Logger.Content outputContent = new Utility.Logs.Logger.Content();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        outputFragment = (OutputFragment) getSupportFragmentManager().findFragmentById(R.id.outputFragment);
+        outputFragment = (LoggerFragment) getSupportFragmentManager().findFragmentById(R.id.loggerFragment);
         outputFragment.setFeed(logFeed);
         logFeed.setContent(outputContent);
     }
@@ -162,23 +161,22 @@ public class MainActivity extends AppCompatActivity {
                 outputContent.log("Hello\nWorld", true);
                 outputContent.refreshIntent();
 
-                outputContent.log("World", false);
-
                 break;
             }
             case 1: {
+                outputContent.log("World", false);
+                break;
+            }
+            case 2: {
                 outputContent.log("More");
                 outputContent.log("Output");
 
                 outputContent.refreshIntent();
-                break;
-            }
-            case 2: {
-                outputFragment.setFeed(logFeed);
 
                 break;
             }
             case 3: {
+                outputFragment.setFeed(logFeed);
                 break;
             }
         }
@@ -187,9 +185,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void update(View view) {
+        Logger.log("Step", "<----------" + String.valueOf(step));
         outputFragTest();
 
-        Logger.log("Step", String.valueOf(step));
+        Logger.log("Step", String.valueOf(step) + "---------->");
         step++;
     }
 }

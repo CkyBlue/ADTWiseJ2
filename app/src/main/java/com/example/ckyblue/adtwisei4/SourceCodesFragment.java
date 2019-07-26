@@ -28,8 +28,8 @@ import Utility.SourceCode.Layer.Printer;
 /*ToDO Export SpanFactory objs to library*/
 
 public class SourceCodesFragment extends Fragment {
-    View rootView;
-    LinearLayout srcCodeLayer_Container;
+    private View rootView;
+    private LinearLayout srcCodeLayer_Container;
 
     //    private final HashMap<String, LinearLayout> titledSrcCodeBoxes = new HashMap<>();
     private final HashMap<String, SourceCodeUnitView> sourceCodeUnitViews = new HashMap<>();

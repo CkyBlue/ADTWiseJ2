@@ -6,7 +6,7 @@ public class Content extends BaseContent {
     private boolean fresh = true;
 
     @Override
-    public void log(String content) {
+    public void log(String content, boolean newLine){
         if (fresh) {
             this.logs.clear();
             this.logs.add(content);
@@ -17,7 +17,7 @@ public class Content extends BaseContent {
                 getFeed().feedRebuilt();
             }
         } else {
-            super.log(content);
+            super.log(content, newLine);
         }
     }
 

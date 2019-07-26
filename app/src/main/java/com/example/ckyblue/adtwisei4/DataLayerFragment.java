@@ -25,8 +25,8 @@ public class DataLayerFragment extends Fragment {
     String TAG = getClass().getName();
     private String dataStackViewTag = "dataStackViewTag";
 
-    View rootView;
-    LinearLayout dataLayer_Container;
+    private View rootView;
+    private LinearLayout dataLayer_Container;
 
     private final HashMap<String, LinearLayout> titledVariablesStackViews = new HashMap<>();
     private final HashMap<String, LinearLayout> titledNodesStackViews = new HashMap<>();

@@ -96,7 +96,7 @@ public class LogView extends android.support.v7.widget.AppCompatTextView {
 
     public void setLog(String log) {
         Logger.log(TAG, "setLog(" + log + ")");
-        this.setText(HtmlCompat.fromHtml(log.replace("\n", "<br>"),
+        this.setText(HtmlCompat.fromHtml(log.replace("\n", "<br>") + " ",
                 HtmlCompat.FROM_HTML_MODE_LEGACY));
     }
 

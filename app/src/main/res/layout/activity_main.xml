@@ -23,8 +23,8 @@
     </LinearLayout>
 
     <fragment
-        android:id="@+id/outputFragment"
-        android:name="com.example.ckyblue.adtwisei4.OutputFragment"
+        android:id="@+id/loggerFragment"
+        android:name="com.example.ckyblue.adtwisei4.LoggerFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

@@ -58,22 +58,28 @@ public class Values {
         return hexARGB.toString();
     }
 
-    public void setRGB(int red, int green, int blue) {
+    public Values setRGB(int red, int green, int blue) {
         validate_As_Rgb_Values(red, green, blue);
 
         this.red = red;
         this.green = green;
         this.blue = blue;
+
+        return this;
     }
 
-    public void setAlpha(int alpha) {
+    public Values setAlpha(int alpha) {
         validate_As_Color_Val(alpha);
         this.alpha = alpha;
+
+        return this;
     }
 
-    public void setTintFactor(float tintFactor) {
+    public Values setTintFactor(float tintFactor) {
         validateAsTintVal(tintFactor);
         this.tintFactor = tintFactor;
+
+        return this;
     }
 
     private static void validateAsTintVal(float value) {

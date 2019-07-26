@@ -21,8 +21,24 @@ import Utility.Themes.Defaults;
 public class OutputFragment extends Fragment {
     String TAG = getClass().getName();
 
-    View rootView;
-    LogView logView;
+    private View rootView;
+    private LogView logView;
+
+    public View getRootView() {
+        return rootView;
+    }
+
+    public void setRootView(View rootView) {
+        this.rootView = rootView;
+    }
+
+    public LogView getLogView() {
+        return logView;
+    }
+
+    public void setLogView(LogView logView) {
+        this.logView = logView;
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,7 +52,14 @@ public class OutputFragment extends Fragment {
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
         Logger.log(TAG, "onCreateView()");
-        rootView = inflater.inflate(R.layout.fragment_output, container, false);
+        setRootView(inflater.inflate(R.layout.fragment_output, container, false));
+
+        setLogView(this.logView = new LogView(getContext()));
+        getLogView().setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT));
+
+        ((LinearLayout) getRootView().findViewById(R.id.container)).addView(logView);
+
         initUI();
         return rootView;
     }
@@ -56,18 +79,14 @@ public class OutputFragment extends Fragment {
     public void initUI() {
         Logger.log(TAG, "initUI()");
 
-        this.logView = new LogView(getContext());
-        this.logView.setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
-        this.logView.setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
-        this.logView.setTextColor(Color.parseColor(
+         getLogView().setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
+        getLogView().setTextColor(Color.parseColor(
                 Defaults.defaultLightText().getHexARGB()
         ));
-        this.logView.setPadding(5, 5, 5, 5);
+        getLogView().setPadding(5, 5, 5, 5);
 
-        ((LinearLayout) rootView.findViewById(R.id.container)).addView(logView);
 
-        rootView.findViewById(R.id.outerHorizontalScroll).setBackgroundColor(Color.parseColor(
+        getRootView().findViewById(R.id.outerHorizontalScroll).setBackgroundColor(Color.parseColor(
                 Defaults.defaultBgColorDark().getHexARGB()
         ));
     }
