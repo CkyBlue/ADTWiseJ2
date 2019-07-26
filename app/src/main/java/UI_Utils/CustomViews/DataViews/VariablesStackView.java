@@ -1,4 +1,4 @@
-package UI_Utils.CustomViews.DataView;
+package UI_Utils.CustomViews.DataViews;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -19,7 +19,7 @@ import Utility.Data.Alteration;
 import Utility.Data.Variables.Unit.Content;
 import Utility.Port;
 
-/*TODO Dispatcher with post execute notifyOfRefreshIntent*/
+/*TODO Dispatcher with post execute notifyOfRefreshIntent on BaseContent objects (notifications should propagate from BaseContent to View)*/
 
 public class VariablesStackView extends DataStackView {
     String TAG = getClass().getName();

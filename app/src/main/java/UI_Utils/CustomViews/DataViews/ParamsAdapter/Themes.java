@@ -1,4 +1,4 @@
-package UI_Utils.CustomViews.DataView.ParamsAdapter;
+package UI_Utils.CustomViews.DataViews.ParamsAdapter;
 
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;

@@ -25,36 +25,6 @@ public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextV
     private HashMap<FormattingKey, SpanFactory> spanFactories = new HashMap<>();
     public HashMap<FormattingKey, Object[]> appliedSpans = new HashMap<>();
 
-    public void logContents() {
-        Logger.log(getClass().getName(), "logContents() <----");
-
-        StringBuilder spanFactories = new StringBuilder();
-        SpanFactory spanFactory;
-
-        for (FormattingKey key : this.spanFactories.keySet()) {
-
-            spanFactories.append("( ");
-            spanFactories.append(key);
-            spanFactories.append(" : ");
-
-            spanFactory = this.spanFactories.get(key);
-            if (spanFactory == null) {
-                spanFactories.append("null");
-            } else {
-                spanFactories.append(spanFactory.getClass().getName());
-            }
-
-
-            spanFactories.append(" ), \n");
-        }
-
-        Logger.log("logContents()", "spanFactories : {" + spanFactories.toString() + "}");
-        Logger.log("logContents()", "formattingKeys : {" + Arrays.toString(getPrinter().getFormattingKeys().toArray()) + "}");
-        Logger.log("logContents()", "appliedSpans : {" + Arrays.toString(appliedSpans.keySet().toArray()) + "}");
-        Logger.log(getClass().getName(), "logContents() ---->");
-
-    }
-
     private HashMap<FormattingKey, SpanFactory> getSpanFactories() {
         return spanFactories;
     }
@@ -100,7 +70,7 @@ public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextV
         return new SpannableString(getContent().getText());
     }
 
-    public Printer getPrinter() {
+    private Printer getPrinter() {
         return printer;
     }
 
@@ -230,5 +200,45 @@ public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextV
     public SourceCodeUnitView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder spanFactories = new StringBuilder();
+        SpanFactory spanFactory;
+
+        for (FormattingKey key : this.spanFactories.keySet()) {
+
+            spanFactories.append("( ");
+            spanFactories.append(key);
+            spanFactories.append(" : ");
+
+            spanFactory = this.spanFactories.get(key);
+            if (spanFactory == null) {
+                spanFactories.append("null");
+
+            } else {
+                spanFactories.append(spanFactory.getClass().getName());
+
+            }
+
+            spanFactories.append(" ), \n");
+        }
+
+        StringBuilder output = new StringBuilder();
+
+        output.append("spanFactories : {");
+        output.append(spanFactories.toString());
+        output.append("}/n");
+
+        output.append("formattingKeys : {");
+        output.append(Arrays.toString(getPrinter().getFormattingKeys().toArray()));
+        output.append("}/n");
+
+        output.append("appliedSpans : {");
+        output.append(Arrays.toString(appliedSpans.keySet().toArray()));
+        output.append("}/n");
+
+        return output.toString();
     }
 }

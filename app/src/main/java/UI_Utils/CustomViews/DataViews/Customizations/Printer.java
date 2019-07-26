@@ -1,4 +1,4 @@
-package UI_Utils.CustomViews.DataView.Customizations;
+package UI_Utils.CustomViews.DataViews.Customizations;
 
 import Utility.Bases.SuperPrinter;
 
@@ -10,7 +10,7 @@ public abstract class Printer extends SuperPrinter<Content, Feed> {
 
         return null;
     }
-    public UI_Utils.CustomViews.DataView.ParamsAdapter.Content getParamsAdapter(){
+    public UI_Utils.CustomViews.DataViews.ParamsAdapter.Content getParamsAdapter(){
         if (getContent() != null){
             return getContent().getParamsContent();
         }

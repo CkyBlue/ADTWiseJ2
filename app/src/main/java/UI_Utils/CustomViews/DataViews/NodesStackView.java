@@ -1,4 +1,4 @@
-package UI_Utils.CustomViews.DataView;
+package UI_Utils.CustomViews.DataViews;
 
 import android.content.Context;
 import android.support.annotation.NonNull;

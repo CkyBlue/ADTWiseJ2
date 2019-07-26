@@ -1,4 +1,4 @@
-package UI_Utils.CustomViews.DataView.Customizations;
+package UI_Utils.CustomViews.DataViews.ParamsAdapter;
 
 import Utility.Bases.SuperFeed;
 

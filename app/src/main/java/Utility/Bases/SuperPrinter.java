@@ -22,7 +22,7 @@ public abstract class SuperPrinter<Content extends SuperContent, Feed extends Su
 
         } catch (Exception e) {
             throw new IllegalStateException("The Feed class associated with this Printer class does not return" +
-                    " Content class compatible with Printer class.");
+                    " BaseContent class compatible with Printer class.");
         }
     }
 

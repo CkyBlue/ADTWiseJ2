@@ -14,7 +14,7 @@ public abstract class SuperFeed<Content extends SuperContent, Printer extends Su
             try {
                 this.content.setFeed(this);
             } catch (Exception e) {
-                throw new IllegalStateException("The Content class associated with this Feed class does not recognize this" +
+                throw new IllegalStateException("The BaseContent class associated with this Feed class does not recognize this" +
                         " Feed class.");
             }
         }

@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import java.util.HashMap;
 
-import UI_Utils.CustomViews.DataView.DataStackView;
-import UI_Utils.CustomViews.DataView.NodesStackView;
-import UI_Utils.CustomViews.DataView.VariablesStackView;
+import UI_Utils.CustomViews.DataViews.DataStackView;
+import UI_Utils.CustomViews.DataViews.NodesStackView;
+import UI_Utils.CustomViews.DataViews.VariablesStackView;
 import Utility.Data.Alteration;
 import Utility.Data.Layer.Component;
 import Utility.Data.Layer.Content;
@@ -139,7 +139,7 @@ public class DataLayerFragment extends Fragment {
         Content layerContent = this.dataLayer_Printer.getContent();
 
         if (layerContent == null) {
-            throw new IllegalStateException("Attempting to build views when Data.Layer.Content is null.");
+            throw new IllegalStateException("Attempting to build views when Data.Layer.BaseContent is null.");
 
         } else if (!layerContent.getKeys(component).contains(componentKey)) {
             throw new IllegalArgumentException("Layer does not contain " + componentKey + " with key " + componentKey + ".");

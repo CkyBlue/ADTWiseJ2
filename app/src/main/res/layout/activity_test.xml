@@ -7,7 +7,6 @@
     android:orientation="vertical"
     tools:context=".MainActivity">
 
-
     <Button
         android:id="@+id/button"
         android:layout_width="match_parent"
@@ -19,6 +18,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:visibility="gone"
         android:layout_weight="1">
 
         <LinearLayout
@@ -31,10 +31,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <UI_Utils.CustomViews.DataView.NodesStackView
+                <UI_Utils.CustomViews.DataViews.NodesStackView
                     android:id="@+id/nodesStackView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></UI_Utils.CustomViews.DataView.NodesStackView>
+                    android:layout_height="wrap_content"></UI_Utils.CustomViews.DataViews.NodesStackView>
             </FrameLayout>
 
             <FrameLayout
@@ -42,13 +42,24 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1">
 
-                <UI_Utils.CustomViews.DataView.VariablesStackView
+                <UI_Utils.CustomViews.DataViews.VariablesStackView
                     android:id="@+id/variableStackView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></UI_Utils.CustomViews.DataView.VariablesStackView>
+                    android:layout_height="wrap_content"></UI_Utils.CustomViews.DataViews.VariablesStackView>
             </FrameLayout>
         </LinearLayout>
     </ScrollView>
 
+    <UI_Utils.CustomViews.LogView
+        android:id="@+id/logView1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <UI_Utils.CustomViews.LogView
+        android:id="@+id/logView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>

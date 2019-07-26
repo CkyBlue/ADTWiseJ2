@@ -1,4 +1,4 @@
-package UI_Utils.CustomViews.DataView;
+package UI_Utils.CustomViews.DataViews;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -9,9 +9,9 @@ import android.widget.ListView;
 
 import com.example.ckyblue.adtwisei4.Logger;
 
-import UI_Utils.CustomViews.DataView.Customizations.Content;
-import UI_Utils.CustomViews.DataView.Customizations.Feed;
-import UI_Utils.CustomViews.DataView.Customizations.Printer;
+import UI_Utils.CustomViews.DataViews.Customizations.Content;
+import UI_Utils.CustomViews.DataViews.Customizations.Feed;
+import UI_Utils.CustomViews.DataViews.Customizations.Printer;
 import UI_Utils.CustomViews.NonScrollableListView;
 
 public abstract class DataStackView extends LinearLayout {
@@ -82,7 +82,7 @@ public abstract class DataStackView extends LinearLayout {
     }
 
     @NonNull
-    public UI_Utils.CustomViews.DataView.ParamsAdapter.Content getParamsAdapter() {
+    public UI_Utils.CustomViews.DataViews.ParamsAdapter.Content getParamsAdapter() {
         return Utilities.getParamsAdapter(getCustomizationsContent());
     }
 

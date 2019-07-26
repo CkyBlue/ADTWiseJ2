@@ -11,7 +11,7 @@ import Utility.Bases.SuperContent;
 import static Utility.Data.Utilities.getTypeDefault;
 import static Utility.Data.Utilities.validateAsNonNullData;
 
-/*TODO Test Content, then delegated Printer of Stack*/
+/*TODO Test BaseContent, then delegated Printer of Stack*/
 
 public class Content extends SuperContent<Feed> {
     public enum Column implements Utility.Key {

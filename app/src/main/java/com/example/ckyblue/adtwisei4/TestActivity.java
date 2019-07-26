@@ -3,16 +3,15 @@ package com.example.ckyblue.adtwisei4;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
-import UI_Utils.CustomViews.DataView.NodesStackView;
-import UI_Utils.CustomViews.DataView.Customizations.Content;
-import UI_Utils.CustomViews.DataView.ParamsAdapter.Themes;
+import UI_Utils.CustomViews.DataViews.NodesStackView;
+import UI_Utils.CustomViews.DataViews.Customizations.Content;
+import UI_Utils.CustomViews.DataViews.ParamsAdapter.Themes;
 
-import UI_Utils.CustomViews.DataView.VariablesStackView;
+import UI_Utils.CustomViews.DataViews.VariablesStackView;
+import UI_Utils.CustomViews.LogView;
+import Utility.Logs.BaseContent;
 import Utility.Port;
 import Utility.Colors.Components;
 import Utility.Data.Nodes.BluePrint;
@@ -21,7 +20,7 @@ import Utility.Data.Variables.Stack.Feed;
 import Utility.Themes.Cascades;
 import Utility.Themes.Defaults;
 
-/*TODO Test Nodes.Unit.Content for sent notifications*/
+/*TODO Test Nodes.Unit.BaseContent for sent notifications*/
 
 public class TestActivity extends AppCompatActivity {
     Utility.Data.Variables.Stack.Content variableStackContent = new Utility.Data.Variables.Stack.Content("myVarStack");
@@ -41,6 +40,15 @@ public class TestActivity extends AppCompatActivity {
     Utility.Data.Nodes.Stack.Content nodesStackContent = new Utility.Data.Nodes.Stack.Content("myNodesStack", bluePrint, 12);
     Utility.Data.Nodes.Stack.Feed nodesStackFeed = new Utility.Data.Nodes.Stack.Feed();
 
+    LogView logView1;
+    LogView logView2;
+
+    Utility.Logs.Feed logFeed1 = new Utility.Logs.Feed();
+    Utility.Logs.Feed logFeed2 = new Utility.Logs.Feed();
+
+    Utility.Logs.Logger.Content loggerContent = new Utility.Logs.Logger.Content();
+    BaseContent outputContent = new Utility.Logs.Output.Content();
+
     String TAG = getClass().getName();
 
     int count = 0;
@@ -50,12 +58,29 @@ public class TestActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test);
 
-        nodesStackView = findViewById(R.id.nodesStackView);
+     /*   nodesStackView = findViewById(R.id.nodesStackView);
         nodesStackView.setNodesStackFeed(nodesStackFeed);
         nodesStackFeed.setContent(nodesStackContent);
 
         variablesStackView = findViewById(R.id.variableStackView);
-        variablesStackView.setVariablesStackFeed(variableStackFeed);
+        variablesStackView.setVariablesStackFeed(variableStackFeed);*/
+
+        logView1 = findViewById(R.id.logView1);
+        logView1.setFeed(logFeed1);
+
+        logView2 = findViewById(R.id.logView2);
+        logView2.setFeed(logFeed2);
+
+        outputContent.log("A quick brown fox");
+        outputContent.log("jumped over the");
+        outputContent.log("lazy dog.");
+
+        loggerContent.log("~~ He~llo ~~~");
+        loggerContent.log("<b>~~ He~llo ~~");
+        loggerContent.log("~~ He~llo ~</b>");
+
+        logFeed1.setContent(loggerContent);
+        logFeed2.setContent(outputContent);
 
     }
 
@@ -132,7 +157,7 @@ public class TestActivity extends AppCompatActivity {
                 };
 
                 Content customizationsContent = new Content(colorAdapter, Themes.Variables);
-                UI_Utils.CustomViews.DataView.Customizations.Feed customizationsFeed = new UI_Utils.CustomViews.DataView.Customizations.Feed();
+                UI_Utils.CustomViews.DataViews.Customizations.Feed customizationsFeed = new UI_Utils.CustomViews.DataViews.Customizations.Feed();
                 customizationsFeed.setContent(customizationsContent);
 
                 variablesStackView.setCustomizationsFeed(customizationsFeed);
@@ -292,7 +317,7 @@ public class TestActivity extends AppCompatActivity {
                 };
 
                 Content customizationsContent = new Content(colorAdapter, Themes.Variables);
-                UI_Utils.CustomViews.DataView.Customizations.Feed customizationsFeed = new UI_Utils.CustomViews.DataView.Customizations.Feed();
+                UI_Utils.CustomViews.DataViews.Customizations.Feed customizationsFeed = new UI_Utils.CustomViews.DataViews.Customizations.Feed();
                 customizationsFeed.setContent(customizationsContent);
 
                 nodesStackView.setCustomizationsFeed(customizationsFeed);
@@ -378,9 +403,60 @@ public class TestActivity extends AppCompatActivity {
         Logger.log(TAG, "Nodes: " + nodesStackContent.toString());
     }
 
+    public void testingLogs() {
+        switch (count) {
+            case 0: {
+//                Logger.log(TAG, "Setting content");
+
+                break;
+            }
+            case 1: {
+                Logger.log(TAG, "New logs");
+
+                loggerContent.log("Let's say there happened to be a great");
+                loggerContent.log("evil terrorizing the land.");
+
+                outputContent.log("A knight pure of heart proposes ...");
+                outputContent.log("A hardened general proposes ....");
+                break;
+            }
+            case 2: {
+                Logger.log(TAG, "Setting nulls");
+
+                logFeed1.setContent(null);
+                logView2.setFeed(null);
+                break;
+            }
+            case 3: {
+                Logger.log(TAG, "Setting contents back");
+
+                logFeed1.setContent(loggerContent);
+                logView2.setFeed(logFeed2);
+                break;
+            }
+            case 4: {
+                break;
+            }
+            case 5: {
+                break;
+            }
+        }
+
+        if (logFeed1.getContent() != null) {
+            Logger.log(TAG, "refreshIntent()::LogFeed1.getContent()");
+            logFeed1.getContent().refreshIntent();
+        }
+
+        if (logFeed2.getContent() != null) {
+            Logger.log(TAG, "refreshIntent()::LogFeed2.getContent()");
+            logFeed2.getContent().refreshIntent();
+        }
+    }
+
     public void update(View view) {
-        testingVariables();
-        testingNodes();
+        Logger.log(TAG, "COunt : " + count);
+
+        testingLogs();
 
         count++;
     }

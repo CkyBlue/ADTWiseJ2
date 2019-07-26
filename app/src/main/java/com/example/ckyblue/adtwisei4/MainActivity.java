@@ -13,6 +13,7 @@ import Utility.Data.Layer.Content;
 import Utility.Data.Layer.Feed;
 import Utility.Data.Nodes.BluePrint;
 import Utility.Data.Type;
+import Utility.Logs.BaseContent;
 import Utility.Utilities;
 
 public class MainActivity extends AppCompatActivity {
@@ -27,12 +28,19 @@ public class MainActivity extends AppCompatActivity {
 
     Utility.SourceCode.Layer.Feed srcCodeFeed = new Utility.SourceCode.Layer.Feed();
 
+    OutputFragment outputFragment = new OutputFragment();
+    Utility.Logs.Feed logFeed = new Utility.Logs.Feed();
+
+    Utility.Logs.Output.Content outputContent = new Utility.Logs.Output.Content();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        sourceCodesFragment = (SourceCodesFragment) getSupportFragmentManager().findFragmentById(R.id.sourceCodeFragment);
+        outputFragment = (OutputFragment) getSupportFragmentManager().findFragmentById(R.id.outputFragment);
+        outputFragment.setFeed(logFeed);
+        logFeed.setContent(outputContent);
     }
 
     private void dataLayerTest() {
@@ -148,8 +156,38 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void outputFragTest() {
+        switch (step) {
+            case 0: {
+                outputContent.log("Hello\nWorld", true);
+                outputContent.refreshIntent();
+
+                outputContent.log("World", false);
+
+                break;
+            }
+            case 1: {
+                outputContent.log("More");
+                outputContent.log("Output");
+
+                outputContent.refreshIntent();
+                break;
+            }
+            case 2: {
+                outputFragment.setFeed(logFeed);
+
+                break;
+            }
+            case 3: {
+                break;
+            }
+        }
+
+        Logger.log(TAG, Arrays.toString(outputContent.getLogs().toArray()));
+    }
+
     public void update(View view) {
-        srcCodeLayerTest();
+        outputFragTest();
 
         Logger.log("Step", String.valueOf(step));
         step++;

@@ -1,4 +1,4 @@
-package UI_Utils.CustomViews.DataView;
+package UI_Utils.CustomViews.DataViews;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import UI_Utils.CustomViews.DataView.ParamsAdapter.Themes;
+import UI_Utils.CustomViews.DataViews.ParamsAdapter.Themes;
 import Utility.Colors.ColorAdapter.Content;
 import Utility.Colors.Components;
 import Utility.Port;
@@ -15,7 +15,7 @@ import Utility.Themes.Defaults;
 public class Utilities {
     public static void applyCustomizations(Port port, String key, String content, int position,
                                            TextView textView, @NonNull Content colorAdapter,
-                                           @NonNull UI_Utils.CustomViews.DataView.ParamsAdapter.Content paramsAdapter) {
+                                           @NonNull UI_Utils.CustomViews.DataViews.ParamsAdapter.Content paramsAdapter) {
 
         Components components = colorAdapter.fetchComponents(port, key, content, position);
 
@@ -35,7 +35,7 @@ public class Utilities {
 
     public static TextView createView(Context context, Port port, String key, String content,
                                       int position, @NonNull Content colorAdapter,
-                                      @NonNull UI_Utils.CustomViews.DataView.ParamsAdapter.Content paramsAdapter) {
+                                      @NonNull UI_Utils.CustomViews.DataViews.ParamsAdapter.Content paramsAdapter) {
         TextView tv = new TextView(context);
 
         applyCustomizations(port, key, content, position, tv, colorAdapter, paramsAdapter);
@@ -47,7 +47,7 @@ public class Utilities {
     }
 
     @NonNull
-    public static Utility.Colors.ColorAdapter.Content getColorAdapter(UI_Utils.CustomViews.DataView.Customizations.Content
+    public static Utility.Colors.ColorAdapter.Content getColorAdapter(UI_Utils.CustomViews.DataViews.Customizations.Content
                                                                               customizations) {
         if (customizations != null) {
             if (customizations.getColorAdapter() != null) {
@@ -59,7 +59,7 @@ public class Utilities {
     }
 
     @NonNull
-    public static UI_Utils.CustomViews.DataView.ParamsAdapter.Content getParamsAdapter(UI_Utils.CustomViews.DataView.Customizations.Content
+    public static UI_Utils.CustomViews.DataViews.ParamsAdapter.Content getParamsAdapter(UI_Utils.CustomViews.DataViews.Customizations.Content
                                                                                                customizations) {
         if (customizations != null) {
             if (customizations.getParamsContent() != null) {

@@ -50,7 +50,7 @@ public class Content extends SuperContent<Feed> {
 
     private void validateUnitExists(String key) {
         if (!getUnitKeys().contains(key)) {
-            throw new IllegalArgumentException("No SourceCode.Unit Feed or Content object with key " + key + " exists.");
+            throw new IllegalArgumentException("No SourceCode.Unit Feed or BaseContent object with key " + key + " exists.");
         }
     }
 }
