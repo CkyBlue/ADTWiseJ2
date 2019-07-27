@@ -5,18 +5,17 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
-import UI_Utils.CustomViews.DataViews.NodesStackView;
 import UI_Utils.CustomViews.DataViews.Customizations.Content;
+import UI_Utils.CustomViews.DataViews.NodesStackView;
 import UI_Utils.CustomViews.DataViews.ParamsAdapter.Themes;
-
 import UI_Utils.CustomViews.DataViews.VariablesStackView;
 import UI_Utils.CustomViews.LogView;
-import Utility.Logs.BaseContent;
-import Utility.Port;
 import Utility.Colors.Components;
 import Utility.Data.Nodes.BluePrint;
 import Utility.Data.Type;
 import Utility.Data.Variables.Stack.Feed;
+import Utility.Logs.BaseContent;
+import Utility.Port;
 import Utility.Themes.Cascades;
 import Utility.Themes.Defaults;
 
@@ -65,7 +64,7 @@ public class TestActivity extends AppCompatActivity {
         variablesStackView = findViewById(R.id.variableStackView);
         variablesStackView.setVariablesStackFeed(variableStackFeed);*/
 
-        logView1 = findViewById(R.id.logView1);
+       /* logView1 = findViewById(R.id.logView1);
         logView1.setFeed(logFeed1);
 
         logView2 = findViewById(R.id.logView2);
@@ -80,7 +79,7 @@ public class TestActivity extends AppCompatActivity {
         loggerContent.log("~~ He~llo ~</b>");
 
         logFeed1.setContent(loggerContent);
-        logFeed2.setContent(outputContent);
+        logFeed2.setContent(outputContent);*/
 
     }
 

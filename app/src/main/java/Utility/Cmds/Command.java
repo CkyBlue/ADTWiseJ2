@@ -1,9 +1,11 @@
 package Utility.Cmds;
 
-/*TODO Custom class to encapsulate Logger.log()*/
 /*TODO Decouple algorithm and process*/
 
 import java.util.HashMap;
+
+import Utility.Resources.Content;
+import Utility.Resources.Feed;
 
 class Algorithm {
     private final HashMap<String, Command> commandsHashMap = new HashMap<>();
@@ -13,32 +15,58 @@ class Algorithm {
     }
 }
 
-class Process {
-    public void getResources() {
+/*TODO Internal back-tracking abilities of Process object*/
+
+abstract class Process {
+    private final Feed resourcesFeed = new Feed();
+    private final Utility.Cmds.CmdStack.Feed cmdStackFeed = new Utility.Cmds.CmdStack.Feed();
+
+    public Process(Content resources) {
+        if (resources == null) {
+            throw new IllegalArgumentException("The Resources.Content reference used by a Process can not be null.");
+        }
+
+        this.resourcesFeed.setContent(resources);
     }
 
     public void pushCommand(String key) {
     }
 
-    public void output(String output) {
+    private Content getResources() {
+        if (this.resourcesFeed.getContent() == null) {
+            throw new IllegalStateException("The command is attempting to execute with a null Resources.Content reference.");
+
+        } else {
+            return this.resourcesFeed.getContent();
+
+        }
     }
+
+    public abstract void onCmdDispatched();
 
     public void log(String log) {
+        getResources().getLogsFeed().getContent().log(log);
     }
 
-    public void onCmdDispatched() {
+    public void output(String output) {
+        getResources().getOutputFeed().getContent().log(output);
+    }
 
+    public Utility.Data.Layer.Content getDataLayer() {
+        return getResources().getDataLayerFeed().getContent();
+    }
+
+    public Utility.SourceCode.Layer.Content getSourceCodeLayer() {
+        return getResources().getSourceCodeLayerFeed().getContent();
     }
 }
 
 public abstract class Command {
     private String name;
+    private String nextCmd;
 
     private Process process;
     private Algorithm algorithm;
-
-    private String nextCmd;
-    private StringBuilder logs;
 
     public void setName(String name) {
         this.name = name;
@@ -67,7 +95,6 @@ public abstract class Command {
     }
 
     protected void preExecute() {
-        logs = new StringBuilder();
     }
 
     protected void postExecute() {
@@ -79,28 +106,11 @@ public abstract class Command {
 
     public void execute() {
         preExecute();
+
         execution();
         getProcess().pushCommand(nextCmd);
+
         postExecute();
-    }
-
-    public void output(String output) {
-        getProcess().output(output);
-    }
-
-    public void log(String log) {
-        logs.append(log);
-        logs.append("/n/n");
-
-    }
-
-    public void getVariablesStack() {
-    }
-
-    public void getNodesStack() {
-    }
-
-    public void getSourceCodeUnit() {
     }
 
     public void setNextCmd(String nextCmd) {
