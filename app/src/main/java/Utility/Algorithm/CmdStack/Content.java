@@ -1,4 +1,4 @@
-package Utility.Cmds.CmdStack;
+package Utility.Algorithm.CmdStack;
 
 import java.util.Stack;
 

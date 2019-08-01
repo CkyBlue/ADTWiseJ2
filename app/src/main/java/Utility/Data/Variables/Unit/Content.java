@@ -155,6 +155,15 @@ public class Content extends SuperContent<Feed> {
         }
     }
 
+    public void addAll(Content content) {
+        for (String variableName : content.getVariableNames()){
+            Type variableType = content.getType(variableName);
+            this.declareVariable(variableName, variableType);
+
+            this.internalSet(variableName, variableType, content.internalGet(variableName, variableType));
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();

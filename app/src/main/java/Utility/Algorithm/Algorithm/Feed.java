@@ -1,4 +1,4 @@
-package Utility.Cmds.CmdStack;
+package Utility.Algorithm.Algorithm;
 
 import Utility.Bases.SuperFeed;
 

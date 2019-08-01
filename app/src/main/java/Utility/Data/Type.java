@@ -1,6 +1,8 @@
 package Utility.Data;
 
-public enum Type {
+import Utility.Key;
+
+public enum Type implements Key {
     STRING,
     INTEGER,
     FLOAT,

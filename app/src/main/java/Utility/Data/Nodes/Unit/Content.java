@@ -108,7 +108,7 @@ public class Content extends SuperContent<Feed> {
 
     @SuppressWarnings("unchecked")
     private void init(BluePrint bluePrint, int length) {
-        if (bluePrint == null){
+        if (bluePrint == null) {
             throw new IllegalArgumentException("BluePrint object cannot be null.");
         }
 
