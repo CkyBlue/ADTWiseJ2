@@ -25,6 +25,7 @@ public abstract class Iterator extends Block {
     public final void execute(Process process) {
         setProcess(process);
         preExecute();
+
         onExecution();
 
         if (evaluate()) {

@@ -36,7 +36,7 @@ public class AlgorithmsTest extends AppCompatActivity {
         };
 
         process.setAlgorithmTree(Tests.tree);
-        process.loadAlgorithm("Algorithm 1");
+        process.loadAlgorithm("Algorithm 2");
 
         loggerFragment = (LoggerFragment) getSupportFragmentManager().findFragmentById(R.id.loggerFragment);
         outputFragment = (OutputFragment) getSupportFragmentManager().findFragmentById(R.id.outputFragment);
