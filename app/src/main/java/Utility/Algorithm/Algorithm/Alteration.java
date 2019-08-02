@@ -1,4 +1,4 @@
-package Utility.Algorithm.Tree;
+package Utility.Algorithm.Algorithm;
 
 import Utility.Key;
 

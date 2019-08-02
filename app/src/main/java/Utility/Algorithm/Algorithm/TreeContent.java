@@ -1,4 +1,4 @@
-package Utility.Algorithm.Tree;
+package Utility.Algorithm.Algorithm;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -38,7 +38,7 @@ class OpenAlgorithms{
     }
 }*/
 
-public class Content extends SuperContent<Feed> {
+public class TreeContent extends SuperContent<TreeFeed> {
     private Command header;
 
     private final HashMap<String, Utility.Algorithm.Algorithm.Content> algorithms = new HashMap<>();

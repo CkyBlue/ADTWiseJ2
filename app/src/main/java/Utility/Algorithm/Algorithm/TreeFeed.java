@@ -1,10 +1,10 @@
-package Utility.Algorithm.Tree;
+package Utility.Algorithm.Algorithm;
 
 import Utility.Bases.SuperFeed;
 
-public class Feed extends SuperFeed<Content, Printer> {
+public class TreeFeed extends SuperFeed<TreeContent, TreePrinter> {
     public void contentAltered(Alteration alteration, String variableName) {
-        for (Printer printer : getPrinters()){
+        for (TreePrinter printer : getPrinters()){
             printer.notifyOfContentAlteration(alteration, variableName);
         }
     }

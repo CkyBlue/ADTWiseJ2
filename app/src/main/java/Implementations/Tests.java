@@ -2,14 +2,14 @@ package Implementations;
 
 import Utility.Algorithm.Commands.Command;
 import Utility.Algorithm.Commands.Iterator;
-import Utility.Algorithm.Tree.Content;
+import Utility.Algorithm.Algorithm.TreeContent;
 import Utility.Data.Type;
 
 public class Tests {
-    public Content tree = new Content();
-    public Utility.Algorithm.Algorithm.Content algorithm_1 = new Utility.Algorithm.Algorithm.Content();
+    public static TreeContent tree = new TreeContent();
+    public static Utility.Algorithm.Algorithm.Content algorithm_1 = new Utility.Algorithm.Algorithm.Content();
 
-    {
+    static {
         Command cmd1 = new Command("cmd1") {
             @Override
             protected void onExecution() {
@@ -39,12 +39,12 @@ public class Tests {
             }
         };
 
-        this.algorithm_1.setHead("cmd1");
+        Tests.algorithm_1.setHead("cmd1");
 
-        this.algorithm_1.addCommand(cmd1);
-        this.algorithm_1.addCommand(cmd2);
-        this.algorithm_1.addCommand(cmd3);
+        Tests.algorithm_1.addCommand(cmd1);
+        Tests.algorithm_1.addCommand(cmd2);
+        Tests.algorithm_1.addCommand(cmd3);
 
-        this.tree.addAlgorithm();
+        Tests.tree.addAlgorithm("Algorithm 1", algorithm_1);
     }
 }

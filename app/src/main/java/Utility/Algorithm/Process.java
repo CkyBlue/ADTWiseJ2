@@ -9,6 +9,7 @@ import Utility.Resources.Feed;
 /*TODO Internal back-tracking abilities of Process object*/
 
 public abstract class Process {
+    private final Utility.Algorithm.Algorithm.Feed algorithmFeed = new Utility.Algorithm.Algorithm.Feed();
     private final Feed resourcesFeed = new Feed();
     private final Utility.Algorithm.CmdStack.Feed cmdStackFeed = new Utility.Algorithm.CmdStack.Feed();
 
@@ -18,6 +19,10 @@ public abstract class Process {
             relayInput(input);
         }
     };
+
+    public void setAlgorithm(Utility.Algorithm.Algorithm.Content algorithm){
+
+    }
 
     public Process(Content resources) {
         if (resources == null) {

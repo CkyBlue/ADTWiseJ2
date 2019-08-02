@@ -9,7 +9,11 @@ public class Content extends SuperContent<Feed> {
     private final HashMap<String, Command> commandsHashMap = new HashMap<>();
 
     private String head;
-    private Utility.Algorithm.Tree.Content tree;
+    private TreeContent tree;
+
+    void setTree(TreeContent tree) {
+        this.tree = tree;
+    }
 
     public String getHead() {
         return head;
@@ -19,11 +23,7 @@ public class Content extends SuperContent<Feed> {
         this.head = head;
     }
 
-    public void setTree(Utility.Algorithm.Tree.Content tree) {
-        this.tree = tree;
-    }
-
-    public Utility.Algorithm.Tree.Content getTree() {
+    public TreeContent getTree() {
         return tree;
     }
 
