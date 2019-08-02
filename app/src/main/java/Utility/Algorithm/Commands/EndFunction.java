@@ -1,3 +1,4 @@
+/*
 package Utility.Algorithm.Commands;
 
 abstract class EndFunction extends Command {
@@ -19,3 +20,4 @@ abstract class EndFunction extends Command {
 
     protected abstract void destroyLocalData();
 }
+*/

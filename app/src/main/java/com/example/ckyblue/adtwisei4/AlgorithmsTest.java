@@ -5,8 +5,19 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import Implementations.Tests;
+import Utility.Algorithm.Process;
+
 public class AlgorithmsTest extends AppCompatActivity {
+    private LoggerFragment loggerFragment;
+    private OutputFragment outputFragment;
+
+    private DataLayerFragment dataLayerFragment;
+    private SourceCodesFragment sourceCodesFragment;
+
     private String TAG = getClass().getName();
+
+    private Process process;
 
     int count = 0;
 
@@ -15,58 +26,37 @@ public class AlgorithmsTest extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_test_3);
 
+        process = new Process() {
+            @Override
+            public void onCmdDispatched() {
+                Logger.log(TAG, "onCmdDispatched() called");
+
+                refreshIntent();
+            }
+        };
+
+        process.setAlgorithmTree(Tests.tree);
+        process.loadAlgorithm("Algorithm 1");
+
+        loggerFragment = (LoggerFragment) getSupportFragmentManager().findFragmentById(R.id.loggerFragment);
+        outputFragment = (OutputFragment) getSupportFragmentManager().findFragmentById(R.id.outputFragment);
+        sourceCodesFragment = (SourceCodesFragment) getSupportFragmentManager().findFragmentById(R.id.srcCodeLayerFragment);
+        dataLayerFragment = (DataLayerFragment) getSupportFragmentManager().findFragmentById(R.id.dataLayerFragment);
+
+        loggerFragment.setFeed(process.getResources().getLogsFeed());
+        outputFragment.setFeed(process.getResources().getOutputFeed());
+        sourceCodesFragment.setFeed(process.getResources().getSourceCodeLayerFeed());
+        dataLayerFragment.setFeed(process.getResources().getDataLayerFeed());
     }
 
     private void test() {
-        switch (count) {
-            case 0: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 1: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 2: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 3: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 4: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 5: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 6: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 7: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 8: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 9: {
-                Logger.log(TAG, "");
-                break;
-            }
-            case 10: {
-                Logger.log(TAG, "");
-                break;
-            }
-        }
+        Logger.log(TAG, "process.execute() called");
+        process.execute();
     }
 
     public void update(View view) {
+        test();
+
         Logger.log(TAG, "update()::Count:" + count);
         count++;
     }

@@ -1,3 +1,4 @@
+/*
 package Utility.Algorithm.Commands;
 
 import Utility.Data.Type;
@@ -54,3 +55,4 @@ public abstract class Input extends Command {
         this.getProcess().onInputHandled();
     }
 }
+*/

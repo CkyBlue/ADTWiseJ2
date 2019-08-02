@@ -63,13 +63,13 @@ public class Content extends SuperContent<Feed> {
 
     public Utility.Data.Nodes.Stack.Feed getNodesStackFeed(String key) {
         validateStackExists(NodesStack, key);
-        return  this.nodesStackFeedHashMap.get(key);
+        return this.nodesStackFeedHashMap.get(key);
 
     }
 
     public Utility.Data.Variables.Stack.Feed getVariablesStackFeed(String key) {
         validateStackExists(VariablesStack, key);
-        return  this.variableStackFeedHashMap.get(key);
+        return this.variableStackFeedHashMap.get(key);
 
     }
 
@@ -88,14 +88,14 @@ public class Content extends SuperContent<Feed> {
         throw new IllegalStateException("Component is not recognized.");
     }
 
-    private void validateStackExists(Component component, String componentKey){
+    private void validateStackExists(Component component, String componentKey) {
         if (!stackExists(component, componentKey)) {
             throw new IllegalArgumentException("A " + component + " with key " + componentKey + " doesn't exist.");
 
         }
     }
 
-    private void validateNoStackExists(Component component, String componentKey){
+    private void validateNoStackExists(Component component, String componentKey) {
         if (stackExists(component, componentKey)) {
             throw new IllegalArgumentException("A " + component + " with key " + componentKey + " already exists.");
 
@@ -120,7 +120,7 @@ public class Content extends SuperContent<Feed> {
 
         boolean keyExists = getKeys(component).contains(componentKey);
 
-        if (keyExists && stack == null){
+        if (keyExists && stack == null) {
             throw new IllegalStateException(component + " object for key " + componentKey + " is null.");
         }
 
@@ -134,5 +134,44 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
+    }
+
+    @Override
+    public void refreshIntent() {
+        for (Utility.Data.Nodes.Stack.Feed nodesStack : nodesStackFeedHashMap.values()) {
+            nodesStack.getContent().refreshIntent();
+        }
+
+        for (Utility.Data.Variables.Stack.Feed variablesStack : variableStackFeedHashMap.values()) {
+            variablesStack.getContent().refreshIntent();
+        }
+
+        super.refreshIntent();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append("DataLayer : [\n");
+
+        stringBuilder.append("Nodes : {\n");
+        for (String nodesStackKeys : nodesStackFeedHashMap.keySet()) {
+            stringBuilder.append(nodesStackFeedHashMap.get(nodesStackKeys).getContent().toString());
+            stringBuilder.append("\n");
+
+        }
+        stringBuilder.append("}");
+
+        stringBuilder.append("\tVariables : {\n");
+        for (String variableStackKeys : variableStackFeedHashMap.keySet()) {
+            stringBuilder.append(variableStackFeedHashMap.get(variableStackKeys).getContent().toString());
+            stringBuilder.append("\n");
+
+        }
+        stringBuilder.append("}\n");
+        stringBuilder.append("]");
+
+        return stringBuilder.toString();
     }
 }

@@ -1,24 +1,27 @@
 package Utility.Algorithm.Commands;
 
+import Utility.Algorithm.Process;
+
 abstract class Block extends Command {
     public Type type = Type.Command;
 
-    private String blockChainedTo;
+    private Command blockChainedTo;
 
     public Block(String name) {
         super(name);
     }
 
-    public String getBlockChainedTo() {
+    public Command getBlockChainedTo() {
         return blockChainedTo;
     }
 
-    public void blockChainTo(String blockChainedTo) {
+    public void blockChainTo(Command blockChainedTo) {
         this.blockChainedTo = blockChainedTo;
     }
 
     @Override
-    public void execute() {
+    public void execute(Process process) {
+        setProcess(process);
         preExecute();
 
         onExecution();
@@ -27,5 +30,6 @@ abstract class Block extends Command {
         getProcess().pushCommand(getChainedTo());
 
         postExecute();
+        setProcess(null);
     }
 }

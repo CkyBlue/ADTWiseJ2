@@ -1,8 +1,8 @@
 package Implementations;
 
+import Utility.Algorithm.Algorithm.TreeContent;
 import Utility.Algorithm.Commands.Command;
 import Utility.Algorithm.Commands.Iterator;
-import Utility.Algorithm.Algorithm.TreeContent;
 import Utility.Data.Type;
 
 public class Tests {
@@ -15,8 +15,6 @@ public class Tests {
             protected void onExecution() {
                 variables("Locals").declareVariable("x", Type.INTEGER);
                 variables("Locals").set("x",  0);
-
-                chainTo("cmd2");
             }
         };
 
@@ -28,7 +26,6 @@ public class Tests {
 
             @Override
             protected void onExecution() {
-                chainTo("cmd3");
             }
         };
 
@@ -39,12 +36,20 @@ public class Tests {
             }
         };
 
-        Tests.algorithm_1.setHead("cmd1");
+//        Tests.algorithm_1.setHead("cmd1");
 
-        Tests.algorithm_1.addCommand(cmd1);
-        Tests.algorithm_1.addCommand(cmd2);
-        Tests.algorithm_1.addCommand(cmd3);
+        cmd1.chainTo(cmd2);
+        cmd2.chainTo(cmd3);
 
+        Tests.algorithm_1.setHead(cmd1);
+
+        Tests.tree.setHeader(new Command("tree header") {
+            @Override
+            protected void onExecution() {
+                getDataLayer().buildVariablesStack("Locals");
+                output("Tree Header Executing");
+            }
+        });
         Tests.tree.addAlgorithm("Algorithm 1", algorithm_1);
     }
 }

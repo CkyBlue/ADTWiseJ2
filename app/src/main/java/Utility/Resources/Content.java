@@ -36,4 +36,14 @@ public class Content extends SuperContent<Feed> {
     public Utility.Data.Layer.Feed getDataLayerFeed() {
         return dataLayerFeed;
     }
+
+    @Override
+    public void refreshIntent() {
+        this.logsFeed.getContent().refreshIntent();
+        this.outputFeed.getContent().refreshIntent();
+        this.dataLayerFeed.getContent().refreshIntent();
+        this.sourceCodeLayerFeed.getContent().refreshIntent();
+
+        super.refreshIntent();
+    }
 }

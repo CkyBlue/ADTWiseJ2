@@ -75,6 +75,11 @@ public class Content extends SuperContent<Feed> {
     }
 
     @Override
+    public void refreshIntent() {
+        getUnit().refreshIntent();
+    }
+
+    @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder(getName());
         stringBuilder.append(": {\n");

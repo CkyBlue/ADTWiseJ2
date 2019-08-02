@@ -5,21 +5,23 @@ import java.util.HashMap;
 import Utility.Algorithm.Commands.Command;
 import Utility.Bases.SuperContent;
 
+/*TODO Algorithm class is unnecessary*/
+
 public class Content extends SuperContent<Feed> {
     private final HashMap<String, Command> commandsHashMap = new HashMap<>();
 
-    private String head;
+    private Command head;
     private TreeContent tree;
 
     void setTree(TreeContent tree) {
         this.tree = tree;
     }
 
-    public String getHead() {
+    public Command getHead() {
         return head;
     }
 
-    public void setHead(String head) {
+    public void setHead(Command head) {
         this.head = head;
     }
 

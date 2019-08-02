@@ -48,6 +48,15 @@ public class Content extends SuperContent<Feed> {
         buildUnits(null);
     }
 
+    @Override
+    public void refreshIntent() {
+        for (Utility.SourceCode.Unit.Feed unit : sourceCodeUnits.values()) {
+            unit.getContent().refreshIntent();
+        }
+
+        super.refreshIntent();
+    }
+
     private void validateUnitExists(String key) {
         if (!getUnitKeys().contains(key)) {
             throw new IllegalArgumentException("No SourceCode.Unit Feed or BaseContent object with key " + key + " exists.");

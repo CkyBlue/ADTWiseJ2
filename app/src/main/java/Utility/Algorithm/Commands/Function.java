@@ -1,3 +1,4 @@
+/*
 package Utility.Algorithm.Commands;
 
 public abstract class Function extends Command {
@@ -39,3 +40,4 @@ public abstract class Function extends Command {
         postExecute();
     }
 }
+*/

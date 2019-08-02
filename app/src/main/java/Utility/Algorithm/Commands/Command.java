@@ -2,21 +2,20 @@ package Utility.Algorithm.Commands;
 
 import Utility.Algorithm.Algorithm.Content;
 import Utility.Algorithm.Process;
-import Utility.Data.Layer.Component;
 import Utility.Data.Nodes.BluePrint;
 
 public abstract class Command {
     private String name;
-    private String chainedTo;
+    private Command chainedTo;
 
     private Process process;
     private Content algorithm;
 
-    public String getChainedTo() {
+    public Command getChainedTo() {
         return chainedTo;
     }
 
-    public void chainTo(String chainedTo) {
+    public void chainTo(Command chainedTo) {
         this.chainedTo = chainedTo;
     }
 
@@ -28,7 +27,7 @@ public abstract class Command {
         return name;
     }
 
-    public void setProcess(Process process) {
+    void setProcess(Process process) {
         this.process = process;
     }
 
@@ -36,7 +35,7 @@ public abstract class Command {
         this.algorithm = algorithm;
     }
 
-    protected final Process getProcess() {
+    final Process getProcess() {
         if (this.process == null) {
             throw new IllegalStateException("The command is attempting to execute without a Process.");
 
@@ -55,13 +54,15 @@ public abstract class Command {
 
     protected abstract void onExecution();
 
-    public void execute() {
+    public void execute(Process process) {
+        setProcess(process);
         preExecute();
 
         onExecution();
         getProcess().pushCommand(chainedTo);
 
         postExecute();
+        setProcess(null);
     }
 
     public Command(String name) {
@@ -114,5 +115,10 @@ public abstract class Command {
 
     public Utility.SourceCode.Layer.Content getSourceCodeLayer() {
         return getProcess().getSourceCodeLayer();
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

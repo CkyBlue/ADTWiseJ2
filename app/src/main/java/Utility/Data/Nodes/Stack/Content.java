@@ -103,4 +103,9 @@ public class Content extends SuperContent<Feed> {
         stringBuilder.append("}");
         return stringBuilder.toString();
     }
+
+    @Override
+    public void refreshIntent() {
+        getUnit().refreshIntent();
+    }
 }

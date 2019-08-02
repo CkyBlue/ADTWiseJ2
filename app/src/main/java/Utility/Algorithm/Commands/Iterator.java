@@ -1,5 +1,7 @@
 package Utility.Algorithm.Commands;
 
+import Utility.Algorithm.Process;
+
 public abstract class Iterator extends Block {
     public final Type type = Type.Iterator;
 
@@ -20,13 +22,13 @@ public abstract class Iterator extends Block {
     protected abstract boolean evaluate();
 
     @Override
-    public final void execute() {
+    public final void execute(Process process) {
+        setProcess(process);
         preExecute();
         onExecution();
 
         if (evaluate()) {
-
-            getProcess().pushCommand(getName());
+            getProcess().pushCommand(this);
             getProcess().pushCommand(getChainedTo());
 
         } else {
@@ -35,5 +37,6 @@ public abstract class Iterator extends Block {
         }
 
         postExecute();
+        setProcess(null);
     }
 }

@@ -1,3 +1,4 @@
+/*
 package Utility.Algorithm.Commands;
 
 import java.util.ArrayList;
@@ -45,3 +46,4 @@ public abstract class Switch extends Block{
         postExecute();
     }
 }
+*/
