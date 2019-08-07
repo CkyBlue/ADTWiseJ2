@@ -2,10 +2,33 @@ package Utility.Algorithm.Commands;
 
 import Utility.Algorithm.Process;
 
-public abstract class Iterator extends Block {
-    public final Type type = Type.Iterator;
+public abstract class DoWhile extends Block {
+    private class EndWhile extends Command {
+        public final Type type = Type.EndWhile;
 
-    public Iterator(String name) {
+        private EndWhile(String name) {
+            super(name);
+        }
+
+        @Override
+        protected final void onExecution() {
+            onEnd();
+        }
+
+        @Override
+        protected final void postExecute() {
+            super.postExecute();
+        }
+
+        @Override
+        protected final void preExecute() {
+            super.preExecute();
+        }
+    }
+
+    public final Type type = Type.DoWhile;
+
+    public DoWhile(String name) {
         super(name);
     }
 
@@ -21,6 +44,8 @@ public abstract class Iterator extends Block {
 
     protected abstract boolean evaluate();
 
+    protected abstract void onEnd();
+
     @Override
     public final void execute(Process process) {
         setProcess(process);
@@ -34,6 +59,7 @@ public abstract class Iterator extends Block {
 
         } else {
             getProcess().pushCommand(getBlockChainedTo());
+            getProcess().pushCommand(new EndWhile("End While - " + getName()));
 
         }
 

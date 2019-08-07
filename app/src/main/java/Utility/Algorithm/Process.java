@@ -2,21 +2,21 @@ package Utility.Algorithm;
 
 import com.example.ckyblue.adtwisei4.Logger;
 
-import Utility.Algorithm.Algorithm.TreeContent;
 import Utility.Algorithm.Commands.Command;
+import Utility.Algorithm.Commands.Input;
+import Utility.Algorithm.Tree.Content;
+import Utility.Algorithm.Tree.Feed;
+import Utility.Data.Type;
 import Utility.Input.Receiver;
-import Utility.Resources.Content;
-import Utility.Resources.Feed;
 
 /*TODO Internal back-tracking abilities of Process object*/
 
 public abstract class Process {
     private String TAG = getClass().getName();
 
-    private final Utility.Algorithm.Algorithm.Feed algorithmFeed = new Utility.Algorithm.Algorithm.Feed();
-    private final Utility.Algorithm.Algorithm.TreeFeed algorithmTreeFeed = new Utility.Algorithm.Algorithm.TreeFeed();
+    private final Feed algorithmTreeFeed = new Feed();
 
-    private final Feed resourcesFeed = new Feed();
+    private final Utility.Resources.Feed resourcesFeed = new Utility.Resources.Feed();
     private final Utility.Algorithm.CmdStack.Feed cmdStackFeed = new Utility.Algorithm.CmdStack.Feed();
 
     private final Receiver inputReceiver = new Receiver() {
@@ -26,13 +26,13 @@ public abstract class Process {
         }
     };
 
-    public void setAlgorithmTree(TreeContent treeContent) {
-        this.resourcesFeed.setContent(new Content());
+    public void setAlgorithmTree(Content treeContent) {
+        this.resourcesFeed.setContent(new Utility.Resources.Content());
         this.cmdStackFeed.setContent(new Utility.Algorithm.CmdStack.Content());
 
         this.algorithmTreeFeed.setContent(treeContent);
 
-        Command header = treeContent.getHeader();
+        Command header = treeContent.getInitializer();
         if (header != null) {
             header.execute(this);
         }
@@ -40,25 +40,25 @@ public abstract class Process {
 
     public void loadAlgorithm(String key) {
         if (this.algorithmTreeFeed.getContent() == null) {
-            throw new IllegalStateException("The Algorithm.TreeContent reference is currently null.");
+            throw new IllegalStateException("The Algorithm.Content reference is currently null.");
 
         } else if (!this.algorithmTreeFeed.getContent().getAlgorithmKeys().contains(key)) {
             throw new IllegalArgumentException("The Algorithm.key " + key +
-                    " is not recignized within the current Algorithm.TreeContent reference.");
+                    " is not recignized within the current Algorithm.Content reference.");
 
         }
 
-        this.algorithmFeed.setContent(this.algorithmTreeFeed.getContent().getAlgorithm(key));
         this.cmdStackFeed.getContent().clear();
+        this.cmdStackFeed.getContent().push(this.algorithmTreeFeed.getContent().getAlgorithmHeader(key));
 
-        this.cmdStackFeed.getContent().push(this.algorithmFeed.getContent().getHead());
+        /*TODO Build algorithm options from tree and kickstart initializer Algorithm*/
     }
 
     public void pushCommand(Command cmd) {
         cmdStackFeed.getContent().push(cmd);
     }
 
-    public Content getResources() {
+    public Utility.Resources.Content getResources() {
         if (this.resourcesFeed.getContent() == null) {
             throw new IllegalStateException("The Process is attempting to execute with a null Resources.Content reference.");
 
@@ -86,10 +86,10 @@ public abstract class Process {
         getResources().getOutputFeed().getContent().log(output);
     }
 
-    /*public void input(Input input, Type inputType){
-     *//*TODO Use input parameter*//*
+    public void input(Input input, Type inputType) {
+//     TODO Use input parameter
         inputReceiver.deployReader(inputType);
-    }*/
+    }
 
     private void relayInput(Object input) {
         /*TODO Build*/

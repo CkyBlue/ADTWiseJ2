@@ -1,6 +1,6 @@
-/*
 package Utility.Algorithm.Commands;
 
+import Utility.Algorithm.Process;
 import Utility.Data.Type;
 
 public abstract class Input extends Command {
@@ -17,18 +17,22 @@ public abstract class Input extends Command {
         return inputType;
     }
 
-    @Override
-    public final void execute() {
+    public void execute(Process process) {
+        setProcess(process);
         preExecute();
+
+
         deployReader();
     }
 
     public final  void receiveInput(String input) {
         this.inputContent = input;
-        onExecution();
 
+        onExecution();
         getProcess().pushCommand(getChainedTo());
+
         postExecute();
+        setProcess(null);
     }
 
     @Override
@@ -55,4 +59,3 @@ public abstract class Input extends Command {
         this.getProcess().onInputHandled();
     }
 }
-*/

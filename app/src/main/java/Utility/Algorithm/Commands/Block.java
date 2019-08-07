@@ -3,8 +3,6 @@ package Utility.Algorithm.Commands;
 import Utility.Algorithm.Process;
 
 abstract class Block extends Command {
-    public Type type = Type.Command;
-
     private Command blockChainedTo;
 
     public Block(String name) {

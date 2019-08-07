@@ -13,7 +13,7 @@ import Utility.Algorithm.Commands.Call;
 import Utility.Algorithm.Commands.Command;
 import Utility.Algorithm.Commands.Function;
 import Utility.Algorithm.Commands.Input;
-import Utility.Algorithm.Commands.Iterator;
+import Utility.Algorithm.Commands.DoWhile;
 import Utility.Algorithm.Commands.Switch;
 import Utility.Algorithm.Tree.Content;
 import Utility.Algorithms.Algorithm;
@@ -27,7 +27,7 @@ import Utility.Commands.Command;
 import Utility.Commands.Function;
 import Utility.Commands.Header;
 import Utility.Commands.Input;
-import Utility.Commands.Iterator;
+import Utility.Commands.DoWhile;
 import Utility.Data.Items.Type;
 import Utility.Data.Nodes.BluePrint;
 import Utility.Data.Nodes.BluePrint.BluePrint;
@@ -79,7 +79,7 @@ class Implementations {
                 }
             };
 
-            setHeader(header);
+            setInitializer(header);
 
             Utility.Algorithm.Algorithm.Content algorithm = new Utility.Algorithm.Algorithm.Content() {
                 {
@@ -103,7 +103,7 @@ class Implementations {
                     };
                     outerLoopCP.chainTo();
 
-                    Iterator iterator = new Iterator("outer-loop", outerLoopCP) {
+                    DoWhile iterator = new DoWhile("outer-loop", outerLoopCP) {
                         @Override
                         protected void onExecution() {
 
@@ -408,7 +408,7 @@ public class BinarySearch extends AlgorithmFamily {
             }
         };
 
-        private Iterator iterator = new Iterator() {
+        private DoWhile iterator = new DoWhile() {
             @Override
             protected boolean evaluate() {
                 return (l("Again").equals("Y") || l("Again").equals("y"));

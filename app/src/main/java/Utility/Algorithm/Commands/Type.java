@@ -2,10 +2,15 @@ package Utility.Algorithm.Commands;
 
 public enum Type {
     Call,
+    Command,
+    Input,
+
     Function,
     EndFunction,
-    Iterator,
-    Switch,
-    Command,
-    Input
+
+    DoWhile,
+    EndWhile,
+
+    IfOrElse,
+    EndIf
 }

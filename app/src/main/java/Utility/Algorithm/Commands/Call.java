@@ -1,15 +1,16 @@
-/*
 package Utility.Algorithm.Commands;
+
+import Utility.Algorithm.Process;
 
 public abstract class Call extends Command {
     public final Type type = Type.Call;
-    private String functionCmd;
+    private Command functionCmd;
 
     public Call(String name) {
         super(name);
     }
 
-    public final void setFunction(String functionCmd) {
+    public final void setFunction(Command functionCmd) {
         this.functionCmd = functionCmd;
     }
 
@@ -30,16 +31,15 @@ public abstract class Call extends Command {
         super.postExecute();
     }
 
-
-    @Override
-    public final void execute() {
+    public final void execute(Process process) {
+        setProcess(process);
         preExecute();
-        onExecution();
 
+        onExecution();
         getProcess().pushCommand(getChainedTo());
         getProcess().pushCommand(functionCmd);
 
         postExecute();
+        setProcess(null);
     }
 }
-*/

@@ -3,18 +3,18 @@ package Implementations;
 import java.util.HashSet;
 import java.util.Set;
 
-import Utility.Algorithm.Algorithm.TreeContent;
 import Utility.Algorithm.Commands.Command;
-import Utility.Algorithm.Commands.Iterator;
+import Utility.Algorithm.Commands.DoWhile;
+import Utility.Algorithm.Tree.Content;
 import Utility.Data.Type;
 
 public class Tests {
-    public static TreeContent tree = new TreeContent();
+    public static Content tree = new Content();
     public static Utility.Algorithm.Algorithm.Content algorithm_1 = new Utility.Algorithm.Algorithm.Content();
     public static Utility.Algorithm.Algorithm.Content algorithm_2 = new Utility.Algorithm.Algorithm.Content();
 
     static {
-        Tests.tree.setHeader(new Command("tree header") {
+        Tests.tree.setInitializer(new Command("tree header") {
             @Override
             protected void onExecution() {
                 getDataLayer().buildVariablesStack("Locals");
@@ -51,7 +51,7 @@ public class Tests {
             }
         };
 
-        Iterator cmd2 = new Iterator("cmd2") {
+        DoWhile cmd2 = new DoWhile("cmd2") {
             @Override
             protected boolean evaluate() {
                 return variables("Locals").getInt("x") <= 10;
@@ -120,7 +120,7 @@ public class Tests {
             }
         };
 
-        Iterator cmd2 = new Iterator("cmd2") {
+        DoWhile cmd2 = new DoWhile("cmd2") {
             @Override
             protected boolean evaluate() {
                 return variables("Locals").getInt("x") <= 10;

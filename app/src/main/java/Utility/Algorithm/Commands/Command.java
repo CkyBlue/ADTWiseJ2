@@ -1,15 +1,15 @@
 package Utility.Algorithm.Commands;
 
-import Utility.Algorithm.Algorithm.Content;
 import Utility.Algorithm.Process;
 import Utility.Data.Nodes.BluePrint;
 
 public abstract class Command {
+    public Type type = Type.Command;
+
     private String name;
     private Command chainedTo;
 
     private Process process;
-    private Content algorithm;
 
     public Command getChainedTo() {
         return chainedTo;
@@ -29,10 +29,6 @@ public abstract class Command {
 
     void setProcess(Process process) {
         this.process = process;
-    }
-
-    public void setAlgorithm(Content algorithm) {
-        this.algorithm = algorithm;
     }
 
     final Process getProcess() {

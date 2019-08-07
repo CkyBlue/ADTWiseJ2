@@ -1,20 +1,45 @@
-/*
 package Utility.Algorithm.Commands;
 
-public abstract class Function extends Command {
-    public final Type type = Type.Function;
-    private String functionEndCmd;
+import Utility.Algorithm.Process;
 
-    public final void setFunctionEnd(String functionEndCmd) {
-        this.functionEndCmd = functionEndCmd;
+/*TODO An implementation of return*/
+
+public abstract class Function extends Command {
+    private class EndFunction extends Command {
+        public final Type type = Type.EndFunction;
+
+        private EndFunction(String name) {
+            super(name);
+        }
+
+        @Override
+        protected final void onExecution() {
+            onEnd();
+        }
+
+        @Override
+        protected final void postExecute() {
+            destroyLocalData();
+            super.postExecute();
+        }
+
+        @Override
+        protected final void preExecute() {
+            super.preExecute();
+        }
     }
 
-    public Function(String name, String functionEndCmd) {
+    public final Type type = Type.Function;
+
+    public Function(String name) {
         super(name);
-        this.functionEndCmd = functionEndCmd;
     }
 
     protected abstract void buildLocalData();
+
+    protected abstract void destroyLocalData();
+
+    protected abstract void onEnd();
 
     @Override
     protected final void preExecute() {
@@ -27,17 +52,15 @@ public abstract class Function extends Command {
         super.postExecute();
     }
 
-
-    @Override
-    public final void execute() {
+    public void execute(Process process) {
+        setProcess(process);
         preExecute();
 
         onExecution();
-
-        getProcess().pushCommand(functionEndCmd);
+        getProcess().pushCommand(new EndFunction("End Function - " + getName()));
         getProcess().pushCommand(getChainedTo());
 
         postExecute();
+        setProcess(null);
     }
 }
-*/
