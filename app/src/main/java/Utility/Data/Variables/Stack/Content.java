@@ -68,8 +68,8 @@ public class Content extends SuperContent<Feed> {
         return false;
     }
 
-    public Content(String name) {
-        this.name = name;
+    public Content(String cmdId) {
+        this.name = cmdId;
         this.unitPrinter.setFeed(unitFeed);
         push();
     }
@@ -81,7 +81,8 @@ public class Content extends SuperContent<Feed> {
 
     @Override
     public String toString() {
-        StringBuilder stringBuilder = new StringBuilder(getName());
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(getName());
         stringBuilder.append(": {\n");
 
         int count = getSize();

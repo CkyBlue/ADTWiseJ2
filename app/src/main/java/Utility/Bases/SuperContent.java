@@ -13,7 +13,7 @@ public class SuperContent <Feed extends SuperFeed> {
         }
     }
 
-    public void setFeed(Feed feed) {
+    void setFeed(Feed feed) {
         this.feed = feed;
     }
 }

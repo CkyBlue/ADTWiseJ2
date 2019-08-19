@@ -1,12 +1,13 @@
-package Utility.Algorithm.Commands;
+package Utility.Algorithm.SubCommands;
 
-import Utility.Algorithm.Process;
+import Utility.Algorithm.Process.Command;
+import Utility.Algorithm.Process.Content;
 import Utility.Data.Type;
 
 public abstract class Input extends Command {
-    public final Utility.Algorithm.Commands.Type type = Utility.Algorithm.Commands.Type.Input;
+    public final Utility.Algorithm.SubCommands.Type type = Utility.Algorithm.SubCommands.Type.Input;
 
-    private String inputContent;
+    private Object inputContent;
     private Type inputType;
 
     protected final Object getInputContent() {
@@ -17,7 +18,7 @@ public abstract class Input extends Command {
         return inputType;
     }
 
-    public void execute(Process process) {
+    public void execute(Content process) {
         setProcess(process);
         preExecute();
 
@@ -25,7 +26,7 @@ public abstract class Input extends Command {
         deployReader();
     }
 
-    public final  void receiveInput(String input) {
+    public final void receiveInput(Object input) {
         this.inputContent = input;
 
         onExecution();
@@ -46,8 +47,8 @@ public abstract class Input extends Command {
         super.postExecute();
     }
 
-    public Input(String name, Type inputType) {
-        super(name);
+    public Input(String cmdId, Type inputType) {
+        super(cmdId);
         this.inputType = inputType;
     }
 

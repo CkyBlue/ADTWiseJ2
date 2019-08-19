@@ -1,10 +1,19 @@
+/*
 package Implementations;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import Utility.Algorithm.Commands.Command;
+import Utility.Algorithm.Commands.Call;
+import Utility.Algorithm.Process.Command;
 import Utility.Algorithm.Commands.DoWhile;
+import Utility.Algorithm.Commands.EndFunction;
+import Utility.Algorithm.Commands.EndIf;
+import Utility.Algorithm.Commands.EndWhile;
+import Utility.Algorithm.Commands.Function;
+import Utility.Algorithm.Commands.IfOrElse;
+import Utility.Algorithm.Commands.Input;
+import Utility.Algorithm.Commands.Return;
 import Utility.Algorithm.Tree.Content;
 import Utility.Data.Type;
 
@@ -17,7 +26,7 @@ public class Tests {
         Tests.tree.setInitializer(new Command("tree header") {
             @Override
             protected void onExecution() {
-                getDataLayer().buildVariablesStack("Locals");
+                getDataLayer().buildVarStack("Locals");
                 output("Tree Header Executing");
             }
         });
@@ -161,4 +170,116 @@ public class Tests {
         Tests.algorithm_2.setHead(cmd1);
         Tests.tree.addAlgorithm("Algorithm 2", algorithm_2);
     }
+
+    {
+*/
+/*        Call call = new Call() {
+            @Override
+            protected void buildArgs() {
+
+            }
+
+            @Override
+            protected void passArgs() {
+
+            }
+
+            @Override
+            protected Object fetchReturn() {
+
+            }
+
+            @Override
+            protected void onExecution() {
+
+            }
+        };
+
+        Command command = new Command() {
+            @Override
+            protected void onExecution() {
+
+            }
+        };
+
+        DoWhile doWhile = new DoWhile() {
+            @Override
+            protected boolean evaluate() {
+                return false;
+            }
+
+            @Override
+            protected void onExecution() {
+
+            }
+        };
+
+        EndFunction endFunction = new EndFunction() {
+            @Override
+            protected void destroyLocalData() {
+
+            }
+
+            @Override
+            protected void onExecution() {
+
+            }
+        };
+
+        EndIf endIf = new EndIf() {
+            @Override
+            protected void onExecution() {
+
+            }
+        };
+
+        EndWhile endWhile = new EndWhile() {
+            @Override
+            protected void onExecution() {
+
+            }
+        };
+
+        Function function = new Function() {
+            @Override
+            protected void buildLocalData() {
+
+            }
+
+            @Override
+            protected void onExecution() {
+
+            }
+        }
+
+        IfOrElse ifOrElse = new IfOrElse() {
+            @Override
+            protected boolean evaluate() {
+                return false;
+            }
+
+            @Override
+            protected void onExecution() {
+
+            }
+        };
+
+        Input input = new Input() {
+            @Override
+            protected void onExecution() {
+
+            }
+        };
+
+        Return re = new Return() {
+            @Override
+            protected void postReturn() {
+
+            }
+        };*//*
+
+
+
+    }
 }
+*/

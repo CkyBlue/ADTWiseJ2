@@ -1,4 +1,4 @@
-package Utility.Algorithm.Commands;
+package Utility.Algorithm.SubCommands;
 
 public enum Type {
     Call,

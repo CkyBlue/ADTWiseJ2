@@ -7,11 +7,11 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/nextBtn"
         android:layout_width="match_parent"
         android:layout_height="75dp"
         android:layout_weight="0"
-        android:onClick="update"
+        android:onClick="pop"
         android:text="Update" />
 
     <ScrollView

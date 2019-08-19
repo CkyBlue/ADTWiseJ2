@@ -3,7 +3,7 @@ package Utility.Algorithm.CmdStack;
 import java.util.ListIterator;
 import java.util.Stack;
 
-import Utility.Algorithm.Commands.Command;
+import Utility.Algorithm.Process.Command;
 import Utility.Bases.SuperContent;
 
 public class Content extends SuperContent<Feed> {

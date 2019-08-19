@@ -11,30 +11,19 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".MainActivity"
-            android:configChanges="orientation|screenSize|keyboardHidden">
-            <!--
-                        <intent-filter>
-                            <action android:name="android.intent.action.MAIN"/>
-                            <category android:name="android.intent.category.LAUNCHER" />
-                        </intent-filter>
-            -->
+            android:configChanges="orientation|screenSize|keyboardHidden"></activity>
+
+        <activity android:name=".Dispatcher">
+
         </activity>
 
         <activity android:name=".TestActivity">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
         </activity>
 
         <activity android:name=".InputPanelTestActivity">
-            <!--<intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>-->
         </activity>
 
-        <activity android:name=".AlgorithmsTest">
+        <activity android:name=".RecursionStackTest">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

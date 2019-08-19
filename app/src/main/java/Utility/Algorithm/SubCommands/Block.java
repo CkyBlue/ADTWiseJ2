@@ -1,12 +1,13 @@
-package Utility.Algorithm.Commands;
+package Utility.Algorithm.SubCommands;
 
-import Utility.Algorithm.Process;
+import Utility.Algorithm.Process.Command;
+import Utility.Algorithm.Process.Content;
 
 abstract class Block extends Command {
     private Command blockChainedTo;
 
-    public Block(String name) {
-        super(name);
+    public Block(String cmdId) {
+        super(cmdId);
     }
 
     public Command getBlockChainedTo() {
@@ -18,7 +19,7 @@ abstract class Block extends Command {
     }
 
     @Override
-    public void execute(Process process) {
+    public void execute(Content process) {
         setProcess(process);
         preExecute();
 

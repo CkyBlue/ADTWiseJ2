@@ -19,11 +19,10 @@ public abstract class Reader {
     }
 
     public Receiver getReceiver() {
-
         return receiver;
     }
 
-    public void setReceiver(Receiver receiver) {
+    void setReceiver(Receiver receiver) {
         this.receiver = receiver;
     }
 

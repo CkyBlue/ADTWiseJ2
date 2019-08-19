@@ -10,7 +10,7 @@ import java.util.Set;
 
 import Utility.Algorithm.CasePort;
 import Utility.Algorithm.Commands.Call;
-import Utility.Algorithm.Commands.Command;
+import Utility.Algorithm.Process.Command;
 import Utility.Algorithm.Commands.Function;
 import Utility.Algorithm.Commands.Input;
 import Utility.Algorithm.Commands.DoWhile;
@@ -61,8 +61,8 @@ class Implementations {
                 protected void onExecution() {
                     getDataLayer().clear();
 
-                    getDataLayer().buildVariablesStack(arguments);
-                    getDataLayer().buildVariablesStack(locals);
+                    getDataLayer().buildVarStack(arguments);
+                    getDataLayer().buildVarStack(locals);
 
                     BluePrint nodeBlueprint = new BluePrint();
                     nodeBlueprint.addKey(index, Type.INTEGER);
@@ -119,8 +119,8 @@ class Implementations {
                     };
 
                     abstract class functionCall extends Call {
-                        functionCall(String name) {
-                            super(name);
+                        functionCall(String cmdId) {
+                            super(cmdId);
                         }
 
                         @Override
@@ -158,7 +158,7 @@ class Implementations {
                     Function binSearchFunc = new Function("binSearchFunc", "binSearchFuncEnd") {
                         @Override
                         protected void buildLocalData() {
-                            pushVariables(locals);
+                            pushVarStack(locals);
                             variables(locals).addAll(variables(arguments));
                         }
 
@@ -335,8 +335,8 @@ public class BinarySearch extends AlgorithmFamily {
     public void initDataLayer(DataLayer dataLayer) {
         dataLayer.clear();
 
-        dataLayer.buildVariablesStack("Arguments");
-        dataLayer.buildVariablesStack("Locals");
+        dataLayer.buildVarStack("Arguments");
+        dataLayer.buildVarStack("Locals");
 
         BluePrint nodeBlueprint = new BluePrint();
         nodeBlueprint.addKey("Index", Type.INTEGER);

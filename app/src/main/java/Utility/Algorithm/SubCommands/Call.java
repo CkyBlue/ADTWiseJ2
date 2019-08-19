@@ -1,13 +1,14 @@
-package Utility.Algorithm.Commands;
+package Utility.Algorithm.SubCommands;
 
-import Utility.Algorithm.Process;
+import Utility.Algorithm.Process.Command;
+import Utility.Algorithm.Process.Content;
 
 public abstract class Call extends Command {
     public final Type type = Type.Call;
     private Command functionCmd;
 
-    public Call(String name) {
-        super(name);
+    public Call(String cmdId) {
+        super(cmdId);
     }
 
     public final void setFunction(Command functionCmd) {
@@ -31,7 +32,7 @@ public abstract class Call extends Command {
         super.postExecute();
     }
 
-    public final void execute(Process process) {
+    public final void execute(Content process) {
         setProcess(process);
         preExecute();
 
