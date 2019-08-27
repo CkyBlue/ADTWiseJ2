@@ -1,4 +1,4 @@
-package com.example.ckyblue.adtwisei4;
+package com.example.ckyblue.adtwisei4.Fragments;
 
 import android.graphics.Color;
 import android.os.Bundle;
@@ -14,10 +14,11 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.example.ckyblue.adtwisei4.R;
+
 import java.util.HashMap;
 
 import UI_Utils.CustomViews.SourceCodeUnitView;
-
 import UI_Utils.SpanFactory;
 import Utility.Colors.Values;
 import Utility.SourceCode.FormattingKey;
@@ -27,7 +28,7 @@ import Utility.SourceCode.Layer.Printer;
 
 /*ToDO Export SpanFactory objs to library*/
 
-public class SourceCodesFragment extends Fragment {
+public class SourceCodes extends Fragment {
     private View rootView;
     private LinearLayout srcCodeLayer_Container;
 
@@ -81,7 +82,9 @@ public class SourceCodesFragment extends Fragment {
 
         @Override
         public void notifyOfFeedRebuild() {
-            rebuildSourceCodeViews();
+            if (srcCodeLayer_Container != null) {
+                rebuildSourceCodeViews();
+            }
         }
     };
 

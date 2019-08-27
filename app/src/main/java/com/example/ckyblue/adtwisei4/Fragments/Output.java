@@ -1,8 +1,7 @@
-package com.example.ckyblue.adtwisei4;
+package com.example.ckyblue.adtwisei4.Fragments;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.hardware.camera2.params.BlackLevelPattern;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,19 +9,20 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
 import android.widget.LinearLayout;
+
+import com.example.ckyblue.adtwisei4.R;
 
 import UI_Utils.CustomViews.LogView;
 import Utility.Logs.Feed;
 import Utility.Themes.Defaults;
 
-public class OutputFragment extends Fragment {
+public class Output extends Fragment {
     String TAG = getClass().getName();
 
     private View rootView;
     private LogView logView;
+    private Feed feed;
 
     public View getRootView() {
         return rootView;
@@ -42,7 +42,8 @@ public class OutputFragment extends Fragment {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        Logger.log(TAG, "onCreate()");
+        com.example.ckyblue.adtwisei4.Logger.log(TAG, "onCreate()");
+
         super.onCreate(savedInstanceState);
     }
 
@@ -51,35 +52,35 @@ public class OutputFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        Logger.log(TAG, "onCreateView()");
+        com.example.ckyblue.adtwisei4.Logger.log(TAG, "onCreateView()");
         setRootView(inflater.inflate(R.layout.fragment_output, container, false));
 
-        setLogView(this.logView = new LogView(getContext()));
+        setLogView(new LogView(getContext()));
         getLogView().setLayoutParams(new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.MATCH_PARENT));
+        getLogView().setFeed(this.feed);
 
         ((LinearLayout) getRootView().findViewById(R.id.container)).addView(logView);
-
         initUI();
         return rootView;
     }
 
     @Override
     public void onResume() {
-        Logger.log(TAG, "onResume()");
+        com.example.ckyblue.adtwisei4.Logger.log(TAG, "onResume()");
         super.onResume();
     }
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        Logger.log(TAG, "onActivityCreated()");
+        com.example.ckyblue.adtwisei4.Logger.log(TAG, "onActivityCreated()");
         super.onActivityCreated(savedInstanceState);
     }
 
     public void initUI() {
-        Logger.log(TAG, "initUI()");
+        com.example.ckyblue.adtwisei4.Logger.log(TAG, "initUI()");
 
-         getLogView().setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
+        getLogView().setTypeface(Typeface.MONOSPACE, Typeface.NORMAL);
         getLogView().setTextColor(Color.parseColor(
                 Defaults.defaultLightText().getHexARGB()
         ));
@@ -92,6 +93,9 @@ public class OutputFragment extends Fragment {
     }
 
     public void setFeed(Feed outputFeed) {
-        this.logView.setFeed(outputFeed);
+        this.feed = outputFeed;
+        if (this.logView != null) {
+            this.logView.setFeed(outputFeed);
+        }
     }
 }

@@ -23,7 +23,7 @@
         <activity android:name=".InputPanelTestActivity">
         </activity>
 
-        <activity android:name=".RecursionStackTest">
+        <activity android:name=".ListActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

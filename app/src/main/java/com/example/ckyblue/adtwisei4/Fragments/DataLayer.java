@@ -1,4 +1,4 @@
-package com.example.ckyblue.adtwisei4;
+package com.example.ckyblue.adtwisei4.Fragments;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -9,6 +9,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import com.example.ckyblue.adtwisei4.Logger;
+import com.example.ckyblue.adtwisei4.R;
 
 import java.util.HashMap;
 
@@ -21,7 +24,7 @@ import Utility.Data.Layer.Content;
 import Utility.Data.Layer.Feed;
 import Utility.Data.Layer.Printer;
 
-public class DataLayerFragment extends Fragment {
+public class DataLayer extends Fragment {
     String TAG = getClass().getName();
     private String dataStackViewTag = "dataStackViewTag";
 
@@ -32,20 +35,22 @@ public class DataLayerFragment extends Fragment {
     private final HashMap<String, LinearLayout> titledNodesStackViews = new HashMap<>();
 
     private Printer dataLayer_Printer = new Printer() {
-        private String TAG = "DataLayerFragment.DataLayerPrinter";
+        private String TAG = "DataLayer.DataLayerPrinter";
 
         @Override
         public void notifyOfContentAlteration(Alteration alteration, Component component, String componentKey) {
             Logger.log(TAG, "notifyOfContentAlteration(" + alteration + ", " + component + ", " + componentKey + ")");
 
-            DataLayerFragment.this.notifyOfContentAlteration(alteration, component, componentKey);
+            DataLayer.this.notifyOfContentAlteration(alteration, component, componentKey);
         }
 
         @Override
         public void notifyOfFeedRebuild() {
             Logger.log(TAG, "notifyOfFeedRebuild()");
 
-            DataLayerFragment.this.rebuildDataViews();
+            if (dataLayer_Container != null) {
+                DataLayer.this.rebuildDataViews();
+            }
         }
 
         @Override

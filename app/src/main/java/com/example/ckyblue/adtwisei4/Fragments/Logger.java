@@ -1,25 +1,16 @@
-package com.example.ckyblue.adtwisei4;
+package com.example.ckyblue.adtwisei4.Fragments;
 
 import android.graphics.Color;
 import android.graphics.Typeface;
-import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.LinearLayout;
 
-import UI_Utils.CustomViews.LogView;
-import Utility.Colors.Values;
-import Utility.Logs.Feed;
+import com.example.ckyblue.adtwisei4.R;
+
 import Utility.Themes.Defaults;
 
-public class LoggerFragment extends OutputFragment {
+public class Logger extends Output {
     @Override
     public void initUI() {
-        Logger.log(TAG, "initUI()");
+        com.example.ckyblue.adtwisei4.Logger.log(TAG, "initUI()");
 
         Typeface typeface = Typeface.create("sans-serif-thin", Typeface.NORMAL);
         getLogView().setTypeface(typeface, Typeface.ITALIC);

@@ -23,7 +23,7 @@
 
     <fragment
         android:id="@+id/loggerFragment"
-        android:name="com.example.ckyblue.adtwisei4.LoggerFragment"
+        android:name="com.example.ckyblue.adtwisei4.Fragments.Logger"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

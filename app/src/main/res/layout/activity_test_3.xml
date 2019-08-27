@@ -51,7 +51,7 @@
 
                     <fragment
                         android:id="@+id/loggerFragment"
-                        android:name="com.example.ckyblue.adtwisei4.LoggerFragment"
+                        android:name="com.example.ckyblue.adtwisei4.Fragments.Logger"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
@@ -64,7 +64,7 @@
 
                     <fragment
                         android:id="@+id/outputFragment"
-                        android:name="com.example.ckyblue.adtwisei4.OutputFragment"
+                        android:name="com.example.ckyblue.adtwisei4.Fragments.Output"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
@@ -78,7 +78,7 @@
 
                     <fragment
                         android:id="@+id/dataLayerFragment"
-                        android:name="com.example.ckyblue.adtwisei4.DataLayerFragment"
+                        android:name="com.example.ckyblue.adtwisei4.Fragments.DataLayer"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 
@@ -92,7 +92,7 @@
 
                     <fragment
                         android:id="@+id/srcCodeLayerFragment"
-                        android:name="com.example.ckyblue.adtwisei4.SourceCodesFragment"
+                        android:name="com.example.ckyblue.adtwisei4.Fragments.SourceCodes"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
 

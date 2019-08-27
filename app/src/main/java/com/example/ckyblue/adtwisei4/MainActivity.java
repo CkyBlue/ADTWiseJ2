@@ -4,6 +4,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
+import com.example.ckyblue.adtwisei4.Fragments.DataLayer;
+import com.example.ckyblue.adtwisei4.Fragments.Logger;
+import com.example.ckyblue.adtwisei4.Fragments.Output;
+import com.example.ckyblue.adtwisei4.Fragments.SourceCodes;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -19,15 +24,15 @@ public class MainActivity extends AppCompatActivity {
     private String TAG = getClass().getName();
     int step = 0;
 
-    DataLayerFragment dataLayerFragment;
-    SourceCodesFragment sourceCodesFragment;
+    DataLayer dataLayerFragment;
+    SourceCodes sourceCodesFragment;
 
     Content dataLayer_Content = new Content();
     Feed dataLayer_Feed = new Feed();
 
     Utility.SourceCode.Layer.Feed srcCodeFeed = new Utility.SourceCode.Layer.Feed();
 
-    OutputFragment outputFragment;
+    Output outputFragment;
     Utility.Logs.Feed logFeed = new Utility.Logs.Feed();
 
     Utility.Logs.Logger.Content outputContent = new Utility.Logs.Logger.Content();
@@ -37,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        outputFragment = (LoggerFragment) getSupportFragmentManager().findFragmentById(R.id.loggerFragment);
+        outputFragment = (Logger) getSupportFragmentManager().findFragmentById(R.id.loggerFragment);
         outputFragment.setFeed(logFeed);
         logFeed.setContent(outputContent);
     }
@@ -45,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     private void dataLayerTest() {
         switch (step) {
             case 0: {
-                Logger.log(TAG, "Building a data layer.");
+                com.example.ckyblue.adtwisei4.Logger.log(TAG, "Building a data layer.");
 
                 dataLayer_Content.buildVariablesStack("myStack");
 
@@ -59,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case 1: {
-                Logger.log(TAG, "Setting the data layer.");
+                com.example.ckyblue.adtwisei4.Logger.log(TAG, "Setting the data layer.");
 
                 dataLayer_Content.getVariablesStackFeed("myStack").getContent().getUnit().declareVariable("myVar", Type.STRING);
                 dataLayer_Content.getVariablesStackFeed("myStack").getContent().getUnit().declareVariable("myVar2", Type.INTEGER);
@@ -76,13 +81,13 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case 2: {
-                Logger.log(TAG, "Setting null as data layer");
+                com.example.ckyblue.adtwisei4.Logger.log(TAG, "Setting null as data layer");
                 dataLayerFragment.setFeed(null);
 
                 break;
             }
             case 3: {
-                Logger.log(TAG, "Adding new components");
+                com.example.ckyblue.adtwisei4.Logger.log(TAG, "Adding new components");
                 dataLayerFragment.setFeed(dataLayer_Feed);
 
                 dataLayer_Content.buildVariablesStack("locals");
@@ -90,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case 4: {
-                Logger.log(TAG, "Manipulating components");
+                com.example.ckyblue.adtwisei4.Logger.log(TAG, "Manipulating components");
 
                 String mString = "mString";
                 String mInt = "mInt";
@@ -114,7 +119,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             }
             case 5: {
-                Logger.log(TAG, "Removing components");
+                com.example.ckyblue.adtwisei4.Logger.log(TAG, "Removing components");
                 dataLayer_Content.removeStack(Component.VariablesStack, "myStack");
                 break;
             }
@@ -139,12 +144,12 @@ public class MainActivity extends AppCompatActivity {
                 srcCodeFeed.setContent(content);
                 sourceCodesFragment.setFeed(srcCodeFeed);
 
-                Logger.log("MainActivity", Arrays.toString(content.getUnitFeed("Pseudo").getPrinters().toArray()));
+                com.example.ckyblue.adtwisei4.Logger.log("MainActivity", Arrays.toString(content.getUnitFeed("Pseudo").getPrinters().toArray()));
                 break;
             }
             case 1: {
                 sourceCodesFragment.setFeed(null);
-                Logger.log("MainActivity", Arrays.toString(srcCodeFeed.getContent().getUnitFeed("Pseudo").getPrinters().toArray()));
+                com.example.ckyblue.adtwisei4.Logger.log("MainActivity", Arrays.toString(srcCodeFeed.getContent().getUnitFeed("Pseudo").getPrinters().toArray()));
                 break;
             }
             case 2: {
@@ -181,14 +186,14 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        Logger.log(TAG, Arrays.toString(outputContent.getLogs().toArray()));
+        com.example.ckyblue.adtwisei4.Logger.log(TAG, Arrays.toString(outputContent.getLogs().toArray()));
     }
 
     public void update(View view) {
-        Logger.log("Step", "<----------" + String.valueOf(step));
+        com.example.ckyblue.adtwisei4.Logger.log("Step", "<----------" + String.valueOf(step));
         outputFragTest();
 
-        Logger.log("Step", String.valueOf(step) + "---------->");
+        com.example.ckyblue.adtwisei4.Logger.log("Step", String.valueOf(step) + "---------->");
         step++;
     }
 }

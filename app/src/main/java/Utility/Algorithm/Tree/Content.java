@@ -15,11 +15,11 @@ public class Content extends SuperContent<Feed> {
         return initializer;
     }
 
-    protected void setInitializer(Command initializer) {
+    public void setInitializer(Command initializer) {
         this.initializer = initializer;
     }
 
-    protected void addAlgorithmHeader(String key, Command algorithmHeader) {
+    public void addAlgorithmHeader(String key, Command algorithmHeader) {
         if (algorithmHeader == null) {
             throw new IllegalArgumentException("Algorithm header can not be null.");
 
