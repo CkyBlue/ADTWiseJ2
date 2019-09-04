@@ -87,7 +87,7 @@ public class Output extends Fragment {
         getLogView().setPadding(5, 5, 5, 5);
 
 
-        getRootView().findViewById(R.id.outerHorizontalScroll).setBackgroundColor(Color.parseColor(
+        getRootView().findViewById(R.id.logRoot).setBackgroundColor(Color.parseColor(
                 Defaults.defaultBgColorDark().getHexARGB()
         ));
     }

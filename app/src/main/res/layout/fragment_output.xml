@@ -5,5 +5,26 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include layout="@layout/scroller_2d"></include>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:paddingBottom="5dp"
+        android:fadeScrollbars="false"
+        android:layout_weight="1"
+        android:ellipsize="none"
+        android:maxLines="1000"
+        android:scrollHorizontally="false"
+        android:scrollbarSize="@dimen/scroll_bar_width"
+        android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
+        android:scrollbarTrackVertical="@drawable/scrollbar">
+
+        <LinearLayout
+            android:id="@+id/container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+        </LinearLayout>
+
+    </ScrollView>
 </LinearLayout>

@@ -97,15 +97,14 @@
                         android:layout_height="match_parent" />
 
                 </FrameLayout>
-
-                <UI_Utils.CustomViews.InputPanel
-                    android:id="@+id/inputPanel"
-                    android:layout_width="match_parent"
-                    android:layout_height="140dp" />
-
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
+
+    <UI_Utils.CustomViews.InputPanel
+        android:id="@+id/inputPanel"
+        android:layout_width="match_parent"
+        android:layout_height="100dp" />
 
     <Button
         android:id="@+id/nextBtn"
@@ -113,6 +112,5 @@
         android:layout_height="55dp"
         android:layout_weight="0"
         android:text="Next" />
-
 
 </LinearLayout>

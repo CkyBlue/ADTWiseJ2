@@ -68,26 +68,17 @@ public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
                     " algorithms are running.");
         }
 
-        if (treeContent != null) {
-            algorithmTreeLoaded = true;
+        getCmdStack().clear();
+        algorithmTreeLoaded = treeContent != null;
 
-            this.resourcesFeed.setContent(new Utility.Resources.Content());
-            this.cmdStackFeed.setContent(new Utility.Algorithm.CmdStack.Content());
-
-            this.algorithmTreeFeed.setContent(treeContent);
-
-            loadAlgorithmHeader(treeContent.getInitializer());
-        } else {
-            this.resourcesFeed.setContent(null);
-            this.cmdStackFeed.setContent(null);
-
-            this.algorithmTreeFeed.setContent(null);
-
-            algorithmTreeLoaded = false;
-        }
+        this.algorithmTreeFeed.setContent(treeContent);
 
         if (getFeed() != null) {
             getFeed().newAlgorithmTree();
+        }
+
+        if (treeContent != null) {
+            loadAlgorithmHeader(treeContent.getInitializer());
         }
     }
 
@@ -128,7 +119,7 @@ public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
 
     public Utility.Resources.Content getResources() {
         if (this.resourcesFeed.getContent() == null) {
-            throw new IllegalStateException("The Content is attempting to execute with a null Resources.Content reference.");
+            throw new IllegalStateException("Resources is null.");
 
         } else {
             return this.resourcesFeed.getContent();
@@ -146,8 +137,8 @@ public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
         }
     }
 
-    public void log(String log) {
-        getResources().getLogsFeed().getContent().log(log);
+    public void log(String log, boolean newLine) {
+        getResources().getLogsFeed().getContent().log(log, newLine);
     }
 
     public void output(String output) {
@@ -196,6 +187,11 @@ public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
         }
 
         return null;
+    }
+
+    public Content() {
+        this.resourcesFeed.setContent(new Utility.Resources.Content());
+        this.cmdStackFeed.setContent(new Utility.Algorithm.CmdStack.Content());
     }
 
     public void refreshIntent() {

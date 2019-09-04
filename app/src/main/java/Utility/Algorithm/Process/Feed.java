@@ -9,6 +9,7 @@ public class Feed extends SuperFeed<Content, Printer> {
         }
     }
 
+
     void cmdDispatched() {
         for (Printer printer : getPrinters()) {
             printer.notifyOfCmdDispatched();

@@ -1,11 +1,13 @@
 package UI_Utils.CustomViews;
 
+import android.app.Activity;
 import android.content.Context;
 import android.text.InputType;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -136,6 +138,9 @@ public class InputPanel extends FrameLayout {
                 }
             }
 
+            InputMethodManager inputMethodManager = (InputMethodManager) getContext().getSystemService(Activity.INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+
         } else if (activeType == Type.BOOLEAN) {
             RadioGroup radioGroup = findViewWithTag(activeType);
 
@@ -185,6 +190,12 @@ public class InputPanel extends FrameLayout {
             }
 
             editText.setTag(activeType);
+            editText.requestFocus();
+
+            InputMethodManager inputMethodManager =
+                    (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, 0);
+
             this.container.addView(editText);
 
         } else if (activeType == Type.BOOLEAN) {
@@ -192,6 +203,7 @@ public class InputPanel extends FrameLayout {
             RadioGroup radioGroup = viewGroup.findViewById(R.id.radioGroup);
 
             radioGroup.setTag(activeType);
+            radioGroup.requestFocus();
         }
     }
 }

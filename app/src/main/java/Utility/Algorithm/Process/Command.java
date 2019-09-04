@@ -69,8 +69,12 @@ public abstract class Command {
         setCmdId(cmdId);
     }
 
+    public void log(String log, boolean newLine) {
+        getProcess().log(log, newLine);
+    }
+
     public void log(String log) {
-        getProcess().log(log);
+        log(log, true);
     }
 
     public void output(String output) {

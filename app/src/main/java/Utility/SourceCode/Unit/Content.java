@@ -4,10 +4,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
+import Utility.Bases.SuperContent;
 import Utility.SourceCode.FormattingKey;
 import Utility.SourceCode.Parser;
 import Utility.SourceCode.Tracker;
-import Utility.Bases.SuperContent;
 import Utility.Utilities;
 
 public class Content extends SuperContent<Feed> {
@@ -93,14 +93,16 @@ public class Content extends SuperContent<Feed> {
     public void highlight(int[] lineNumbers) {
         Tracker highlighting = new Tracker();
 
-        int start, end;
+        if (lineNumbers != null) {
+            int start, end;
 
-        for (int lineNum : lineNumbers) {
-            if (lineNum > 0 && lineNum <= getLineCount()) {
-                start = getLineBoundaries().getStart(lineNum - 1);
-                end = getLineBoundaries().getEnd(lineNum - 1);
+            for (int lineNum : lineNumbers) {
+                if (lineNum > 0 && lineNum <= getLineCount()) {
+                    start = getLineBoundaries().getStart(lineNum - 1);
+                    end = getLineBoundaries().getEnd(lineNum - 1);
 
-                highlighting.addMarkers(start, end);
+                    highlighting.addMarkers(start, end);
+                }
             }
         }
 

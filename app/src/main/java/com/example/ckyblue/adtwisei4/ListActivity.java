@@ -8,7 +8,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -36,7 +35,7 @@ public class ListActivity extends AppCompatActivity {
                 TextView btn = (TextView) view;
                 String key = btn.getText().toString();
 
-                Toast.makeText(ListActivity.this, key, Toast.LENGTH_SHORT).show();
+//                Toast.makeText(ListActivity.this, key, Toast.LENGTH_SHORT).show();
 
                 launchDispatcher(key);
             }
@@ -44,7 +43,7 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void launchDispatcher(String key) {
-        Intent intent = new Intent(this, Dispatcher.class);
+        Intent intent = new Intent(this, Dispatcher2.class);
         intent.putExtra(tree_key, key);
 
         startActivity(intent);

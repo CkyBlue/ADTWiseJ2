@@ -13,15 +13,19 @@
             android:name=".MainActivity"
             android:configChanges="orientation|screenSize|keyboardHidden"></activity>
 
-        <activity android:name=".Dispatcher">
-
+        <activity
+            android:name=".Dispatcher"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".TestActivity">
+        <activity
+            android:name=".Dispatcher2"
+            android:screenOrientation="portrait">
         </activity>
 
-        <activity android:name=".InputPanelTestActivity">
-        </activity>
+        <activity android:name=".TestActivity"></activity>
+
+        <activity android:name=".InputPanelTestActivity"></activity>
 
         <activity android:name=".ListActivity">
             <intent-filter>
