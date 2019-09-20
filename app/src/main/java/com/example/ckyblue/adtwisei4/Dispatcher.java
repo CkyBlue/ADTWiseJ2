@@ -38,7 +38,7 @@ public class Dispatcher extends AppCompatActivity {
         }
 
         @Override
-        public void notifyOfNewAlgorithmLoaded() {
+        public void notifyOfNewAlgorithmLoaded(String algorithmKey) {
             com.example.ckyblue.adtwisei4.Logger.log(TAG, "notifyOfNewAlgorithmLoaded() called");
             Toast.makeText(Dispatcher.this, "Algorithm loaded.", Toast.LENGTH_LONG).show();
 

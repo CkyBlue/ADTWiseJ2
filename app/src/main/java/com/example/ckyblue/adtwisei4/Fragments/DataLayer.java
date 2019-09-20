@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -17,12 +18,19 @@ import java.util.HashMap;
 
 import UI_Utils.CustomViews.DataViews.DataStackView;
 import UI_Utils.CustomViews.DataViews.NodesStackView;
+import UI_Utils.CustomViews.DataViews.ParamsAdapter.Themes;
 import UI_Utils.CustomViews.DataViews.VariablesStackView;
+import Utility.Colors.Components;
 import Utility.Data.Alteration;
 import Utility.Data.Layer.Component;
 import Utility.Data.Layer.Content;
 import Utility.Data.Layer.Feed;
 import Utility.Data.Layer.Printer;
+import Utility.Port;
+import Utility.Themes.Cascades;
+import Utility.Themes.Defaults;
+
+import static Utility.Themes.Defaults.headerChrome;
 
 public class DataLayer extends Fragment {
     String TAG = getClass().getName();
@@ -30,6 +38,9 @@ public class DataLayer extends Fragment {
 
     private View rootView;
     private LinearLayout dataLayer_Container;
+
+    private final UI_Utils.CustomViews.DataViews.Customizations.Feed customizationsFeedNodes = new UI_Utils.CustomViews.DataViews.Customizations.Feed();
+    private final UI_Utils.CustomViews.DataViews.Customizations.Feed customizationsFeedVars = new UI_Utils.CustomViews.DataViews.Customizations.Feed();
 
     private final HashMap<String, LinearLayout> titledVariablesStackViews = new HashMap<>();
     private final HashMap<String, LinearLayout> titledNodesStackViews = new HashMap<>();
@@ -117,6 +128,13 @@ public class DataLayer extends Fragment {
         if (layerContent != null) {
             for (Component component : Component.values()) {
                 for (String componentKey : layerContent.getKeys(component)) {
+
+                    // Do not build if variable stack isn't in displaying state
+                    if (component == Component.VariablesStack &&
+                            !layerContent.getDisplayingVarStacks().contains(componentKey)) {
+                        continue;
+                    }
+
                     LinearLayout titledViewBox = buildTitledView(component, componentKey);
 
                     dataLayer_Container.addView(titledViewBox);
@@ -166,6 +184,7 @@ public class DataLayer extends Fragment {
                 dataStackView = new NodesStackView(getContext());
                 ((NodesStackView) dataStackView).setNodesStackFeed(nodesStackFeed);
 
+                dataStackView.setCustomizationsFeed(customizationsFeedNodes);
                 break;
             }
             case VariablesStack: {
@@ -174,6 +193,7 @@ public class DataLayer extends Fragment {
                 dataStackView = new VariablesStackView(getContext());
                 ((VariablesStackView) dataStackView).setVariablesStackFeed(variablesStackFeed);
 
+                dataStackView.setCustomizationsFeed(customizationsFeedVars);
                 break;
             }
         }
@@ -188,6 +208,7 @@ public class DataLayer extends Fragment {
         ((TextView) titleViewBox.findViewById(R.id.titleTextView)).setText(componentKey);
         innerContainer = titleViewBox.findViewById(R.id.container);
         innerContainer.addView(dataStackView);
+        titleViewBox.setPadding(6, 6, 6, 6);
 
         return titleViewBox;
     }
@@ -196,6 +217,84 @@ public class DataLayer extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         Logger.log(TAG, "onCreate()");
         super.onCreate(savedInstanceState);
+
+        Utility.Colors.ColorAdapter.Content nodesColorAdapter = new Utility.Colors.ColorAdapter.Content() {
+            @Override
+            public Components fetchComponents(Port port, String key, String content, int position) {
+                if (port == Port.header) {
+                    return headerChrome.fetchComponents(content, position);
+                }
+
+                if (content.equals(String.valueOf(-1))) {
+                    return Defaults.chrome.fetchComponents(content, position);
+                }
+
+                if (key.equals(Utility.Data.Nodes.Unit.Content.Column.Index.toString()) ||
+                        key.toLowerCase().contains(Utility.Data.Nodes.Unit.Content.Column.Pointer.toString().toLowerCase())) {
+                    return Cascades.ContentStreamers.AquaGreens.getChrome().fetchComponents(content, position);
+                }
+
+                return Cascades.IndexStreamers.Stripes.getChrome().fetchComponents(content, position);
+            }
+        };
+
+        Utility.Colors.ColorAdapter.Content varColorAdapter = new Utility.Colors.ColorAdapter.Content() {
+            @Override
+            public Components fetchComponents(Port port, String key, String content, int position) {
+                if (port == Port.header) {
+                    return headerChrome.fetchComponents(content, position);
+                }
+
+                if (key.equals(Utility.Data.Variables.Unit.Content.Column.Identifier.toString())) {
+                    return Cascades.IndexStreamers.Stripes.getChrome().fetchComponents(content, position);
+                }
+
+                if (content.equals(String.valueOf(-1)) || content.equals("") || !android.text.TextUtils.isDigitsOnly(content)) {
+                    return Defaults.chrome.fetchComponents(content, position);
+                }
+
+                return Cascades.ContentStreamers.AquaGreens.getChrome().fetchComponents(content, position);
+            }
+        };
+
+        UI_Utils.CustomViews.DataViews.ParamsAdapter.Content nodesParamsAdapter = new UI_Utils.CustomViews.DataViews.ParamsAdapter.Content() {
+            @NonNull
+            @Override
+            public AbsListView.LayoutParams getBodyRowParams() {
+                return Themes.SquareIndices.getBodyRowParams();
+            }
+
+            @NonNull
+            @Override
+            public LinearLayout.LayoutParams getHeaderRowParams() {
+                return Themes.SquareIndices.getHeaderRowParams();
+            }
+
+            @NonNull
+            @Override
+            public LinearLayout.LayoutParams getChildParams(Port port, String key) {
+                return Themes.SquareIndices.getChildParams(port, key);
+            }
+
+            @Override
+            public void applyModifications(Port port, String key, View view) {
+                if (port == Port.header && key.equals(Utility.Data.Nodes.Unit.Content.Column.Index.toString())) {
+                    view.setVisibility(View.INVISIBLE);
+                }
+                Themes.SquareIndices.applyModifications(port, key, view);
+            }
+        };
+
+        customizationsFeedNodes.setContent(new UI_Utils.CustomViews.DataViews.Customizations.Content(
+                nodesColorAdapter,
+                nodesParamsAdapter
+        ));
+
+        customizationsFeedVars.setContent(new UI_Utils.CustomViews.DataViews.Customizations.Content(
+                varColorAdapter,
+                Themes.Variables
+        ));
+
     }
 
     @Nullable

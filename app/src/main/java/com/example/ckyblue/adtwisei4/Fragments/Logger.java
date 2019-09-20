@@ -18,7 +18,7 @@ public class Logger extends Output {
         getLogView ().setTextColor(Color.parseColor(
                 Utility.Colors.Color.gray.createValues().setTintFactor(-.75f).getHexARGB()
         ));
-        getLogView().setTextSize(16f);
+        getLogView().setTextSize(14f);
         getLogView().setLetterSpacing(0.2f);
         getLogView().setPadding(5, 5, 5, 5);
 

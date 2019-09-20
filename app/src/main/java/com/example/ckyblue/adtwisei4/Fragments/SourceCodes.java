@@ -1,12 +1,14 @@
 package com.example.ckyblue.adtwisei4.Fragments;
 
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.style.BackgroundColorSpan;
 import android.text.style.ForegroundColorSpan;
+import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,7 +22,6 @@ import java.util.HashMap;
 
 import UI_Utils.CustomViews.SourceCodeUnitView;
 import UI_Utils.SpanFactory;
-import Utility.Colors.Values;
 import Utility.SourceCode.FormattingKey;
 import Utility.SourceCode.Layer.Content;
 import Utility.SourceCode.Layer.Feed;
@@ -32,10 +33,10 @@ public class SourceCodes extends Fragment {
     private View rootView;
     private LinearLayout srcCodeLayer_Container;
 
-    //    private final HashMap<String, LinearLayout> titledSrcCodeBoxes = new HashMap<>();
+    private final HashMap<String, LinearLayout> titledSrcCodeBoxes = new HashMap<>();
     private final HashMap<String, SourceCodeUnitView> sourceCodeUnitViews = new HashMap<>();
 
-    SpanFactory baseFormatting, lineCountFormatting, highlightFormatting;
+    SpanFactory baseFormatting, lineCountFormatting, previewHighlightFormatting, executionHighlightFormatting;
 
     {
         baseFormatting = new SpanFactory() {
@@ -54,22 +55,31 @@ public class SourceCodes extends Fragment {
         lineCountFormatting = new SpanFactory() {
             @Override
             public Object[] createSpans(int scopeCount) {
-                Values customGray = Utility.Colors.Color.rick_black.createValues();
-
-                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(
-                        Color.parseColor(customGray.getHexARGB())
-                );
-                return new Object[]{foregroundColorSpan};
+                StyleSpan styleSpan = new StyleSpan(Typeface.BOLD);
+                return new Object[]{styleSpan};
             }
         };
 
-        highlightFormatting = new SpanFactory() {
+        previewHighlightFormatting = new SpanFactory() {
             @Override
             public Object[] createSpans(int scopeCount) {
+                Utility.Colors.Values customGray = Utility.Colors.Color.light_gray.createValues();
+                customGray.setTintFactor(.4f);
+
                 BackgroundColorSpan backgroundColorSpan = new BackgroundColorSpan(
-                        Color.parseColor(Utility.Colors.Color.light_gray.getHexARGB())
+                        Color.parseColor(customGray.getHexARGB())
                 );
                 return new Object[]{backgroundColorSpan};
+            }
+        };
+
+        executionHighlightFormatting = new SpanFactory() {
+            @Override
+            public Object[] createSpans(int scopeCount) {
+                ForegroundColorSpan foregroundColorSpan = new ForegroundColorSpan(
+                        Color.parseColor(Utility.Colors.Color.medium_aqua_marine.getHexARGB())
+                );
+                return new Object[]{foregroundColorSpan};
             }
         };
     }
@@ -86,7 +96,25 @@ public class SourceCodes extends Fragment {
                 rebuildSourceCodeViews();
             }
         }
+
+        @Override
+        public void notifyOfHideIntent(String unitkey) {
+            hideUnit(unitkey);
+        }
+
+        @Override
+        public void notifyOfShowIntent(String unitkey) {
+            showUnit(unitkey);
+        }
     };
+
+    private void hideUnit(String key) {
+        titledSrcCodeBoxes.get(key).setVisibility(View.GONE);
+    }
+
+    private void showUnit(String key) {
+        titledSrcCodeBoxes.get(key).setVisibility(View.VISIBLE);
+    }
 
     public void rebuildSourceCodeViews() {
         SourceCodeUnitView srcCodeUnitView;
@@ -116,7 +144,9 @@ public class SourceCodes extends Fragment {
                 srcCodeUnitView = new SourceCodeUnitView(getContext());
                 srcCodeUnitView.setFeed(unitFeed);
 
-                srcCodeUnitView.setSpanFactory(FormattingKey.Highlighting, highlightFormatting);
+                srcCodeUnitView.setSpanFactory(FormattingKey.Highlighting_A, previewHighlightFormatting);
+                srcCodeUnitView.setSpanFactory(FormattingKey.Highlighting_B, executionHighlightFormatting);
+
                 srcCodeUnitView.setSpanFactory(FormattingKey.Line_Count, lineCountFormatting);
 
                 srcCodeUnitView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
@@ -129,9 +159,17 @@ public class SourceCodes extends Fragment {
                 innerContainer = titleViewBox.findViewById(R.id.container);
                 innerContainer.addView(srcCodeUnitView);
 
-//                titledSrcCodeBoxes.put(sourceCodeUnitKey, titleViewBox);
+                ((LinearLayout.LayoutParams) titleViewBox.getLayoutParams()).setMargins(6, 6, 6, 6);
+
+                titledSrcCodeBoxes.put(sourceCodeUnitKey, titleViewBox);
                 sourceCodeUnitViews.put(sourceCodeUnitKey, srcCodeUnitView);
                 srcCodeLayer_Container.addView(titleViewBox);
+            }
+
+            for (String sourceCodeUnitKey : layerContent.getUnitKeys()) {
+                if (!layerContent.getDisplayingUnits().contains(sourceCodeUnitKey)) {
+                    hideUnit(sourceCodeUnitKey);
+                }
             }
         }
     }

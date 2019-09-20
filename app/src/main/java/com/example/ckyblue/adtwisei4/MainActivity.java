@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
             case 0: {
                 com.example.ckyblue.adtwisei4.Logger.log(TAG, "Building a data layer.");
 
-                dataLayer_Content.buildVariablesStack("myStack");
+                dataLayer_Content.buildVariablesStack("myStack", true);
 
                 BluePrint bluePrint = new BluePrint();
 
@@ -90,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
                 com.example.ckyblue.adtwisei4.Logger.log(TAG, "Adding new components");
                 dataLayerFragment.setFeed(dataLayer_Feed);
 
-                dataLayer_Content.buildVariablesStack("locals");
+                dataLayer_Content.buildVariablesStack("locals", true);
 
                 break;
             }
