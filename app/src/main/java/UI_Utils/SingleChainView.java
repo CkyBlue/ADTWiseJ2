@@ -207,7 +207,7 @@ public class SingleChainView extends View {
 
     };
 
-    float arrowHeadWidth, arrowHeadHeight;
+    float arrowHeadSize;
 
     float nodeHeight, keyHeight, keyWidth, itemColWidth, pointerColWidth;
     float verticalPadding, keyToNodePadding, textSize, strokeWidth;
@@ -224,8 +224,7 @@ public class SingleChainView extends View {
     int strokeColor = Color.DKGRAY;
 
     private void init(AttributeSet attrs) {
-        arrowHeadWidth = dipToPx(30);
-        arrowHeadHeight = dipToPx(30);
+        arrowHeadSize = dipToPx(20);
 
         nodeHeight = dipToPx(40);
         itemColWidth = dipToPx(120);
@@ -242,9 +241,6 @@ public class SingleChainView extends View {
 
         nodeWidth = (itemColWidth + pointerColWidth * 2);
         minContentWidth = keyToNodePadding + nodeWidth + keyWidth;
-
-        arrowHeadWidth = dipToPx(5);
-        arrowHeadHeight = arrowHeadWidth;
 
         mPaint.setStyle(Paint.Style.FILL);
 
@@ -337,7 +333,7 @@ public class SingleChainView extends View {
 
         // Drawing keys & nodes
         cursorY += verticalPadding;
-        cursorX = dipToPx(20);
+        cursorX = dipToPx(120);
 
         float startX, endX, startY, endY;
 
@@ -352,7 +348,7 @@ public class SingleChainView extends View {
             endY = startY + verticalPadding;
 
             if (i < nodeItems.size() - 1) {
-                renderArrow(canvas, startX, endY, endX, startY, arrowHeadHeight, arrowHeadWidth);
+                renderArrow(canvas, startX, endY, endX, startY, arrowHeadSize);
             }
 
             cursorY += nodeHeight + verticalPadding;
@@ -399,38 +395,49 @@ public class SingleChainView extends View {
     }
 
     private void renderArrow(Canvas canvas, float x1, float y1, float x2, float y2,
-                             float arrowHeadHeight, float arrowHeadWidth) {
+                             float arrowHeadSize) {
         path.moveTo(x1, y1);
         path.lineTo(x2, y2);
 
         canvas.drawPath(path, mArrowPaint);
 
-        float slope = (y2 - y1) / (x2 - x1);
-        float normal = -1 / slope;
+        float delY = y2 - y1;
+        float delX = x2 - x1;
 
-        float unitDelY = normal;
-        float unitDelX = 1;
+        float delMagnitude = (float) Math.pow(Math.pow(delX, 2) + Math.pow(delY, 2), 0.5);
 
-        double delMagnitude = Math.pow(Math.pow(unitDelX, 2) + Math.pow(unitDelY, 2), 0.5);
+        float unitDelY = delY / delMagnitude;
+        float unitDelX = delX / delMagnitude;
 
-        unitDelY /= delMagnitude;
-        unitDelX /= delMagnitude;
+        canvas.save();
+        canvas.rotate(90, x2, y2);
 
-        path.moveTo(x2 + unitDelX * arrowHeadWidth / 2, y2 + unitDelY * arrowHeadWidth / 2);
-        path.lineTo(x2 - unitDelX * arrowHeadWidth / 2, y2 - unitDelY * arrowHeadWidth / 2);
-
-        unitDelY = slope;
-        unitDelX = 1;
-
-        delMagnitude = Math.pow(Math.pow(unitDelX, 2) + Math.pow(unitDelY, 2), 0.5);
-
-        unitDelY /= delMagnitude;
-        unitDelX /= delMagnitude;
-
-        path.lineTo(x2 + unitDelX * arrowHeadHeight, y2 + unitDelY * arrowHeadHeight);
-        path.close();
-
+        path.reset();
+        path.moveTo(x2 + unitDelX * arrowHeadSize / 2, y2 + unitDelY * arrowHeadSize / 2);
+        path.lineTo(x2 - unitDelX * arrowHeadSize / 2, y2 - unitDelY * arrowHeadSize / 2);
         canvas.drawPath(path, mArrowPaint);
+
+        canvas.restore();
+
+        float tipX = x2 + unitDelX * arrowHeadSize, tipY = y2 + unitDelY * arrowHeadSize;
+
+        path.reset();
+        path.moveTo(tipX, tipY);
+
+        canvas.save();
+        canvas.rotate(150, tipX, tipY);
+        path.lineTo(tipX + unitDelX * arrowHeadSize, tipY + unitDelY * arrowHeadSize);
+        canvas.drawPath(path, mArrowPaint);
+        canvas.restore();
+
+        path.reset();
+        path.moveTo(tipX, tipY);
+
+        canvas.save();
+        canvas.rotate(-150, tipX, tipY);
+        path.lineTo(tipX + unitDelX * arrowHeadSize, tipY + unitDelY * arrowHeadSize);
+        canvas.drawPath(path, mArrowPaint);
+        canvas.restore();
     }
 
     private void renderCircle(Canvas canvas, float centerX, float centerY, float rad, int fillColor,
@@ -489,7 +496,7 @@ public class SingleChainView extends View {
         super.onDraw(canvas);
 /*        renderArrow(canvas, 0, 0,
                 dipToPx(200), dipToPx(200),
-                dipToPx(arrowHeadHeight),
+                dipToPx(arrowHeadSize),
                 dipToPx(arrowHeadWidth));
 
         renderNode(canvas,
