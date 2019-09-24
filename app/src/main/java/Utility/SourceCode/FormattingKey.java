@@ -10,9 +10,12 @@ import Utility.Key;
 
 public enum FormattingKey implements Key {
     Line_Count,
-    Highlighting,
     Base,
     Strings,
+
+    Highlighting_A,
+    Highlighting_B,
+    Highlighting_C,
 
     Key_Words_A,
     Key_Words_B,

@@ -8,7 +8,7 @@ import Utility.Data.Layer.Component;
 import Utility.Data.Nodes.BluePrint;
 
 public abstract class Command {
-    public Type type = Type.Command;
+    public static Type type = Type.Command;
 
     private String cmdId;
     private Command chainedTo;
@@ -37,7 +37,7 @@ public abstract class Command {
 
     protected final Content getProcess() {
         if (this.process == null) {
-            throw new IllegalStateException("The command is attempting to execute without a Content.");
+            throw new IllegalStateException("The command is attempting to execute without a BaseContent.");
 
         } else {
             return this.process;
@@ -81,6 +81,10 @@ public abstract class Command {
         getProcess().output(output);
     }
 
+    public void clearOutput() {
+        getProcess().clearOutput();
+    }
+
     public Utility.Data.Layer.Content getDataLayer() {
         return getProcess().getResources().getDataLayerFeed().getContent();
     }
@@ -114,7 +118,11 @@ public abstract class Command {
     }
 
     public void buildVarStack(String key) {
-        getDataLayer().buildVariablesStack(key);
+        buildVarStack(key, true);
+    }
+
+    public void buildVarStack(String key, boolean display) {
+        getDataLayer().buildVariablesStack(key, display);
     }
 
     public void removeNodesStack(String key) {
@@ -127,6 +135,14 @@ public abstract class Command {
 
     public void buildSourceCodeUnits(String[] unitKeys) {
         getSourceCodeLayer().buildUnits(new HashSet<>(Arrays.asList(unitKeys)));
+    }
+
+    public void hideSourceCodeUnit(String unitKey) {
+        getSourceCodeLayer().hide(unitKey);
+    }
+
+    public void showSourceCodeUnit(String unitKey) {
+        getSourceCodeLayer().show(unitKey);
     }
 
     public Utility.SourceCode.Unit.Content getSourceCodeUnit(String unitKey) {

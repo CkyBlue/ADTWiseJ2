@@ -121,7 +121,6 @@ public class SourceCodeUnitView extends android.support.v7.widget.AppCompatTextV
     private HashMap<FormattingKey, SpanFactory> spanFactories = new HashMap<>();
     public HashMap<FormattingKey, Object[]> appliedSpans = new HashMap<>();
 
-
     private HashMap<FormattingKey, SpanFactory> getSpanFactories() {
         return spanFactories;
     }

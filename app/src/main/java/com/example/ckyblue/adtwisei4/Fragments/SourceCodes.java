@@ -124,7 +124,7 @@ public class SourceCodes extends Fragment {
         LinearLayout innerContainer;
         LinearLayout titleViewBox;
 
-        /*The unit Feeds constituting a Layer contain references to Printer objects used for rendering them. Those references are removed
+        /*The unit Feeds constituting a Layer contain references to BasePrinter objects used for rendering them. Those references are removed
         ro prevent a memory leak.*/
 
         for (SourceCodeUnitView sourceCodeUnitView : sourceCodeUnitViews.values()) {

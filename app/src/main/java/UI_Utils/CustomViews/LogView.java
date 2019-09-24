@@ -2,26 +2,23 @@ package UI_Utils.CustomViews;
 
 import android.content.Context;
 import android.support.v4.text.HtmlCompat;
-import android.text.Editable;
 import android.util.AttributeSet;
 
 import com.example.ckyblue.adtwisei4.Logger;
-
-import java.util.ArrayList;
 
 import Utility.Logs.BaseContent;
 import Utility.Logs.Feed;
 import Utility.Logs.Printer;
 
-/*TODO Decouple internal Printers and views. Create identical CallBack methods in Views for methods in Printer
- * instead of handling view within the Printer*/
+/*TODO Decouple internal Printers and views. Create identical CallBack methods in Views for methods in BasePrinter
+ * instead of handling view within the BasePrinter*/
 
 public class LogView extends android.support.v7.widget.AppCompatTextView {
     String TAG = getClass().getName();
     boolean newLogs = false;
 
     private Printer printer = new Printer() {
-        String TAG = "LogView.Logs.Printer";
+        String TAG = "LogView.Logs.BasePrinter";
 
         @Override
         public void notifyOfNewLog() {
@@ -80,6 +77,10 @@ public class LogView extends android.support.v7.widget.AppCompatTextView {
         Logger.log(TAG, "notifyOfRefreshIntent()");
 
         if (newLogs) {
+            if (printer.getContent() != null) {
+                printer.getContent().unitDelta();
+            }
+
             StringBuilder stringBuilder = new StringBuilder();
             if (getContent() != null && getContent().getLogs() != null) {
 

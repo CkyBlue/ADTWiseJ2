@@ -1,9 +1,11 @@
 package Utility.Data.Layer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
 import Utility.Bases.SuperContent;
+import Utility.Bases.SuperFeed;
 import Utility.Data.Alteration;
 import Utility.Data.Nodes.BluePrint;
 
@@ -14,6 +16,8 @@ public class Content extends SuperContent<Feed> {
     private final HashMap<String, Utility.Data.Nodes.Stack.Feed> nodesStackFeedHashMap = new HashMap<>();
     private final HashMap<String, Utility.Data.Variables.Stack.Feed> variableStackFeedHashMap = new HashMap<>();
 
+    private final ArrayList<String> displayingVarStacks = new ArrayList<>();
+
     public void buildNodesStack(String key, BluePrint bluePrint, int length) {
         validateNoStackExists(NodesStack, key);
 
@@ -21,15 +25,19 @@ public class Content extends SuperContent<Feed> {
         Utility.Data.Nodes.Stack.Feed nodesStackFeed = new Utility.Data.Nodes.Stack.Feed();
 
         nodesStackFeed.setContent(nodesStackContent);
+        this.addUnit(nodesStackContent);
         this.nodesStackFeedHashMap.put(key, nodesStackFeed);
 
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_added, NodesStack, key);
-
         }
     }
 
-    public void buildVariablesStack(String key) {
+    public ArrayList<String> getDisplayingVarStacks() {
+        return displayingVarStacks;
+    }
+
+    public void buildVariablesStack(String key, boolean display) {
         validateNoStackExists(VariablesStack, key);
 
         Utility.Data.Variables.Stack.Content variablesStackContent = new Utility.Data.Variables.Stack.Content(key);
@@ -38,25 +46,43 @@ public class Content extends SuperContent<Feed> {
         variablesStackFeed.setContent(variablesStackContent);
         this.variableStackFeedHashMap.put(key, variablesStackFeed);
 
-        if (getFeed() != null) {
-            getFeed().contentAltered(Alteration.component_added, Component.VariablesStack, key);
-
+        if (display) {
+            displayingVarStacks.add(key);
+            this.addUnit(variablesStackContent);
+            if (getFeed() != null) {
+                getFeed().contentAltered(Alteration.component_added, Component.VariablesStack, key);
+            }
         }
     }
 
     public void removeStack(Component component, String componentKey) {
         validateStackExists(component, componentKey);
+        SuperFeed removedFeed = null;
 
         if (component == NodesStack) {
-            this.nodesStackFeedHashMap.remove(componentKey);
+            removedFeed = this.nodesStackFeedHashMap.remove(componentKey);
+
 
         } else if (component == VariablesStack) {
-            this.variableStackFeedHashMap.remove(componentKey);
-
+            removedFeed = this.variableStackFeedHashMap.remove(componentKey);
         }
 
-        if (getFeed() != null) {
-            getFeed().contentAltered(Alteration.component_removed, component, componentKey);
+        if (removedFeed == null) {
+            throw new IllegalStateException("Removed " + component + " feed for key " + componentKey + " is null.");
+        }
+
+        if (component == VariablesStack && displayingVarStacks.contains(componentKey)) {
+            displayingVarStacks.remove(componentKey);
+            removeUnit(removedFeed.getContent());
+            if (getFeed() != null) {
+                getFeed().contentAltered(Alteration.component_removed, component, componentKey);
+            }
+
+        } else if (component == NodesStack) {
+            removeUnit(removedFeed.getContent());
+            if (getFeed() != null) {
+                getFeed().contentAltered(Alteration.component_removed, component, componentKey);
+            }
 
         }
     }
@@ -128,6 +154,7 @@ public class Content extends SuperContent<Feed> {
     }
 
     public void clear() {
+        this.clearUnits();
         this.variableStackFeedHashMap.clear();
         this.nodesStackFeedHashMap.clear();
 

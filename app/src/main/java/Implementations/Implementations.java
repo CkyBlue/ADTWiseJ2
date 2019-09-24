@@ -8,6 +8,6 @@ public class Implementations {
     public static HashMap<String, Content> algorithmTrees = new HashMap<>();
 
     static {
-        algorithmTrees.put("Queue", Queue.algorithmTree);
+        algorithmTrees.put("Queue (ADT) related algorithms", Queue.algorithmTree);
     }
 }

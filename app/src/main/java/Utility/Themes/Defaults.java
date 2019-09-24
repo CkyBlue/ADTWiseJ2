@@ -1,10 +1,10 @@
 package Utility.Themes;
 
-import Utility.Port;
 import Utility.Colors.Chrome.Content;
-import Utility.Colors.Components;
 import Utility.Colors.Color;
+import Utility.Colors.Components;
 import Utility.Colors.Values;
+import Utility.Port;
 
 public class Defaults {
     public static Values defaultLightText() {
@@ -12,7 +12,7 @@ public class Defaults {
     }
 
     public static Values defaultDarkText() {
-        return Color.black_leather_jacket.createValues();
+        return Color.gray.createValues();
     }
 
     public static Values defaultBgColorLight() {

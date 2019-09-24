@@ -57,13 +57,14 @@ public class Themes {
         @NonNull
         @Override
         public LinearLayout.LayoutParams getChildParams(Port port, String key) {
-            if (port == Port.header) {
-                return headerChildParams;
-            }
+//            if (port == Port.header) {
+//                return headerChildParams;
+//            }
 
-            if (key.equals("Pointer") || key.equals("Index")) {
+            if (key.equals(Utility.Data.Nodes.Unit.Content.Column.Index.toString())) {
                 return indexChild;
             }
+
             return dataChild;
         }
     };

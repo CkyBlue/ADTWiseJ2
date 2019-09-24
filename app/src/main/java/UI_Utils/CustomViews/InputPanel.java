@@ -91,6 +91,10 @@ public class InputPanel extends FrameLayout {
         this.receiver = receiver;
     }
 
+    public void setTitleText(String titleText) {
+        this.titleTextView.setText(titleText);
+    }
+
     public void init() {
         inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         this.rootView = (ViewGroup) inflater.inflate(R.layout.input_panel, this, true);

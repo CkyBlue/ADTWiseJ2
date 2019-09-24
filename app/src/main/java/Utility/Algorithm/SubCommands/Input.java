@@ -5,7 +5,7 @@ import Utility.Algorithm.Process.Content;
 import Utility.Data.Type;
 
 public abstract class Input extends Command {
-    public final Utility.Algorithm.SubCommands.Type type = Utility.Algorithm.SubCommands.Type.Input;
+    public static final Utility.Algorithm.SubCommands.Type type = Utility.Algorithm.SubCommands.Type.Input;
 
     private Object inputContent;
     private Type inputType;

@@ -3,7 +3,7 @@ package Utility.Algorithm.SubCommands;
 import Utility.Algorithm.Process.Content;
 
 public abstract class DoWhile extends Block {
-    public final Type type = Type.DoWhile;
+    public static final Type type = Type.DoWhile;
     private EndWhile endsTo;
 
     public EndWhile getEndsTo() {

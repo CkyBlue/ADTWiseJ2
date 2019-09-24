@@ -9,7 +9,7 @@ public abstract class Printer extends SuperPrinter<Content, Feed> {
 
     public abstract void notifyOfNewCmdInOperation();
 
-    public abstract void notifyOfNewAlgorithmLoaded();
+    public abstract void notifyOfNewAlgorithmLoaded(String algorithmKey);
 
     public abstract void notifyOfAlgorithmTerminated();
 

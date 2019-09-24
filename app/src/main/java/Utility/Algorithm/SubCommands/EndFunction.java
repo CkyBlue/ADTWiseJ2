@@ -3,7 +3,7 @@ package Utility.Algorithm.SubCommands;
 import Utility.Algorithm.Process.Command;
 
 public abstract class EndFunction extends Command {
-    public final Type type = Type.EndFunction;
+    public static final Type type = Type.EndFunction;
 
     public EndFunction(String cmdId) {
         super(cmdId);

@@ -4,7 +4,7 @@ import Utility.Algorithm.Process.Command;
 import Utility.Algorithm.Process.Content;
 
 public abstract class IfOrElse extends Block {
-    public final Type type = Type.IfOrElse;
+    public static final Type type = Type.IfOrElse;
     private Command elseChainedTo;
     private EndIf endsTo;
 

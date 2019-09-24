@@ -4,14 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import Utility.Bases.SuperContent;
 import Utility.Data.Alteration;
 import Utility.Data.Type;
-import Utility.Bases.SuperContent;
 
 import static Utility.Data.Utilities.getTypeDefault;
 import static Utility.Data.Utilities.validateAsNonNullData;
 
-/*TODO Test BaseContent, then delegated Printer of Stack*/
+/*TODO Test BaseContent, then delegated BasePrinter of Stack*/
 
 public class Content extends SuperContent<Feed> {
     public enum Column implements Utility.Key {
@@ -37,6 +37,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
+        this.unitDelta();
     }
 
     public void declareVariable(String variableName, Type variableType) {
@@ -55,6 +56,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_added, variableName);
         }
+        this.unitDelta();
 
     }
 
@@ -66,6 +68,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_removed, variableName);
         }
+        this.unitDelta();
     }
 
     public void set(String variableName, String value) {
@@ -134,7 +137,7 @@ public class Content extends SuperContent<Feed> {
         }
     }
 
-    private void validateAddressAndType(String variableName, Type type){
+    private void validateAddressAndType(String variableName, Type type) {
         validateVariableExists(variableName);
         validateVariableType(variableName, type);
     }
@@ -153,10 +156,11 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_value_updated, variableName);
         }
+        this.unitDelta();
     }
 
     public void addAll(Content content) {
-        for (String variableName : content.getVariableNames()){
+        for (String variableName : content.getVariableNames()) {
             Type variableType = content.getType(variableName);
             this.declareVariable(variableName, variableType);
 

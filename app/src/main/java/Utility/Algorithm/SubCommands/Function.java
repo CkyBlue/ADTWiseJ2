@@ -6,7 +6,7 @@ import Utility.Algorithm.Process.Content;
 /*TODO An implementation of return*/
 
 public abstract class Function extends Command {
-    public final Type type = Type.Function;
+    public static final Type type = Type.Function;
 
     private EndFunction endsTo;
     private String identifier;

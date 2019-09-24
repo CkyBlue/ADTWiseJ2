@@ -1,71 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".MainActivity">
-
-    <Button
-        android:id="@+id/nextBtn"
-        android:layout_width="match_parent"
-        android:layout_height="75dp"
-        android:layout_weight="0"
-        android:onClick="pop"
-        android:text="Update" />
-
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"
-        android:layout_weight="1">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <UI_Utils.CustomViews.DataViews.NodesStackView
-                    android:id="@+id/nodesStackView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></UI_Utils.CustomViews.DataViews.NodesStackView>
-            </FrameLayout>
-
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1">
-
-                <UI_Utils.CustomViews.DataViews.VariablesStackView
-                    android:id="@+id/variableStackView"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"></UI_Utils.CustomViews.DataViews.VariablesStackView>
-            </FrameLayout>
-        </LinearLayout>
-    </ScrollView>
-
-    <UI_Utils.CustomViews.LogView
-        android:id="@+id/logView1"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:visibility="gone" />
-
-    <UI_Utils.CustomViews.LogView
-        android:id="@+id/logView2"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:visibility="gone"
-        android:layout_weight="1"/>
+    android:orientation="vertical">
 
     <include
-        layout="@layout/input_panel"
+        layout="@layout/scroller_2d"
         android:layout_width="match_parent"
-        android:layout_height="140dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Update"
+        android:onClick="update" />
 
 </LinearLayout>

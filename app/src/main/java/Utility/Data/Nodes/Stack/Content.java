@@ -43,7 +43,7 @@ public class Content extends SuperContent<Feed> {
             return nodeUnits.peek();
         }
 
-        throw new IllegalStateException("The stack is empty.");
+        return null;
     }
 
     public BluePrint getBluePrint() {
@@ -61,13 +61,18 @@ public class Content extends SuperContent<Feed> {
     public void push() {
         Utility.Data.Nodes.Unit.Content unitContent = new Utility.Data.Nodes.Unit.Content(this.bluePrint, this.defaultSize);
 
+        this.removeUnit(getUnit());
+        this.addUnit(unitContent);
+
         nodeUnits.push(unitContent);
         this.unitFeed.setContent(unitContent);
     }
 
     public boolean pop() {
         if (nodeUnits.size() > 1) {
-            nodeUnits.pop();
+            this.removeUnit(nodeUnits.pop());
+            this.addUnit(getUnit());
+
             this.unitFeed.setContent(getUnit());
 
             return true;

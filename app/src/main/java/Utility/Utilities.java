@@ -33,7 +33,6 @@ public class Utilities {
         return text.toString();
     }
 
-
     public static ArrayList<Integer> indicesOf(String match, String text) {
         /*Returns an ArrayList of all the indices where a parse to the parse String is found in the text String*/
 

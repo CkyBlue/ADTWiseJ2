@@ -14,8 +14,8 @@ public abstract class SuperFeed<Content extends SuperContent, Printer extends Su
             try {
                 this.content.setFeed(this);
             } catch (Exception e) {
-                throw new IllegalStateException("The BaseContent class associated with this Feed class does not recognize this" +
-                        " Feed class.");
+                throw new IllegalStateException("The BaseContent class associated with this BaseFeed class does not recognize this" +
+                        " BaseFeed class.");
             }
         }
 
@@ -49,6 +49,12 @@ public abstract class SuperFeed<Content extends SuperContent, Printer extends Su
     public void feedRebuilt() {
         for (Printer printer : getPrinters()) {
             printer.notifyOfFeedRebuild();
+        }
+    }
+
+    public void changeToUnit() {
+        for (Printer printer : getPrinters()) {
+            printer.notifyOfChangeToUnit();
         }
     }
 }

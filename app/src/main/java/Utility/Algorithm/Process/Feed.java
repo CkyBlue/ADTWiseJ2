@@ -28,9 +28,9 @@ public class Feed extends SuperFeed<Content, Printer> {
         }
     }
 
-    void newAlgorithmLoaded() {
+    void newAlgorithmLoaded(String algorithmKey) {
         for (Printer printer : getPrinters()) {
-            printer.notifyOfNewAlgorithmLoaded();
+            printer.notifyOfNewAlgorithmLoaded(algorithmKey);
         }
     }
 

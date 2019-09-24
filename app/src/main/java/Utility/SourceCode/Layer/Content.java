@@ -1,5 +1,6 @@
 package Utility.SourceCode.Layer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
 
@@ -7,9 +8,14 @@ import Utility.Bases.SuperContent;
 
 public class Content extends SuperContent<Feed> {
     private final HashMap<String, Utility.SourceCode.Unit.Feed> sourceCodeUnits = new HashMap<>();
+    private final ArrayList<String> displayingUnits = new ArrayList<>();
 
     public void buildUnits(Set<String> keys) {
         this.sourceCodeUnits.clear();
+        displayingUnits.clear();
+
+        this.clearUnits();
+
         Utility.SourceCode.Unit.Feed feed;
         Utility.SourceCode.Unit.Content content;
 
@@ -21,12 +27,18 @@ public class Content extends SuperContent<Feed> {
                 feed.setContent(content);
 
                 this.sourceCodeUnits.put(key, feed);
+                this.displayingUnits.add(key);
+                this.addUnit(content);
             }
         }
 
-        if (getFeed() != null){
+        if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
+    }
+
+    public ArrayList<String> getDisplayingUnits() {
+        return displayingUnits;
     }
 
     public Utility.SourceCode.Unit.Feed getUnitFeed(String key) {
@@ -48,6 +60,32 @@ public class Content extends SuperContent<Feed> {
         buildUnits(null);
     }
 
+    public void hide(String key) {
+        validateUnitExists(key);
+
+        if (displayingUnits.contains(key)) {
+            displayingUnits.remove(key);
+            removeUnit(getUnitFeed(key).getContent());
+
+            if (getFeed() != null) {
+                getFeed().hideUnit(key);
+            }
+        }
+    }
+
+    public void show(String key) {
+        validateUnitExists(key);
+
+        if (!displayingUnits.contains(key)) {
+            displayingUnits.add(key);
+            addUnit(getUnitFeed(key).getContent());
+
+            if (getFeed() != null) {
+                getFeed().showUnit(key);
+            }
+        }
+    }
+
     @Override
     public void refreshIntent() {
         for (Utility.SourceCode.Unit.Feed unit : sourceCodeUnits.values()) {
@@ -59,7 +97,7 @@ public class Content extends SuperContent<Feed> {
 
     private void validateUnitExists(String key) {
         if (!getUnitKeys().contains(key)) {
-            throw new IllegalArgumentException("No SourceCode.Unit Feed or BaseContent object with key " + key + " exists.");
+            throw new IllegalArgumentException("No SourceCode.Unit BaseFeed or BaseContent object with key " + key + " exists.");
         }
     }
 }

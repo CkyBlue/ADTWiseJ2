@@ -19,8 +19,6 @@ import Utility.Data.Alteration;
 import Utility.Data.Variables.Unit.Content;
 import Utility.Port;
 
-/*TODO Dispatcher with post execute notifyOfRefreshIntent on BaseContent objects (notifications should propagate from BaseContent to View)*/
-
 public class VariablesStackView extends DataStackView {
     String TAG = getClass().getName();
 
@@ -107,6 +105,10 @@ public class VariablesStackView extends DataStackView {
         Logger.log(TAG, "notifyOfRefreshIntent()");
 
         if (isNotified()) {
+            if (variableStackPrinter.getContent() != null) {
+                variableStackPrinter.getContent().unitDelta();
+            }
+
             refreshView();
             setNotified(false);
         }

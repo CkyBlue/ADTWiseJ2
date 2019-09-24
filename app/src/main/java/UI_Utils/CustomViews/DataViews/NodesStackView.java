@@ -15,11 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import Utility.Data.Alteration;
+import Utility.Data.Nodes.Unit.Content;
 import Utility.Port;
 
 public class NodesStackView extends DataStackView {
     String TAG = getClass().getName();
 
+    // ListAdapterIndices is the ArrayList object fed into the Adapter's constructor
     private List<Integer> listAdapterIndices = new ArrayList<>();
     private Utility.Data.Nodes.Stack.Printer nodesStackPrinter = new Utility.Data.Nodes.Stack.Printer() {
         private String TAG_Header = "NodesStackView.nodesStackPrinter";
@@ -35,7 +37,6 @@ public class NodesStackView extends DataStackView {
         @Override
         public void notifyOfRefreshIntent() {
             Logger.log(TAG, "notifyOfRefreshIntent()");
-
             NodesStackView.this.notifyOfRefreshIntent();
         }
 
@@ -43,7 +44,7 @@ public class NodesStackView extends DataStackView {
         public void notifyOfFeedRebuild() {
             TAG = TAG_Header;
 
-            if (getContent() != null){
+            if (getContent() != null) {
                 TAG += "<" + getContent().getName() + ">";
             }
 
@@ -74,6 +75,10 @@ public class NodesStackView extends DataStackView {
         TextView childView;
 
         if (nodesStackPrinter.getUnit() != null) {
+            childView = Utilities.createView(getContext(), Port.header, Content.Column.Index.toString(),
+                    Content.Column.Index.toString(), 0, getColorAdapter(), getParamsAdapter());
+            getHeaderRow().addView(childView);
+
             for (String key : nodesStackPrinter.getUnit().getBluePrint().getKeys()) {
                 childView = Utilities.createView(getContext(), Port.header, key, key, 0, getColorAdapter(), getParamsAdapter());
                 getHeaderRow().addView(childView);
@@ -107,6 +112,10 @@ public class NodesStackView extends DataStackView {
         Logger.log(TAG, "notifyOfRefreshIntent()");
 
         if (isNotified()) {
+            if (nodesStackPrinter.getContent() != null) {
+                nodesStackPrinter.getContent().unitDelta();
+            }
+
             refreshView();
             setNotified(false);
         }
@@ -184,6 +193,9 @@ class NodesAdapter extends DataAdapter<Integer> {
             rowLinearLayout.setId(View.generateViewId());
             rowLinearLayout.setLayoutParams(getParamsAdapter().getBodyRowParams());
 
+            rowLinearLayout.addView(Utilities.createView(getContext(), Port.body, Content.Column.Index.toString(),
+                    String.valueOf(index), position, getColorAdapter(), getParamsAdapter()));
+
             for (String elementKey : nodesStackContent.getUnit().getKeys()) {
                 data = nodesStackContent.getUnit().getStrEqv(elementKey, index);
 
@@ -198,6 +210,14 @@ class NodesAdapter extends DataAdapter<Integer> {
             TextView childTextView;
 
             int count = 0;
+
+            // 0th child is the Index child
+            childTextView = (TextView) rowLinearLayout.getChildAt(count);
+            childTextView.setText(String.valueOf(index));
+            Utilities.applyCustomizations(Port.body, Content.Column.Index.toString(),
+                    String.valueOf(index), position, childTextView, getColorAdapter(), getParamsAdapter());
+            count++;
+
             for (String elementKey : nodesStackContent.getBluePrint().getKeys()) {
                 data = nodesStackContent.getUnit().getStrEqv(elementKey, index);
 

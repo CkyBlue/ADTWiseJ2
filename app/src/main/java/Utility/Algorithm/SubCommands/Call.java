@@ -4,7 +4,7 @@ import Utility.Algorithm.Process.Command;
 import Utility.Algorithm.Process.Content;
 
 public abstract class Call extends Command {
-    public final Type type = Type.Call;
+    public static final Type type = Type.Call;
     private Command functionCmd;
 
     public Call(String cmdId) {

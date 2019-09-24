@@ -7,6 +7,11 @@ public abstract class SuperPrinter<Content extends SuperContent, Feed extends Su
 
     public abstract void notifyOfRefreshIntent();
 
+    public void notifyOfChangeToUnit() {
+    }
+
+    ;
+
     public Feed getFeed() {
         return feed;
     }
@@ -21,8 +26,8 @@ public abstract class SuperPrinter<Content extends SuperContent, Feed extends Su
             return (Content) getFeed().getContent();
 
         } catch (Exception e) {
-            throw new IllegalStateException("The Feed class associated with this Printer class does not return" +
-                    " BaseContent class compatible with Printer class.");
+            throw new IllegalStateException("The BaseFeed class associated with this BasePrinter class does not return" +
+                    " BaseContent class compatible with BasePrinter class.");
         }
     }
 
@@ -32,8 +37,8 @@ public abstract class SuperPrinter<Content extends SuperContent, Feed extends Su
             try {
                 this.feed.removePrinter(this);
             } catch (Exception e) {
-                throw new IllegalStateException("The Feed class associated with this Printer class does not recognize this" +
-                        " Printer class.");
+                throw new IllegalStateException("The BaseFeed class associated with this BasePrinter class does not recognize this" +
+                        " BasePrinter class.");
             }
         }
         if (feed != null) {

@@ -1,16 +1,35 @@
 package Utility.SourceCode.Unit;
 
+import com.example.ckyblue.adtwisei4.Logger;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
 import Utility.Bases.SuperContent;
+import Utility.Key;
 import Utility.SourceCode.FormattingKey;
 import Utility.SourceCode.Parser;
 import Utility.SourceCode.Tracker;
 import Utility.Utilities;
 
 public class Content extends SuperContent<Feed> {
+    public enum HighLightingLevel implements Key {
+        Primary(FormattingKey.Highlighting_A), // Preview highlighting
+        Secondary(FormattingKey.Highlighting_B), // Execution-highlighting
+        Tertiary(FormattingKey.Highlighting_C); // Misc-highlighting
+
+        private FormattingKey formattingKey;
+
+        HighLightingLevel(FormattingKey formattingKey) {
+            this.formattingKey = formattingKey;
+        }
+
+        public FormattingKey getFormattingKey() {
+            return formattingKey;
+        }
+    }
+
     private String contentText;
     private int scopeCount = 0;
 
@@ -39,6 +58,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().scopeChanged();
         }
+        this.unitDelta();
     }
 
     public void registerMask(String key, Tracker mask) {
@@ -48,13 +68,14 @@ public class Content extends SuperContent<Feed> {
     public void setMaskedKeys(Set<FormattingKey> maskedKeys) {
         this.maskedKeys.clear();
 
-        if (maskedKeys != null){
+        if (maskedKeys != null) {
             this.maskedKeys.addAll(maskedKeys);
         }
 
         if (getFeed() != null) {
             getFeed().maskChanged();
         }
+        this.unitDelta();
     }
 
     public Set<FormattingKey> getMaskedKeys() {
@@ -67,6 +88,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().maskChanged();
         }
+        this.unitDelta();
     }
 
     public Tracker getActiveMask() {
@@ -77,10 +99,10 @@ public class Content extends SuperContent<Feed> {
         HashMap<FormattingKey, Tracker> trackersMap = parser.parseString(getText());
         boolean feedExists = (getFeed() != null);
 
-        for (FormattingKey key : trackersMap.keySet()){
+        for (FormattingKey key : trackersMap.keySet()) {
             this.formattingTrackers.put(key, trackersMap.get(key));
 
-            if (feedExists){
+            if (feedExists) {
                 getFeed().formattingChanged(key);
             }
         }
@@ -91,6 +113,10 @@ public class Content extends SuperContent<Feed> {
     }
 
     public void highlight(int[] lineNumbers) {
+        highlight(lineNumbers, HighLightingLevel.Primary);
+    }
+
+    public void highlight(int[] lineNumbers, HighLightingLevel levelKey) {
         Tracker highlighting = new Tracker();
 
         if (lineNumbers != null) {
@@ -106,11 +132,15 @@ public class Content extends SuperContent<Feed> {
             }
         }
 
-        this.formattingTrackers.put(FormattingKey.Highlighting, highlighting);
+        FormattingKey formattingKey = levelKey.getFormattingKey();
+        Logger.log("Highlighter", "highlight() called with formattingKey = [" + formattingKey + "]");
 
-        if (getFeed() != null){
-            getFeed().formattingChanged(FormattingKey.Highlighting);
+        this.formattingTrackers.put(formattingKey, highlighting);
+
+        if (getFeed() != null) {
+            getFeed().formattingChanged(formattingKey);
         }
+        this.unitDelta();
     }
 
     public void setText(String content) {
@@ -118,7 +148,7 @@ public class Content extends SuperContent<Feed> {
 
         String[] lines;
 
-        if (content == null){
+        if (content == null) {
             lines = new String[0];
 
         } else {
@@ -166,9 +196,9 @@ public class Content extends SuperContent<Feed> {
                 newContent.append(" ");
             }
 
-            this.lineBoundaries.addMarkers(start, newContent.length());
+            this.lineBoundaries.addMarkers(start + max_digits_in_lineCount + 1, newContent.length());
 
-            if (count < noOfLines){
+            if (count < noOfLines) {
                 newContent.append("\n");
             }
         }
@@ -182,9 +212,10 @@ public class Content extends SuperContent<Feed> {
         this.activeMask = null;
         this.scopeCount = 0;
 
-        if (getFeed() != null){
+        if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
+        this.unitDelta();
     }
 
     public String getText() {

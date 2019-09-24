@@ -1,7 +1,5 @@
 package Utility.Data.Nodes.Unit;
 
-import android.util.Log;
-
 import com.example.ckyblue.adtwisei4.Logger;
 
 import java.util.ArrayList;
@@ -17,6 +15,10 @@ import Utility.Data.Utilities;
 import static Utility.Data.Utilities.validateAsNonNullData;
 
 public class Content extends SuperContent<Feed> {
+    public enum Column implements Utility.Key {
+        Index, Pointer;
+    }
+
     private int size = 0;
     private BluePrint bluePrint;
     private final HashMap<String, ArrayList> node_values = new HashMap<>();
@@ -63,6 +65,7 @@ public class Content extends SuperContent<Feed> {
                 getFeed().contentAltered(Alteration.component_added, element_key, index);
             }
         }
+        this.unitDelta();
     }
 
     public void addNode() {
@@ -95,6 +98,7 @@ public class Content extends SuperContent<Feed> {
                 getFeed().contentAltered(Alteration.component_removed, element_key, index);
             }
         }
+        this.unitDelta();
     }
 
     public void clear() {
@@ -104,6 +108,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
+        this.unitDelta();
     }
 
     @SuppressWarnings("unchecked")
@@ -152,6 +157,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
+        this.unitDelta();
     }
 
     public void set(String elementKey, int index, String value) {
@@ -231,6 +237,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_value_updated, elementKey, index);
         }
+        this.unitDelta();
     }
 
     private void validateAddressAndType(String elementKey, int index, Type type) {

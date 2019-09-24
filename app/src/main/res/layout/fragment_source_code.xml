@@ -8,9 +8,6 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="2dp"
-        android:background="@drawable/borders"
-        android:fadeScrollbars="false"
         android:scrollbarSize="@dimen/scroll_bar_width"
         android:scrollbarThumbVertical="@drawable/scrollbar_thumb"
         android:scrollbarTrackVertical="@drawable/scrollbar">

@@ -10,11 +10,11 @@ import Utility.Bases.SuperContent;
 import Utility.Data.Type;
 import Utility.Input.Receiver;
 
-/*TODO Internal back-tracking abilities of Content object*/
-/*TODO Build algorithm options from tree and kickstart initializer Algorithm*/
+/*TODO Internal back-tracking abilities of BaseContent object*/
 
 public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
     private String TAG = getClass().getName();
+    public final static String Initializer = "Initializer";
 
     private final Feed algorithmTreeFeed = new Feed();
     private Command cmdInOperation;
@@ -78,23 +78,23 @@ public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
         }
 
         if (treeContent != null) {
-            loadAlgorithmHeader(treeContent.getInitializer());
+            loadAlgorithmHeader(Content.Initializer, treeContent.getInitializer());
         }
     }
 
     public void loadAlgorithm(String key) {
         if (!this.algorithmTreeFeed.getContent().getAlgorithmKeys().contains(key)) {
             throw new IllegalArgumentException("The Algorithm.key " + key +
-                    " is not recignized within the current Algorithm.Content reference.");
+                    " is not recignized within the current Algorithm.BaseContent reference.");
 
         }
 
-        loadAlgorithmHeader(this.algorithmTreeFeed.getContent().getAlgorithmHeader(key));
+        loadAlgorithmHeader(key, this.algorithmTreeFeed.getContent().getAlgorithmHeader(key));
     }
 
-    private void loadAlgorithmHeader(Command header) {
+    private void loadAlgorithmHeader(String key, Command header) {
         if (this.algorithmTreeFeed.getContent() == null) {
-            throw new IllegalStateException("The Algorithm.Content reference is currently null.");
+            throw new IllegalStateException("The Algorithm.BaseContent reference is currently null.");
 
         } else if (algorithmInOperation) {
             throw new IllegalStateException("An algorithm is currently active already..");
@@ -104,12 +104,20 @@ public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
         this.cmdStackFeed.getContent().clear();
         this.cmdStackFeed.getContent().push(header);
 
+        // Clearing the previous output before the newAlgorithmLoaded call back
+        this.getResources().getOutputFeed().getContent().clear();
+
         if (header != null) {
             this.algorithmInOperation = true;
 
             if (getFeed() != null) {
-                getFeed().newAlgorithmLoaded();
+                getFeed().newAlgorithmLoaded(key);
             }
+
+            /*The algorithm's first command is automatically executed for convenience in setting up display elements
+             * in the case of the initializer, the whole initialization can be handled there to remove the need for walking
+             * through any initialization process*/
+            execute();
         }
     }
 
@@ -129,7 +137,7 @@ public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
 
     private Utility.Algorithm.CmdStack.Content getCmdStack() {
         if (this.cmdStackFeed.getContent() == null) {
-            throw new IllegalStateException("The Content is attempting to execute with a null CmdStack.Content reference.");
+            throw new IllegalStateException("The BaseContent is attempting to execute with a null CmdStack.BaseContent reference.");
 
         } else {
             return this.cmdStackFeed.getContent();
@@ -143,6 +151,10 @@ public class Content extends SuperContent<Utility.Algorithm.Process.Feed> {
 
     public void output(String output) {
         getResources().getOutputFeed().getContent().log(output);
+    }
+
+    public void clearOutput() {
+        getResources().getOutputFeed().getContent().clear();
     }
 
     public void input(Input input, Type inputType) {

@@ -40,7 +40,7 @@ public class Content extends SuperContent<Feed> {
             return variablesUnits.peek();
         }
 
-        throw new IllegalStateException("The stack is empty.");
+        return null;
     }
 
     public String getName() {
@@ -54,22 +54,30 @@ public class Content extends SuperContent<Feed> {
     public void push() {
         Utility.Data.Variables.Unit.Content unitContent = new Utility.Data.Variables.Unit.Content();
 
+        this.removeUnit(getUnit());
+        this.addUnit(unitContent);
+
         variablesUnits.push(unitContent);
         this.unitFeed.setContent(unitContent);
+
+        unitDelta();
     }
 
     public boolean pop() {
         if (variablesUnits.size() > 1) {
-            variablesUnits.pop();
+            this.removeUnit(variablesUnits.pop());
+            this.addUnit(getUnit());
+
             this.unitFeed.setContent(getUnit());
+            unitDelta();
 
             return true;
         }
         return false;
     }
 
-    public Content(String cmdId) {
-        this.name = cmdId;
+    public Content(String stackName) {
+        this.name = stackName;
         this.unitPrinter.setFeed(unitFeed);
         push();
     }

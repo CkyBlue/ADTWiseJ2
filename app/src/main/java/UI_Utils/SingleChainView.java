@@ -5,126 +5,48 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
 
+import com.example.ckyblue.adtwisei4.Logger;
+
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
-import Utility.Bases.SuperContent;
-import Utility.Bases.SuperFeed;
-import Utility.Bases.SuperPrinter;
 import Utility.Colors.Components;
-import Utility.Data.Alteration;
+import Utility.Diagram.Units.Chain.Unbranching.Content;
+import Utility.Diagram.Units.Chain.Unbranching.Feed;
+import Utility.Diagram.Units.Chain.Unbranching.Printer;
 import Utility.Port;
 import Utility.Themes.Cascades;
+import Utility.Themes.Defaults;
 
-class Content extends SuperContent<Feed> {
-    private boolean isInitializingChain = false;
-
-    Utility.Data.Nodes.Stack.Printer mNodesStackPrinter = new Utility.Data.Nodes.Stack.Printer() {
-        @Override
-        public void notifyOfContentAlteration(Alteration alteration, String elementKey, int index) {
-            chainModified();
-        }
-
-        @Override
-        public void notifyOfFeedRebuild() {
-            chainModified();
-        }
-
-        @Override
-        public void notifyOfRefreshIntent() {
-        }
-    };
-    Utility.Data.Variables.Stack.Printer mPPointersStackPrinter = new Utility.Data.Variables.Stack.Printer() {
-        @Override
-        public void notifyOfContentAlteration(Alteration alteration, String variableName) {
-            if (mPointerKeys.contains(variableName)) {
-                chainModified();
-            }
-        }
-
-        @Override
-        public void notifyOfFeedRebuild() {
-            chainModified();
-        }
-
-        @Override
-        public void notifyOfRefreshIntent() {
-        }
-    };
-
-    String mItemColKey;
-    String mPointerColKey;
-    ArrayList<String> mPointerKeys;
-
-    int mheader;
-
-    public void readChain(Utility.Data.Nodes.Stack.Feed nodesStackFeed,
-                          String itemColKey, String pointerColKey,
-                          Utility.Data.Variables.Stack.Feed pointerStackFeed,
-                          int header, ArrayList<String> pointerKeys) {
-        // callBacks notifying of modifications are swallowed until flag is negated
-        isInitializingChain = true;
-
-        mNodesStackPrinter.setFeed(nodesStackFeed);
-        mPPointersStackPrinter.setFeed(pointerStackFeed);
-
-        mItemColKey = itemColKey;
-        mPointerColKey = pointerColKey;
-        mheader = header;
-
-        mPointerKeys = pointerKeys;
-
-        isInitializingChain = false;
-
-        if (getFeed() != null) {
-            getFeed().feedRebuilt();
-        }
-        this.unitDelta();
-    }
-
-    private void chainModified() {
-        if (!isInitializingChain) {
-            if (getFeed() != null) {
-                getFeed().chainModified();
-            }
-            this.unitDelta();
-        }
-    }
-}
-
-class Feed extends SuperFeed<Content, Printer> {
-    void chainModified() {
-        for (Printer printer : getPrinters()) {
-            printer.notifyOfContentModification();
-        }
-    }
-}
-
-/*TODO Build a renderText method that handles centering text*/
-/*TODO Test how \n is rendered on renderText*/
 /*TODO Add a configuration for vertical orientation (Top->Down or vice-versa)*/
-/*TODO Replace color args with chrome arg at drawNode*/
-/*TODO Add mechanism for keys*/
-/*TODO Handling null keys in adapter*/
 
-abstract class Printer extends SuperPrinter<Content, Feed> {
-    abstract void notifyOfContentModification();
-}
+/*TODO Handling null keys in adapters*/
+/*TODO Test using the mCanvas approach to drawing without needing one master onDraw root*/
 
 public class SingleChainView extends View {
+    private String TAG = getClass().getName();
+
     private boolean chainContentValid = false;
     private Utility.Colors.ColorAdapter.Content mDefaultColorAdaper = new Utility.Colors.ColorAdapter.Content() {
         @Override
         public Components fetchComponents(Port port, String key, String content, int position) {
+            if (port == Port.header) {
+                return Defaults.headerChrome.fetchComponents(content, position);
+            }
+
             if (key == null || !(key.equals(Utility.Data.Nodes.Unit.Content.Column.Index.toString()) ||
                     key.contains(Utility.Data.Nodes.Unit.Content.Column.Pointer.toString())
             )) {
-                return Cascades.IndexStreamers.Stripes.getChrome().fetchComponents(content, position);
+                return Cascades.IndexStreamers.MonoChromeGradient.getChrome().fetchComponents(content, position);
             }
 
             return Cascades.ContentStreamers.AllInPlains.getChrome().fetchComponents(content, position);
@@ -134,15 +56,16 @@ public class SingleChainView extends View {
     String mItemColKey;
     String mPointerColKey = Utility.Data.Nodes.Unit.Content.Column.Pointer.toString();
 
-    ArrayList<String> mPointerKeys;
+    final HashMap<String, Integer> mPointerKeys = new HashMap<>();
 
+    private int header;
     private final ArrayList<String> nodeItems = new ArrayList<>();
     private final ArrayList<Integer> nodePointers = new ArrayList<>();
 
     private final Utility.Colors.ColorAdapter.Printer colorAdapterPrinter = new Utility.Colors.ColorAdapter.Printer() {
         @Override
         public void notifyOfFeedRebuild() {
-            postInvalidate();
+            invalidate();
         }
 
         @Override
@@ -151,28 +74,35 @@ public class SingleChainView extends View {
         }
     };
 
+    public Feed getFeed() {
+        return mChainPrinter.getFeed();
+    }
+
     private Printer mChainPrinter = new Printer() {
         @Override
-        void notifyOfContentModification() {
+        public void notifyOfDiagramModification() {
             notifyOfFeedRebuild();
         }
 
         @Override
         public void notifyOfFeedRebuild() {
-            chainContentValid = false;
+            Logger.log(TAG, "notifyOfFeedRebuild() called");
+
             Content chainContent = getContent();
 
             nodeItems.clear();
             nodePointers.clear();
+            mPointerKeys.clear();
 
             try {
-                mPointerColKey = chainContent.mPointerColKey;
-                mItemColKey = chainContent.mItemColKey;
+                mPointerColKey = chainContent.getPointerColKey();
+                mItemColKey = chainContent.getItemColKey();
 
-                Utility.Data.Nodes.Unit.Content nodes = chainContent.mNodesStackPrinter.getUnit();
-                Utility.Data.Variables.Unit.Content pointers = chainContent.mPPointersStackPrinter.getUnit();
+                Utility.Data.Nodes.Unit.Content nodes = chainContent.getNodesStackPrinter().getUnit();
+                Utility.Data.Variables.Unit.Content pointers = chainContent.getPPointersStackPrinter().getUnit();
 
-                int currentPointer = chainContent.mheader;
+                header = pointers.getInt(chainContent.getRootPointerKey());
+                int currentPointer = header;
 
                 while (currentPointer != -1) {
                     nodeItems.add(nodes.getStrEqv(mItemColKey, currentPointer));
@@ -181,24 +111,26 @@ public class SingleChainView extends View {
                     nodePointers.add(currentPointer);
                 }
 
-                ArrayList<String> pointerKeys = new ArrayList<>();
                 List<String> allVarKeys = Arrays.asList(pointers.getVariableNames());
 
-                for (String pointerKey : chainContent.mPointerKeys) {
+                for (String pointerKey : chainContent.getMiscPointerKeys()) {
                     if (allVarKeys.contains(pointerKey)) {
-                        pointerKeys.add(pointerKey);
+                        mPointerKeys.put(pointerKey, pointers.getInt(pointerKey));
                     }
                 }
 
-                mPointerKeys = pointerKeys;
+                setMinimumWidth((int) (minContentWidth + measuredHorizontalPadding));
+                setMinimumHeight((int) ((nodeHeight + verticalPadding) * nodeItems.size() +
+                        verticalPadding));
+
+
                 chainContentValid = true;
 
             } catch (Exception e) {
                 chainContentValid = false;
-
             }
 
-            postInvalidate();
+            invalidate();
         }
 
         @Override
@@ -207,7 +139,9 @@ public class SingleChainView extends View {
 
     };
 
-    float arrowHeadSize;
+    float arrowHeadHeight, arrowHeadWidth;
+
+    float measuredHorizontalPadding;
 
     float nodeHeight, keyHeight, keyWidth, itemColWidth, pointerColWidth;
     float verticalPadding, keyToNodePadding, textSize, strokeWidth;
@@ -216,57 +150,64 @@ public class SingleChainView extends View {
     private Paint mPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mFillPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private Paint mStrokePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-    private Paint mTextPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private TextPaint mTextPaint = new TextPaint(TextPaint.ANTI_ALIAS_FLAG);
     private Paint mArrowPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
 
-    private Path path = new Path();
+    int keyBoxBg, keyBoxTextColor;
+
+    private StaticLayout mStaticLayout;
+
+    private Path mPath = new Path();
 
     int strokeColor = Color.DKGRAY;
 
     private void init(AttributeSet attrs) {
-        arrowHeadSize = dipToPx(20);
+//        this.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
+//        setWillNotDraw(false);
+
+        measuredHorizontalPadding = dipToPx(15);
+
+        arrowHeadHeight = dipToPx(20);
+        arrowHeadWidth = dipToPx(40);
 
         nodeHeight = dipToPx(40);
-        itemColWidth = dipToPx(120);
+        itemColWidth = dipToPx(180);
         pointerColWidth = nodeHeight;
 
         verticalPadding = dipToPx(30);
-        keyToNodePadding = dipToPx(50);
 
-        keyHeight = dipToPx(nodeHeight + verticalPadding * 2 - 10);
-        keyWidth = dipToPx(200);
+        keyToNodePadding = dipToPx(40);
+        keyHeight = nodeHeight + verticalPadding - 10;
+        keyWidth = dipToPx(150);
 
-        textSize = dipToPx(16);
+        textSize = dipToPx(14);
         strokeWidth = dipToPx(1);
 
         nodeWidth = (itemColWidth + pointerColWidth * 2);
         minContentWidth = keyToNodePadding + nodeWidth + keyWidth;
 
+        Components components = mDefaultColorAdaper.fetchComponents(Port.header, "Key", null, 0);
+        keyBoxTextColor = Color.parseColor(components.getText_color());
+        keyBoxBg = Color.parseColor(components.getBg_color());
+
         mPaint.setStyle(Paint.Style.FILL);
 
         mTextPaint.setTextAlign(Paint.Align.CENTER);
-        mTextPaint.setColor(Color.BLACK);
+        mTextPaint.setColor(strokeColor);
         mTextPaint.setTextSize(textSize);
+        mTextPaint.setStrokeJoin(Paint.Join.MITER);
 
         mArrowPaint.setStrokeWidth(dipToPx(3));
         mArrowPaint.setStyle(Paint.Style.FILL_AND_STROKE);
-        mTextPaint.setStrokeJoin(Paint.Join.MITER);
-        mTextPaint.setColor(Color.BLACK);
 
         mStrokePaint.setStyle(Paint.Style.STROKE);
         mStrokePaint.setStrokeJoin(Paint.Join.MITER);
-        mStrokePaint.setColor(Color.BLACK);
+        mStrokePaint.setColor(strokeColor);
         mStrokePaint.setStrokeWidth(strokeWidth);
+    }
 
-        /*TODO Remove*/
-        // For test purposes only
-        for (int i = 0; i < 10; i++) {
-            nodeItems.add("Ram" + ('A' + i));
-            nodePointers.add(i);
-        }
-
-        chainContentValid = true;
-        postInvalidate();
+    public void setFeed(Feed feed) {
+        this.mChainPrinter.setFeed(feed);
     }
 
     public SingleChainView(Context context) {
@@ -307,58 +248,123 @@ public class SingleChainView extends View {
         canvas.drawRect(left, top, right, bottom, mFillPaint);
         canvas.drawRect(left, top, right, bottom, mStrokePaint);
 
-        renderText(canvas, (left + right) / 2, (top + bottom) / 2, textColor, textContent);
+        renderText(canvas, (left + right) / 2, (top + bottom) / 2, width, textColor, textContent);
     }
 
-    private void renderText(Canvas canvas, float x, float y, int textColor, String textContent) {
+    private void renderText(Canvas canvas, float x, float y, float widthConstraint, int textColor, String textContent) {
         if (textContent == null) {
             return;
         }
 
         mTextPaint.setColor(textColor);
-        float adjustedY = y - ((mTextPaint.descent() + mTextPaint.ascent()) / 2.0f);
-        canvas.drawText(textContent, x, adjustedY, mTextPaint);
+
+        StaticLayout.Builder builder = StaticLayout.Builder.obtain(textContent, 0, textContent.length(),
+                mTextPaint, (int) widthConstraint)
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL);
+
+        mStaticLayout = builder.build();
+
+        canvas.save();
+
+        canvas.translate(x, y - mStaticLayout.getHeight() / 2.0f);
+        mStaticLayout.draw(canvas);
+
+        canvas.restore();
     }
 
     public void buildChain(Canvas canvas) {
+        Logger.log(TAG, "buildChain()");
+
         if (!chainContentValid) {
             return;
         }
+        Logger.log(TAG, "buildChain() w/ chainContentValid");
 
         float cursorY = 0;
         float cursorX = 0;
         int screenWidth = getWidth();
 
         float horizontalExtPadding = (screenWidth - minContentWidth) / 2.0f;
+        float nodeLeft = horizontalExtPadding + keyWidth + keyToNodePadding;
 
-        // Drawing keys & nodes
-        cursorY += verticalPadding;
-        cursorX = dipToPx(120);
+        int index;
 
-        float startX, endX, startY, endY;
+        // Drawing nodes
+        cursorY = verticalPadding;
+        cursorX = nodeLeft;
+
+        index = header;
 
         for (int i = 0; i < nodeItems.size(); i++) {
             renderNode(canvas, cursorX, cursorY, nodeHeight, itemColWidth, pointerColWidth,
-                    i, "String" + i, i + 1);
+                    index, nodeItems.get(i), nodePointers.get(i));
 
+            index = nodePointers.get(i);
+            cursorY += nodeHeight + verticalPadding;
+        }
+
+        cursorY = verticalPadding;
+        cursorX = nodeLeft;
+
+        float startX, endX, startY, endY;
+
+        for (int i = 0; i < nodeItems.size() - 1; i++) {
             startX = cursorX + nodeWidth - pointerColWidth / 2;
             startY = cursorY + nodeHeight;
 
             endX = cursorX + pointerColWidth / 2;
             endY = startY + verticalPadding;
 
-            if (i < nodeItems.size() - 1) {
-                renderArrow(canvas, startX, endY, endX, startY, arrowHeadSize);
-            }
-
+            renderArrow(canvas, startX, startY, endX, endY, arrowHeadWidth, arrowHeadHeight);
             cursorY += nodeHeight + verticalPadding;
         }
+
+        // Drawing keys
+        cursorY = verticalPadding;
+        cursorX = horizontalExtPadding;
+
+        index = header;
+        float keyTop;
+        ArrayList<String> pointerAttributes = new ArrayList<>();
+
+        for (int i = 0; i < nodeItems.size(); i++) {
+            pointerAttributes.clear();
+
+            keyTop = cursorY + nodeHeight / 2 - keyHeight / 2;
+
+            for (String key : mPointerKeys.keySet()) {
+                if (mPointerKeys.get(key) == index) {
+                    pointerAttributes.add(key);
+                }
+            }
+
+            if (!pointerAttributes.isEmpty()) {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(pointerAttributes.get(0));
+
+                for (int j = 1; j < pointerAttributes.size(); j++) {
+                    stringBuilder.append(", ");
+                    stringBuilder.append(pointerAttributes.get(j));
+                }
+
+                renderBoxedText(canvas, cursorX, keyTop, keyWidth, keyHeight, keyBoxBg, keyBoxTextColor,
+                        stringBuilder.toString());
+
+                renderArrow(canvas, cursorX + keyWidth, keyTop + keyHeight / 2,
+                        cursorX + keyWidth + keyToNodePadding, keyTop + keyHeight / 2,
+                        arrowHeadWidth, arrowHeadHeight);
+            }
+
+            index = nodePointers.get(i);
+            cursorY += nodeHeight + verticalPadding;
+        }
+
     }
+
 
     private void renderNode(Canvas canvas, float left, float top,
                             float height, float itemColWidth, float indexColWidth,
                             int indexVal, String itemVal, int pointerVal) {
-
         int indexBgColor, indexTextColor;
         int itemBgColor, itemTextColor;
         int pointerBgColor, pointerTextColor;
@@ -389,55 +395,39 @@ public class SingleChainView extends View {
         pointerBgColor = Color.parseColor(pointerColorComponents.getBg_color());
         pointerTextColor = Color.parseColor(pointerColorComponents.getText_color());
 
-        renderBoxedText(canvas, left, top, indexColWidth, height, indexBgColor, indexTextColor, "I");
-        renderBoxedText(canvas, left + indexColWidth, top, itemColWidth, height, itemBgColor, itemTextColor, "D\nD");
-        renderBoxedText(canvas, left + indexColWidth + itemColWidth, top, indexColWidth, height, pointerBgColor, pointerTextColor, "P");
+        renderBoxedText(canvas, left, top, indexColWidth, height, indexBgColor, indexTextColor, String.valueOf(indexVal));
+        renderBoxedText(canvas, left + indexColWidth, top, itemColWidth, height, itemBgColor, itemTextColor, itemVal);
+        renderBoxedText(canvas, left + indexColWidth + itemColWidth, top, indexColWidth, height,
+                pointerBgColor, pointerTextColor, String.valueOf(pointerVal));
     }
 
     private void renderArrow(Canvas canvas, float x1, float y1, float x2, float y2,
-                             float arrowHeadSize) {
-        path.moveTo(x1, y1);
-        path.lineTo(x2, y2);
+                             float arrowHeadWidth, float arrowHeadHeight) {
+        mPath.reset();
+        mPath.moveTo(x1, y1);
+        mPath.lineTo(x2, y2);
 
-        canvas.drawPath(path, mArrowPaint);
+        canvas.drawPath(mPath, mArrowPaint);
 
-        float delY = y2 - y1;
-        float delX = x2 - x1;
+        mPath.reset();
 
-        float delMagnitude = (float) Math.pow(Math.pow(delX, 2) + Math.pow(delY, 2), 0.5);
+        float deltaX = x2 - x1;
+        float deltaY = y2 - y1;
+        float frac = (float) 0.05;
 
-        float unitDelY = delY / delMagnitude;
-        float unitDelX = delX / delMagnitude;
+        float point_x_1 = x1 + (float) ((1 - frac) * deltaX + frac * deltaY);
+        float point_y_1 = y1 + (float) ((1 - frac) * deltaY - frac * deltaX);
+        float point_x_2 = x2;
+        float point_y_2 = y2;
+        float point_x_3 = x1 + (float) ((1 - frac) * deltaX - frac * deltaY);
+        float point_y_3 = y1 + (float) ((1 - frac) * deltaY + frac * deltaX);
 
-        canvas.save();
-        canvas.rotate(90, x2, y2);
+        mPath.moveTo(point_x_1, point_y_1);
+        mPath.lineTo(point_x_2, point_y_2);
+        mPath.lineTo(point_x_3, point_y_3);
+        mPath.close();
 
-        path.reset();
-        path.moveTo(x2 + unitDelX * arrowHeadSize / 2, y2 + unitDelY * arrowHeadSize / 2);
-        path.lineTo(x2 - unitDelX * arrowHeadSize / 2, y2 - unitDelY * arrowHeadSize / 2);
-        canvas.drawPath(path, mArrowPaint);
-
-        canvas.restore();
-
-        float tipX = x2 + unitDelX * arrowHeadSize, tipY = y2 + unitDelY * arrowHeadSize;
-
-        path.reset();
-        path.moveTo(tipX, tipY);
-
-        canvas.save();
-        canvas.rotate(150, tipX, tipY);
-        path.lineTo(tipX + unitDelX * arrowHeadSize, tipY + unitDelY * arrowHeadSize);
-        canvas.drawPath(path, mArrowPaint);
-        canvas.restore();
-
-        path.reset();
-        path.moveTo(tipX, tipY);
-
-        canvas.save();
-        canvas.rotate(-150, tipX, tipY);
-        path.lineTo(tipX + unitDelX * arrowHeadSize, tipY + unitDelY * arrowHeadSize);
-        canvas.drawPath(path, mArrowPaint);
-        canvas.restore();
+        canvas.drawPath(mPath, mArrowPaint);
     }
 
     private void renderCircle(Canvas canvas, float centerX, float centerY, float rad, int fillColor,
@@ -446,14 +436,22 @@ public class SingleChainView extends View {
         canvas.drawCircle(centerX, centerY, rad, mFillPaint);
         canvas.drawCircle(centerX, centerY, rad, mStrokePaint);
 
-        renderText(canvas, centerX, centerY, textColor, textContent);
+        renderText(canvas, centerX, centerY, rad * 2, textColor, textContent);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        int desiredWidth = (int) minContentWidth;
-        int desiredHeight = (int) ((nodeHeight + verticalPadding) * nodeItems.size() +
-                verticalPadding * 4);
+        Logger.log(TAG, "onMeasure() called");
+
+        int desiredWidth = 0;
+        int desiredHeight = 0;
+
+        if (chainContentValid) {
+            desiredWidth = (int) (minContentWidth + measuredHorizontalPadding);
+            desiredHeight = (int) ((nodeHeight + verticalPadding) * nodeItems.size() +
+                    verticalPadding);
+
+        }
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -493,18 +491,8 @@ public class SingleChainView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        super.onDraw(canvas);
-/*        renderArrow(canvas, 0, 0,
-                dipToPx(200), dipToPx(200),
-                dipToPx(arrowHeadSize),
-                dipToPx(arrowHeadWidth));
-
-        renderNode(canvas,
-                0, 0,
-                dipToPx(nodeHeight), dipToPx(itemColWidth), dipToPx(pointerColWidth),
-                "Item", 2, Color.RED, Color.GREEN
-        );*/
-
+//        super.onDraw(canvas);
+        Logger.log(TAG, "onDraw()");
         buildChain(canvas);
     }
 }
