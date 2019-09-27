@@ -58,7 +58,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().scopeChanged();
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public void registerMask(String key, Tracker mask) {
@@ -75,7 +75,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().maskChanged();
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public Set<FormattingKey> getMaskedKeys() {
@@ -88,7 +88,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().maskChanged();
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public Tracker getActiveMask() {
@@ -140,7 +140,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().formattingChanged(formattingKey);
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public void setText(String content) {
@@ -215,7 +215,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public String getText() {

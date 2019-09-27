@@ -7,7 +7,7 @@ public abstract class SuperPrinter<Content extends SuperContent, Feed extends Su
 
     public abstract void notifyOfRefreshIntent();
 
-    public void notifyOfChangeToUnit() {
+    public void notifyOfChangeToConstituentUnit() {
     }
 
     ;

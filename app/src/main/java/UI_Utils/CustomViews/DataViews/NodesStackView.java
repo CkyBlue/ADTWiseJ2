@@ -113,7 +113,7 @@ public class NodesStackView extends DataStackView {
 
         if (isNotified()) {
             if (nodesStackPrinter.getContent() != null) {
-                nodesStackPrinter.getContent().unitDelta();
+                nodesStackPrinter.getContent().alertComposingGroupOfChangeToConstituent();
             }
 
             refreshView();

@@ -36,7 +36,7 @@ public class SingleChainView extends View {
     private String TAG = getClass().getName();
 
     private boolean chainContentValid = false;
-    private Utility.Colors.ColorAdapter.Content mDefaultColorAdaper = new Utility.Colors.ColorAdapter.Content() {
+    private Utility.Colors.ColorAdapter.Content mDefaultColorAdapter = new Utility.Colors.ColorAdapter.Content() {
         @Override
         public Components fetchComponents(Port port, String key, String content, int position) {
             if (port == Port.header) {
@@ -171,14 +171,14 @@ public class SingleChainView extends View {
         arrowHeadWidth = dipToPx(40);
 
         nodeHeight = dipToPx(40);
-        itemColWidth = dipToPx(180);
+        itemColWidth = dipToPx(100);
         pointerColWidth = nodeHeight;
 
         verticalPadding = dipToPx(30);
 
         keyToNodePadding = dipToPx(40);
         keyHeight = nodeHeight + verticalPadding - 10;
-        keyWidth = dipToPx(150);
+        keyWidth = dipToPx(100);
 
         textSize = dipToPx(14);
         strokeWidth = dipToPx(1);
@@ -186,7 +186,7 @@ public class SingleChainView extends View {
         nodeWidth = (itemColWidth + pointerColWidth * 2);
         minContentWidth = keyToNodePadding + nodeWidth + keyWidth;
 
-        Components components = mDefaultColorAdaper.fetchComponents(Port.header, "Key", null, 0);
+        Components components = mDefaultColorAdapter.fetchComponents(Port.header, "Key", null, 0);
         keyBoxTextColor = Color.parseColor(components.getText_color());
         keyBoxBg = Color.parseColor(components.getBg_color());
 
@@ -369,7 +369,7 @@ public class SingleChainView extends View {
         int itemBgColor, itemTextColor;
         int pointerBgColor, pointerTextColor;
 
-        Utility.Colors.ColorAdapter.Content colorAdapter = mDefaultColorAdaper;
+        Utility.Colors.ColorAdapter.Content colorAdapter = mDefaultColorAdapter;
 
         if (colorAdapterPrinter.getContent() != null) {
             colorAdapter = colorAdapterPrinter.getContent();

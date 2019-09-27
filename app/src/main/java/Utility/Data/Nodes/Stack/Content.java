@@ -61,18 +61,12 @@ public class Content extends SuperContent<Feed> {
     public void push() {
         Utility.Data.Nodes.Unit.Content unitContent = new Utility.Data.Nodes.Unit.Content(this.bluePrint, this.defaultSize);
 
-        this.removeUnit(getUnit());
-        this.addUnit(unitContent);
-
         nodeUnits.push(unitContent);
         this.unitFeed.setContent(unitContent);
     }
 
     public boolean pop() {
         if (nodeUnits.size() > 1) {
-            this.removeUnit(nodeUnits.pop());
-            this.addUnit(getUnit());
-
             this.unitFeed.setContent(getUnit());
 
             return true;
@@ -86,6 +80,7 @@ public class Content extends SuperContent<Feed> {
         this.bluePrint = bluePrint;
 
         this.unitPrinter.setFeed(unitFeed);
+        this.addUnitFeed(unitFeed);
         push();
     }
 

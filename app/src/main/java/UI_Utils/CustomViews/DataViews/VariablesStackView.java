@@ -106,7 +106,7 @@ public class VariablesStackView extends DataStackView {
 
         if (isNotified()) {
             if (variableStackPrinter.getContent() != null) {
-                variableStackPrinter.getContent().unitDelta();
+                variableStackPrinter.getContent().alertComposingGroupOfChangeToConstituent();
             }
 
             refreshView();

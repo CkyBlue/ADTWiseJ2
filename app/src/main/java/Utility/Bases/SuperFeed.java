@@ -52,9 +52,24 @@ public abstract class SuperFeed<Content extends SuperContent, Printer extends Su
         }
     }
 
-    public void changeToUnit() {
+    public void constituentUnitModified() {
         for (Printer printer : getPrinters()) {
-            printer.notifyOfChangeToUnit();
+            printer.notifyOfChangeToConstituentUnit();
         }
     }
+
+    // <--- SuperUnit methods
+
+    private SuperContent composition;
+
+    public void registerComposition(SuperContent composition) {
+        this.composition = composition;
+    }
+
+    public void alertComposingGroup() {
+        if (this.composition != null) {
+            this.composition.constituentUnitModified();
+        }
+    }
+    // --->
 }

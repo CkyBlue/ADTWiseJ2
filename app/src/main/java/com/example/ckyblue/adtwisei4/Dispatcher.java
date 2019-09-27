@@ -40,7 +40,7 @@ import Utility.Themes.Defaults;
 public class Dispatcher extends AppCompatActivity {
     private Utility.Data.Layer.Printer dataLayerSecondaryPrinter = new Utility.Data.Layer.Printer() {
         @Override
-        public void notifyOfChangeToUnit() {
+        public void notifyOfChangeToConstituentUnit() {
             onDataLayerUpdated();
         }
 
@@ -81,7 +81,7 @@ public class Dispatcher extends AppCompatActivity {
         }
 
         @Override
-        public void notifyOfChangeToUnit() {
+        public void notifyOfChangeToConstituentUnit() {
             onSourceCodeLayerUpdated();
         }
     };

@@ -37,7 +37,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public void declareVariable(String variableName, Type variableType) {
@@ -56,7 +56,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_added, variableName);
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
 
     }
 
@@ -68,7 +68,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_removed, variableName);
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public void set(String variableName, String value) {
@@ -156,7 +156,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_value_updated, variableName);
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public void addAll(Content content) {

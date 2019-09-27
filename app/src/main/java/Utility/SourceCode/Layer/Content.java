@@ -28,13 +28,14 @@ public class Content extends SuperContent<Feed> {
 
                 this.sourceCodeUnits.put(key, feed);
                 this.displayingUnits.add(key);
-                this.addUnit(content);
+                this.addUnitFeed(feed);
             }
         }
 
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public ArrayList<String> getDisplayingUnits() {
@@ -48,6 +49,7 @@ public class Content extends SuperContent<Feed> {
         if (feed != null) {
             return feed;
         }
+        this.alertComposingGroupOfChangeToConstituent();
 
         return null;
     }
@@ -65,11 +67,12 @@ public class Content extends SuperContent<Feed> {
 
         if (displayingUnits.contains(key)) {
             displayingUnits.remove(key);
-            removeUnit(getUnitFeed(key).getContent());
+            removeUnit(getUnitFeed(key));
 
             if (getFeed() != null) {
                 getFeed().hideUnit(key);
             }
+            this.alertComposingGroupOfChangeToConstituent();
         }
     }
 
@@ -78,11 +81,12 @@ public class Content extends SuperContent<Feed> {
 
         if (!displayingUnits.contains(key)) {
             displayingUnits.add(key);
-            addUnit(getUnitFeed(key).getContent());
+            addUnitFeed(getUnitFeed(key));
 
             if (getFeed() != null) {
                 getFeed().showUnit(key);
             }
+            this.alertComposingGroupOfChangeToConstituent();
         }
     }
 
@@ -96,7 +100,7 @@ public class Content extends SuperContent<Feed> {
     }
 
     private void validateUnitExists(String key) {
-        if (!getUnitKeys().contains(key)) {
+        if (!sourceCodeUnits.keySet().contains(key)) {
             throw new IllegalArgumentException("No SourceCode.Unit BaseFeed or BaseContent object with key " + key + " exists.");
         }
     }

@@ -9,6 +9,6 @@ public class BaseContent<Feed extends BaseFeed> extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().diagramContentModified();
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 }

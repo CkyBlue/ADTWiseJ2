@@ -25,12 +25,13 @@ public class Content extends SuperContent<Feed> {
         Utility.Data.Nodes.Stack.Feed nodesStackFeed = new Utility.Data.Nodes.Stack.Feed();
 
         nodesStackFeed.setContent(nodesStackContent);
-        this.addUnit(nodesStackContent);
+        this.addUnitFeed(nodesStackFeed);
         this.nodesStackFeedHashMap.put(key, nodesStackFeed);
 
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_added, NodesStack, key);
         }
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public ArrayList<String> getDisplayingVarStacks() {
@@ -48,10 +49,11 @@ public class Content extends SuperContent<Feed> {
 
         if (display) {
             displayingVarStacks.add(key);
-            this.addUnit(variablesStackContent);
+            this.addUnitFeed(variablesStackFeed);
             if (getFeed() != null) {
                 getFeed().contentAltered(Alteration.component_added, Component.VariablesStack, key);
             }
+            this.alertComposingGroupOfChangeToConstituent();
         }
     }
 
@@ -73,16 +75,18 @@ public class Content extends SuperContent<Feed> {
 
         if (component == VariablesStack && displayingVarStacks.contains(componentKey)) {
             displayingVarStacks.remove(componentKey);
-            removeUnit(removedFeed.getContent());
+            removeUnit(removedFeed);
             if (getFeed() != null) {
                 getFeed().contentAltered(Alteration.component_removed, component, componentKey);
             }
+            this.alertComposingGroupOfChangeToConstituent();
 
         } else if (component == NodesStack) {
-            removeUnit(removedFeed.getContent());
+            removeUnit(removedFeed);
             if (getFeed() != null) {
                 getFeed().contentAltered(Alteration.component_removed, component, componentKey);
             }
+            this.alertComposingGroupOfChangeToConstituent();
 
         }
     }
@@ -161,6 +165,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     @Override

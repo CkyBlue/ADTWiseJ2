@@ -78,7 +78,7 @@ public class LogView extends android.support.v7.widget.AppCompatTextView {
 
         if (newLogs) {
             if (printer.getContent() != null) {
-                printer.getContent().unitDelta();
+                printer.getContent().alertComposingGroupOfChangeToConstituent();
             }
 
             StringBuilder stringBuilder = new StringBuilder();

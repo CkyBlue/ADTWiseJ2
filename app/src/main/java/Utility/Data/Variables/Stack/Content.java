@@ -54,22 +54,16 @@ public class Content extends SuperContent<Feed> {
     public void push() {
         Utility.Data.Variables.Unit.Content unitContent = new Utility.Data.Variables.Unit.Content();
 
-        this.removeUnit(getUnit());
-        this.addUnit(unitContent);
-
         variablesUnits.push(unitContent);
         this.unitFeed.setContent(unitContent);
 
-        unitDelta();
+        alertComposingGroupOfChangeToConstituent();
     }
 
     public boolean pop() {
         if (variablesUnits.size() > 1) {
-            this.removeUnit(variablesUnits.pop());
-            this.addUnit(getUnit());
-
             this.unitFeed.setContent(getUnit());
-            unitDelta();
+            alertComposingGroupOfChangeToConstituent();
 
             return true;
         }
@@ -79,6 +73,8 @@ public class Content extends SuperContent<Feed> {
     public Content(String stackName) {
         this.name = stackName;
         this.unitPrinter.setFeed(unitFeed);
+        this.addUnitFeed(unitFeed);
+
         push();
     }
 

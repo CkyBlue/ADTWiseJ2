@@ -4,17 +4,9 @@ import Utility.Bases.SuperFeed;
 import Utility.Diagram.Type;
 
 public class Feed extends SuperFeed<Content, Printer> {
-    public Type
-
-    void hideUnit(String unitKey) {
+    public void contentAltered(Alteration alteration, Type diagramType, String diagramKey) {
         for (Printer printer : getPrinters()) {
-            printer.notifyOfHideIntent(unitKey);
-        }
-    }
-
-    void showUnit(String unitKey) {
-        for (Printer printer : getPrinters()) {
-            printer.notifyOfShowIntent(unitKey);
+            printer.notifyOfContentAlteration(alteration, diagramType, diagramKey);
         }
     }
 }

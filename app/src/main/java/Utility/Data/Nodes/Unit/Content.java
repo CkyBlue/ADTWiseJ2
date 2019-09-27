@@ -65,7 +65,7 @@ public class Content extends SuperContent<Feed> {
                 getFeed().contentAltered(Alteration.component_added, element_key, index);
             }
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public void addNode() {
@@ -98,7 +98,7 @@ public class Content extends SuperContent<Feed> {
                 getFeed().contentAltered(Alteration.component_removed, element_key, index);
             }
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public void clear() {
@@ -108,7 +108,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     @SuppressWarnings("unchecked")
@@ -157,7 +157,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().feedRebuilt();
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     public void set(String elementKey, int index, String value) {
@@ -237,7 +237,7 @@ public class Content extends SuperContent<Feed> {
         if (getFeed() != null) {
             getFeed().contentAltered(Alteration.component_value_updated, elementKey, index);
         }
-        this.unitDelta();
+        this.alertComposingGroupOfChangeToConstituent();
     }
 
     private void validateAddressAndType(String elementKey, int index, Type type) {
