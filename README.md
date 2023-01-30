@@ -1,4 +1,4 @@
-This project is, in summary, various tools my friends and I attempted implementing to make it easier to grasp the inner-workings of complicated algorithms that we encountered in Computer-Science classes. Since this was as much a learning experience as it was a project endeavor for us, we started with attempting to re-invent the wheel for common code-editor features like executing code one line at a time, and a screen for monitoring variables before trying to come up with features to complement them. Here's how we tried to accomplish this:
+This project is, in summary, various tools my friends and I attempted implementing to make it easier to grasp the inner-workings of complicated algorithms that we encountered in Computer-Science classes.
 
 An algorithm gets divided into logical sections (for e.g, the statements of code handling cleanup after modifying some data making up one section, the statements that actually do the modification making another)
 
